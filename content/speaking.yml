@@ -1,0 +1,38 @@
+title: Articles & Writing
+description: Technical articles on security, ESLint, and AI-native development published across dev.to and other platforms.
+links:
+  - label: "Follow on dev.to"
+    to: "https://dev.to/ofriperetz"
+    size: md
+    icon: "i-simple-icons-devdotto"
+events:
+  - category: dev.to
+    title: "Building AI-Native ESLint Plugins: A Complete Guide"
+    date: "2024-12-15"
+    location: "dev.to"
+    url: "https://dev.to/ofriperetz"
+  - category: dev.to
+    title: "OWASP Top 10 2021: Complete ESLint Coverage"
+    date: "2024-11-20"
+    location: "dev.to"
+    url: "https://dev.to/ofriperetz"
+  - category: dev.to
+    title: "100x Faster Cycle Detection: Replacing eslint-plugin-import"
+    date: "2024-10-15"
+    location: "dev.to"
+    url: "https://dev.to/ofriperetz"
+  - category: dev.to
+    title: "JWT Security: Preventing Algorithm Confusion Attacks"
+    date: "2024-09-28"
+    location: "dev.to"
+    url: "https://dev.to/ofriperetz"
+  - category: dev.to
+    title: "XSS Prevention in Modern React Applications"
+    date: "2024-08-15"
+    location: "dev.to"
+    url: "https://dev.to/ofriperetz"
+  - category: dev.to
+    title: "PostgreSQL Security: Protecting Against SQL Injection"
+    date: "2024-07-22"
+    location: "dev.to"
+    url: "https://dev.to/ofriperetz"

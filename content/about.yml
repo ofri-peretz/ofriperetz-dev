@@ -1,0 +1,58 @@
+title: About Me
+description: Engineering Leader, Open-Source Creator, and builder of AI-native developer tools.
+content: |
+  Hi, I'm **Ofri Peretz**, an Engineering Leader currently leading Snappy's U.S. engineering expansion. I build distributed teams, architect revenue-generating API platforms, and establish scalable infrastructure.
+
+  My current level of experience aligns with **[IC5/M2±](https://mui-org.notion.site/Leveling-at-MUI-5c30f9bfe65149d697f346447cef9db1)** on MUI's leveling framework — combining deep technical expertise with strategic leadership capabilities.
+
+  ### 🔥 Current Focus: AI-Native Static Analysis
+
+  I'm currently **revolutionizing the ESLint plugin ecosystem for the AI/Agentic era** — building LLM-optimized, security-first static analysis tools that empower both human developers and AI coding assistants.
+
+  The **Interlace ESLint Ecosystem** includes 16+ production packages with 200+ rules covering:
+  - 🔐 **Security**: `secure-coding`, `jwt`, `crypto`, `pg`, `browser-security`
+  - 🖥️ **Framework Security**: `nestjs-security`, `express-security`, `lambda-security`, `vercel-ai-security`
+  - ⚛️ **React**: `react-a11y`, `react-features`
+  - 🏗️ **Architecture & Quality**: `import-next` (100x faster no-cycle detection), `architecture`, `quality`
+
+  ### 💼 Business Achievements
+
+  **Team Leadership**
+  - Built first U.S. Engineering Team from scratch
+  - Leading largest distributed team (US/EU)
+  - Revitalized team to #1 fastest-growing division
+
+  **Product Innovation**
+  - Architected first monetized API platform
+  - Created new high-margin revenue stream
+  - Scaled APIs 100x for enterprise load
+
+  **Infrastructure & DevEx**
+  - Built Developer Experience function from scratch
+  - Developed 25+ shared packages & mono-repo
+  - Established company-wide API-first standards
+
+  **Engineering Excellence**
+  - Migrated to TypeScript & Jest standards
+  - Increased test coverage to thousands of tests
+  - Improved Web Vitals from 50s to 70s
+  - Co-led Engineering Backend Guild
+
+  ### 🛠️ Tech Stack
+
+  **Languages**: TypeScript, JavaScript, Node.js
+  **Frameworks**: React, Express, NestJS
+  **Backend**: Kafka, Redis, Serverless
+  **Cloud**: AWS, Docker, Kubernetes
+  **DevEx**: ESLint, Nx Monorepos, CLI tools, AI/MCP integrations
+
+  ### Beyond Code
+
+  I value craftsmanship in both code and culture. Whether it's writing clean, testable code or fostering environments where diverse perspectives lead to better outcomes — I find fulfillment in the details that create lasting impact.
+
+  Feel free to browse my [projects](/projects), read my [articles](/blog), or [get in touch](/#contact) if you'd like to collaborate!
+images:
+  - src: https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1470&auto=format&fit=crop
+    alt: Coding workspace with multiple monitors
+  - src: https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1470&auto=format&fit=crop
+    alt: Clean code on screen

@@ -1,0 +1,11 @@
+title: Building Developer Tools for the AI Era.
+description: I create AI-native ESLint plugins and developer tools that empower both human developers and AI coding assistants. Here are the key projects from the Interlace ESLint Ecosystem.
+links:
+  - label: "View on GitHub"
+    to: "https://github.com/ofri-peretz"
+    color: "primary"
+    icon: "i-simple-icons-github"
+  - label: "View on NPM"
+    to: "https://www.npmjs.com/~ofriperetz"
+    color: "neutral"
+    icon: "i-simple-icons-npm"

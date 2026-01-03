@@ -1,0 +1,122 @@
+seo:
+  title: "Ofri Peretz - Engineering Leader & Open Source Creator"
+  description: "Building Products That Matter • Engineering Leadership • Open-Source Contributor. Creator of the Interlace ESLint Ecosystem - AI-native security plugins with LLM-optimized error messages."
+title: "Hey, I'm Ofri Peretz Engineering Leader"
+description: "Building products that matter. Leading distributed engineering teams, architecting scalable platforms, and revolutionizing the ESLint ecosystem for the AI era."
+hero:
+  links:
+    - label: "Explore My Projects"
+      to: /projects
+      color: "primary"
+    - label: "Available for Opportunities"
+      to: https://cal.com/
+      color: "neutral"
+      icon: "i-lucide-calendar"
+  images:
+    - src: /hero/code-1.avif
+      alt: Coding workspace
+    - src: /hero/code-2.avif
+      alt: Terminal output
+    - src: /hero/code-3.avif
+      alt: Architecture diagram
+    - src: /hero/code-4.avif
+      alt: Code review
+    - src: /hero/code-5.avif
+      alt: Team collaboration
+    - src: /hero/code-6.avif
+      alt: Open source
+    - src: /hero/code-7.avif
+      alt: Engineering leadership
+    - src: /hero/code-8.avif
+      alt: Cloud infrastructure
+    - src: /hero/code-9.avif
+      alt: Security focus
+about:
+  title: "About Me"
+  description: |
+    Leading Snappy's U.S. engineering expansion. Building distributed teams, architecting revenue-generating API platforms, and establishing scalable infrastructure.
+
+    🔥 **Currently revolutionizing the ESLint plugin ecosystem for the AI/Agentic era** — building LLM-optimized, security-first static analysis tools that empower both human developers and AI coding assistants.
+
+    I value craftsmanship in both code and culture. Whether it's writing clean, testable code or fostering environments where diverse perspectives lead to better outcomes — I find fulfillment in the details that create lasting impact.
+experience:
+  title: Work Experience
+  items:
+    - position: "Engineering Leader at"
+      date: "2021 - Present"
+      company:
+        name: Snappy
+        logo: "i-lucide-gift"
+        url: "https://snappy.com"
+        color: "#6366F1"
+    - position: "Open Source Creator"
+      date: "2024 - Present"
+      company:
+        name: Interlace ESLint Ecosystem
+        logo: "i-simple-icons-eslint"
+        url: "https://github.com/AriTedesworker/interlace-plugin"
+        color: "#4B32C3"
+    - position: "Senior Full-Stack Engineer"
+      date: "2018 - 2021"
+      company:
+        name: Previous Roles
+        logo: "i-lucide-building"
+        url: "#"
+        color: "#10B981"
+testimonials:
+  - quote: "Ofri built our first U.S. engineering team from scratch and led our largest distributed team across US and EU. His technical leadership and ability to align engineering with business strategy has been instrumental to our growth."
+    author:
+      name: 'Engineering Colleague'
+      description: 'Snappy Team Member'
+      avatar:
+        src: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=40&h=40&q=80'
+        srcset: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=80&h=80&q=80 2x'
+  - quote: "The ESLint plugins from the Interlace ecosystem have transformed how our team approaches security. The LLM-optimized error messages make it incredibly easy for our AI-assisted workflows to catch and fix vulnerabilities automatically."
+    author:
+      name: 'Open Source User'
+      description: 'Security-focused Developer'
+      avatar:
+        src: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=40&h=40&q=80'
+        srcset: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=80&h=80&q=80 2x'
+blog:
+  title: "Latest Articles"
+  description: "Thoughts on engineering leadership, security, and AI-native development"
+faq:
+  title: Frequently Asked Questions
+  description: Common questions about my work and open source projects.
+  categories:
+    - title: Open Source
+      questions:
+        - label: What is the Interlace ESLint Ecosystem?
+          content: |
+            The Interlace ESLint Ecosystem is a collection of 16+ production-ready ESLint plugins designed for the AI/Agentic era. These plugins feature LLM-optimized error messages that empower both human developers and AI coding assistants to catch and fix security vulnerabilities automatically.
+        - label: Why AI-native ESLint plugins?
+          content: |
+            Traditional ESLint error messages are designed for human developers reading them in an IDE. As AI coding assistants become more prevalent, there's a need for error messages that are also machine-parseable and provide clear remediation guidance. Our plugins bridge this gap.
+        - label: Which security standards do your plugins cover?
+          content: |
+            Our plugins provide comprehensive coverage for OWASP Top 10 2021, OWASP Mobile 2024, and framework-specific security patterns for Express, NestJS, Lambda, and more. Each plugin includes detailed documentation with Known False Negatives disclosure.
+    - title: Engineering Leadership
+      questions:
+        - label: What is your leadership experience?
+          content: |
+            I've built and led Snappy's first U.S. engineering team, managed the largest distributed team across US and EU, and revitalized teams to become the fastest-growing division. I focus on technical excellence while aligning engineering with business strategy.
+        - label: What level of experience do you have?
+          content: |
+            My current level of experience aligns with IC5/M2± on MUI's leveling framework — combining deep technical expertise with strategic leadership capabilities.
+    - title: Tech Stack
+      questions:
+        - label: What technologies do you work with?
+          content: |
+            **Languages**: TypeScript, JavaScript, Node.js
+            **Frameworks**: React, Express, NestJS
+            **Backend**: Kafka, Redis, Serverless
+            **Cloud**: AWS, Docker, Kubernetes
+            **DevEx**: ESLint, Nx Monorepos, CLIs
+        - label: What are your key achievements?
+          content: |
+            - Architected first monetized API platform, creating new high-margin revenue stream
+            - Scaled APIs 100x for enterprise load
+            - Built Developer Experience function from scratch with 25+ shared packages
+            - Migrated codebase to TypeScript with comprehensive test coverage
+            - Improved Web Vitals from 50s to 70s
