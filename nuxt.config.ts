@@ -37,9 +37,9 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'canonical', href: 'https://ofriperetz.dev' },
-        { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' },
+        { rel: 'icon', type: 'image/png', href: '/logo.png' },
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        { rel: 'apple-touch-icon', href: '/logo.jpg' }
+        { rel: 'apple-touch-icon', href: '/logo.png' }
       ],
       script: [
         {

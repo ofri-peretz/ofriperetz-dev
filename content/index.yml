@@ -42,13 +42,36 @@ about:
 experience:
   title: Work Experience
   items:
-    - position: "Engineering Leader at"
-      date: "2021 - Present"
+    - position: "U.S. Site Engineering Manager"
+      date: "2024 - Present"
+      company:
+        name: Snappy (Austin, TX)
+        logo: "i-lucide-gift"
+        url: "https://snappy.com"
+        color: "#6366F1"
+      highlights:
+        - "Built first U.S. engineering team"
+        - "Leading largest distributed team (US/EU)"
+    - position: "DevEx Team Lead + API Lead"
+      date: "2022 - 2024"
+      company:
+        name: Snappy (Tel Aviv)
+        logo: "i-lucide-gift"
+        url: "https://snappy.com"
+        color: "#6366F1"
+      highlights:
+        - "First monetized API platform"
+        - "25+ shared packages, mono-repo"
+    - position: "Full Stack Engineer"
+      date: "2021 - 2022"
       company:
         name: Snappy
         logo: "i-lucide-gift"
         url: "https://snappy.com"
         color: "#6366F1"
+      highlights:
+        - "Scaled APIs 100x"
+        - "1,000+ tests, TypeScript migration"
     - position: "Open Source Creator"
       date: "2025 - Present"
       company:
