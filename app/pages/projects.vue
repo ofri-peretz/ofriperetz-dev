@@ -113,10 +113,10 @@ useSeoMeta({
 
       <template #links>
         <BlurFade :delay="100">
-          <div class="flex flex-wrap items-center gap-3 mt-6">
+          <div class="flex flex-wrap items-center justify-center gap-3 mt-6">
             <ShimmerButton>
               <NuxtLink
-                to="https://github.com/ofri-peretz/eslint"
+                to="https://github.com/ofri-peretz"
                 target="_blank"
                 class="flex items-center gap-2"
               >
@@ -320,7 +320,7 @@ useSeoMeta({
             <div class="flex flex-wrap gap-3 justify-center mt-2">
               <ShimmerButton>
                 <NuxtLink
-                  to="https://github.com/ofri-peretz/eslint"
+                  to="https://github.com/ofri-peretz"
                   target="_blank"
                   class="flex items-center gap-2"
                 >
