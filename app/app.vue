@@ -5,6 +5,12 @@ const color = computed(() =>
   colorMode.value === "dark" ? "#020618" : "white",
 );
 
+// Track page views
+const { trackPageView } = useVisitorTracking();
+onMounted(() => {
+  trackPageView();
+});
+
 useHead({
   meta: [
     { charset: "utf-8" },
