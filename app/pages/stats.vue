@@ -534,70 +534,45 @@ useSeoMeta({
             </div>
 
             <div v-else class="space-y-4">
-              <!-- Activity Breakdown Chart -->
+              <!-- Contribution Stats - Simplified -->
               <div>
-                <div class="flex items-center justify-between mb-3">
-                  <h4
-                    class="text-xs font-medium text-gray-500 dark:text-gray-400"
+                <h4
+                  class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3"
+                >
+                  This Year's Activity
+                </h4>
+                <div class="grid grid-cols-2 gap-3">
+                  <!-- Total Contributions -->
+                  <div
+                    class="p-4 bg-primary-50 dark:bg-primary-900/20 rounded-xl text-center"
                   >
-                    This Year's Contributions
-                  </h4>
-                  <div class="text-lg font-bold text-primary-500">
-                    <NumberTicker
-                      :value="githubStats?.totalContributions || 0"
-                      :duration="1500"
-                    />
-                    <span class="text-xs text-gray-400 ml-1">total</span>
-                  </div>
-                </div>
-                <div class="grid grid-cols-4 gap-2 text-center">
-                  <div class="p-2 bg-green-50 dark:bg-green-900/20 rounded-lg">
                     <div
-                      class="text-lg font-bold text-green-600 dark:text-green-400"
+                      class="text-3xl sm:text-4xl font-bold text-primary-600 dark:text-primary-400 tabular-nums"
+                    >
+                      <NumberTicker
+                        :value="githubStats?.totalContributions || 0"
+                        :duration="1500"
+                      />
+                    </div>
+                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Contributions
+                    </div>
+                  </div>
+                  <!-- Commits -->
+                  <div
+                    class="p-4 bg-green-50 dark:bg-green-900/20 rounded-xl text-center"
+                  >
+                    <div
+                      class="text-3xl sm:text-4xl font-bold text-green-600 dark:text-green-400 tabular-nums"
                     >
                       <NumberTicker
                         :value="githubStats?.recentCommits || 0"
                         :duration="1200"
                       />
                     </div>
-                    <div class="text-[10px] text-gray-500">Commits</div>
-                  </div>
-                  <div
-                    class="p-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg"
-                  >
-                    <div
-                      class="text-lg font-bold text-purple-600 dark:text-purple-400"
-                    >
-                      <NumberTicker
-                        :value="githubStats?.recentPRs || 0"
-                        :duration="1200"
-                      />
+                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Commits
                     </div>
-                    <div class="text-[10px] text-gray-500">PRs</div>
-                  </div>
-                  <div class="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <div
-                      class="text-lg font-bold text-blue-600 dark:text-blue-400"
-                    >
-                      <NumberTicker
-                        :value="githubStats?.recentReviews || 0"
-                        :duration="1200"
-                      />
-                    </div>
-                    <div class="text-[10px] text-gray-500">Reviews</div>
-                  </div>
-                  <div
-                    class="p-2 bg-orange-50 dark:bg-orange-900/20 rounded-lg"
-                  >
-                    <div
-                      class="text-lg font-bold text-orange-600 dark:text-orange-400"
-                    >
-                      <NumberTicker
-                        :value="githubStats?.recentIssues || 0"
-                        :duration="1200"
-                      />
-                    </div>
-                    <div class="text-[10px] text-gray-500">Issues</div>
                   </div>
                 </div>
               </div>

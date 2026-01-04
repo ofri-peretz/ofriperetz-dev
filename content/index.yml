@@ -32,7 +32,7 @@ hero:
     - src: https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=800&auto=format&fit=crop
       alt: API architecture diagram
 about:
-  title: "About Me"
+  title: "Building & Scaling Technology, Teams, and Products"
   description: |
     Leading Snappy's U.S. engineering expansion. Building distributed teams, architecting revenue-generating API platforms, and establishing scalable infrastructure.
 

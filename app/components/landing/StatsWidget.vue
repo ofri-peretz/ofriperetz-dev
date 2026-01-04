@@ -42,108 +42,109 @@ const totalFollowers = computed(
 </script>
 
 <template>
-  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+  <!-- Equal-width grid with proper sizing for large numbers -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
     <!-- npm Downloads -->
     <NuxtLink
       to="/stats"
-      class="group text-center p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/30 dark:to-primary-800/30 rounded-2xl border-2 border-primary-200 dark:border-primary-800 hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/20"
+      class="group flex flex-col items-center justify-center text-center p-4 sm:p-5 lg:p-6 min-h-[100px] sm:min-h-[120px] bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/30 dark:to-primary-800/30 rounded-xl border border-primary-200 dark:border-primary-800 hover:scale-[1.02] transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/20"
     >
       <div
-        class="text-3xl sm:text-4xl lg:text-5xl font-black text-primary-600 dark:text-primary-400 mb-1 tabular-nums"
+        class="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary-600 dark:text-primary-400 tabular-nums leading-tight"
       >
         <NumberTicker
           v-if="hasLoaded"
           :value="totalDownloads"
           :duration="2000"
         />
-        <span v-else class="animate-pulse">-</span>
+        <span v-else class="animate-pulse">—</span>
       </div>
       <div
-        class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center gap-1.5"
+        class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1 mt-1"
       >
         <UIcon
           name="i-simple-icons-npm"
-          class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-500"
+          class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-red-500 shrink-0"
         />
-        <span>Downloads</span>
+        <span class="truncate">Downloads</span>
       </div>
     </NuxtLink>
 
     <!-- GitHub Stars -->
     <NuxtLink
       to="/stats"
-      class="group text-center p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/30 dark:to-yellow-800/30 rounded-2xl border-2 border-yellow-200 dark:border-yellow-800 hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-yellow-500/20"
+      class="group flex flex-col items-center justify-center text-center p-4 sm:p-5 lg:p-6 min-h-[100px] sm:min-h-[120px] bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/30 dark:to-yellow-800/30 rounded-xl border border-yellow-200 dark:border-yellow-800 hover:scale-[1.02] transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500/20"
     >
       <div
-        class="text-3xl sm:text-4xl lg:text-5xl font-black text-yellow-600 dark:text-yellow-400 mb-1 tabular-nums"
+        class="text-2xl sm:text-3xl lg:text-4xl font-bold text-yellow-600 dark:text-yellow-400 tabular-nums leading-tight"
       >
         <NumberTicker
           v-if="hasLoaded"
-          :value="githubStats.totalStars"
+          :value="githubStats?.totalStars || 0"
           :duration="2000"
         />
-        <span v-else class="animate-pulse">-</span>
+        <span v-else class="animate-pulse">—</span>
       </div>
       <div
-        class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center gap-1.5"
+        class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1 mt-1"
       >
         <UIcon
           name="i-lucide-star"
-          class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-500"
+          class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-yellow-500 shrink-0"
         />
-        <span>Stars</span>
+        <span class="truncate">Stars</span>
       </div>
     </NuxtLink>
 
-    <!-- Total Followers (GitHub + dev.to + Medium) -->
+    <!-- Total Followers -->
     <NuxtLink
       to="/stats"
-      class="group text-center p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 rounded-2xl border-2 border-purple-200 dark:border-purple-800 hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20"
+      class="group flex flex-col items-center justify-center text-center p-4 sm:p-5 lg:p-6 min-h-[100px] sm:min-h-[120px] bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 rounded-xl border border-purple-200 dark:border-purple-800 hover:scale-[1.02] transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20"
     >
       <div
-        class="text-3xl sm:text-4xl lg:text-5xl font-black text-purple-600 dark:text-purple-400 mb-1 tabular-nums"
+        class="text-2xl sm:text-3xl lg:text-4xl font-bold text-purple-600 dark:text-purple-400 tabular-nums leading-tight"
       >
         <NumberTicker
           v-if="hasLoaded"
           :value="totalFollowers"
           :duration="2000"
         />
-        <span v-else class="animate-pulse">-</span>
+        <span v-else class="animate-pulse">—</span>
       </div>
       <div
-        class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center gap-1.5"
+        class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1 mt-1"
       >
         <UIcon
           name="i-lucide-users"
-          class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-500"
+          class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-purple-500 shrink-0"
         />
-        <span>Followers</span>
+        <span class="truncate">Followers</span>
       </div>
     </NuxtLink>
 
-    <!-- Articles (dev.to + Medium) -->
+    <!-- Articles -->
     <NuxtLink
       to="/articles"
-      class="group text-center p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 rounded-2xl border-2 border-green-200 dark:border-green-800 hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/20"
+      class="group flex flex-col items-center justify-center text-center p-4 sm:p-5 lg:p-6 min-h-[100px] sm:min-h-[120px] bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 rounded-xl border border-green-200 dark:border-green-800 hover:scale-[1.02] transition-all duration-300 hover:shadow-lg hover:shadow-green-500/20"
     >
       <div
-        class="text-3xl sm:text-4xl lg:text-5xl font-black text-green-600 dark:text-green-400 mb-1 tabular-nums"
+        class="text-2xl sm:text-3xl lg:text-4xl font-bold text-green-600 dark:text-green-400 tabular-nums leading-tight"
       >
         <NumberTicker
           v-if="hasLoaded"
           :value="totalArticles"
           :duration="2000"
         />
-        <span v-else class="animate-pulse">-</span>
+        <span v-else class="animate-pulse">—</span>
       </div>
       <div
-        class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center gap-1.5"
+        class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1 mt-1"
       >
         <UIcon
           name="i-simple-icons-devdotto"
-          class="w-3.5 h-3.5 sm:w-4 sm:h-4"
+          class="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0"
         />
-        <span>Articles</span>
+        <span class="truncate">Articles</span>
       </div>
     </NuxtLink>
   </div>
