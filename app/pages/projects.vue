@@ -219,9 +219,9 @@ useSeoMeta({
 
       <!-- More Projects Coming Soon -->
       <BlurFade :delay="300">
-        <div class="mt-16 text-center">
+        <div class="mt-16">
           <div
-            class="inline-flex flex-col items-center gap-4 p-8 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50 border border-gray-200 dark:border-gray-700"
+            class="flex flex-col items-center gap-4 p-8 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50 border border-gray-200 dark:border-gray-700"
           >
             <div
               class="flex items-center gap-2 text-gray-500 dark:text-gray-400"
@@ -234,7 +234,9 @@ useSeoMeta({
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
               10+ More ESLint Plugins Available
             </h3>
-            <p class="text-sm text-gray-500 dark:text-gray-400 max-w-md">
+            <p
+              class="text-sm text-gray-500 dark:text-gray-400 text-center max-w-2xl"
+            >
               Including eslint-plugin-pg, eslint-plugin-vercel-ai-security,
               eslint-plugin-express-security, eslint-plugin-lambda-security, and
               more.
