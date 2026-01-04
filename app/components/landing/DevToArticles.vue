@@ -16,11 +16,22 @@ onMounted(() => {
 </script>
 
 <template>
-  <UPageSection v-if="page.blog">
+  <UPageSection v-if="page.blog" id="latest-articles" class="scroll-mt-20">
     <div class="text-center mb-8">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-        {{ page.blog.title }}
-      </h2>
+      <a
+        href="#latest-articles"
+        class="group inline-flex items-center gap-2 hover:text-primary-500 transition-colors"
+      >
+        <h2
+          class="text-2xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary-500 transition-colors"
+        >
+          {{ page.blog.title }}
+        </h2>
+        <UIcon
+          name="i-lucide-link"
+          class="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity -mt-2"
+        />
+      </a>
       <p class="text-gray-600 dark:text-gray-400">
         {{ page.blog.description }}
       </p>

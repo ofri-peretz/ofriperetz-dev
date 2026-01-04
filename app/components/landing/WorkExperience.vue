@@ -8,13 +8,26 @@ defineProps<{
 
 <template>
   <UPageSection
-    :title="page.experience.title"
+    id="work-experience"
+    class="scroll-mt-20"
     :ui="{
       container: '!p-0 gap-4 sm:gap-4',
       title: 'text-left text-xl sm:text-xl lg:text-2xl font-medium',
       description: 'mt-2',
     }"
   >
+    <template #title>
+      <a
+        href="#work-experience"
+        class="group inline-flex items-center gap-2 hover:text-primary-500 transition-colors"
+      >
+        {{ page.experience.title }}
+        <UIcon
+          name="i-lucide-link"
+          class="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
+        />
+      </a>
+    </template>
     <template #description>
       <div class="flex flex-col gap-3">
         <Motion

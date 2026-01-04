@@ -164,10 +164,44 @@ const isPinned = (article: any) =>
 const { width } = useWindowSize();
 
 // ============================================
-// PAGINATION
+// PAGINATION (URL-synced for deep linking)
 // ============================================
 
-const currentArticlePage = ref(1);
+const route = useRoute();
+const router = useRouter();
+
+// Read initial page from URL query param
+const initialPage = computed(() => {
+  const pageParam = route.query.page;
+  const parsed = parseInt(pageParam as string, 10);
+  return !isNaN(parsed) && parsed >= 1 ? parsed : 1;
+});
+
+const currentArticlePage = ref(initialPage.value);
+
+// Sync URL when page changes
+watch(currentArticlePage, (newPage) => {
+  const query = { ...route.query };
+  if (newPage === 1) {
+    delete query.page;
+  } else {
+    query.page = String(newPage);
+  }
+  router.replace({ query });
+});
+
+// Read page from URL on route change (back/forward buttons)
+watch(
+  () => route.query.page,
+  (newPage) => {
+    const parsed = parseInt(newPage as string, 10);
+    if (!isNaN(parsed) && parsed >= 1) {
+      currentArticlePage.value = parsed;
+    } else if (!newPage) {
+      currentArticlePage.value = 1;
+    }
+  },
+);
 
 // Responsive items per page
 const itemsPerPage = computed(() => {
@@ -199,7 +233,7 @@ const paginatedArticles = computed(() => {
 const goToArticlePage = (page: number) => {
   currentArticlePage.value = page;
   // Scroll to top of articles section
-  const section = document.querySelector(".mb-16");
+  const section = document.getElementById("devto-articles");
   if (section) {
     section.scrollIntoView({ behavior: "smooth", block: "start" });
   }
@@ -418,16 +452,24 @@ useSeoMeta({
       </div>
 
       <!-- dev.to Section -->
-      <div class="mb-16">
-        <!-- Title Row -->
-        <div class="flex items-center gap-3 mb-6">
+      <div id="devto-articles" class="mb-16 scroll-mt-20">
+        <!-- Title Row with anchor link -->
+        <div class="group flex items-center gap-3 mb-6">
           <UIcon
             name="i-simple-icons-devdotto"
             class="w-6 h-6 text-gray-900 dark:text-white"
           />
-          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-            dev.to Articles
-          </h2>
+          <a href="#devto-articles" class="flex items-center gap-2">
+            <h2
+              class="text-2xl font-bold text-gray-900 dark:text-white hover:text-primary-500 transition-colors"
+            >
+              dev.to Articles
+            </h2>
+            <UIcon
+              name="i-lucide-link"
+              class="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
+            />
+          </a>
           <UBadge color="primary" variant="subtle">Auto-synced</UBadge>
         </div>
 

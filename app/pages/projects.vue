@@ -52,9 +52,43 @@ const gridClass = computed(() => {
   }
 });
 
-// Pagination
-const currentPage = ref(1);
+// Pagination (URL-synced for deep linking)
+const route = useRoute();
+const router = useRouter();
+
+// Read initial page from URL query param
+const initialPage = computed(() => {
+  const pageParam = route.query.page;
+  const parsed = parseInt(pageParam as string, 10);
+  return !isNaN(parsed) && parsed >= 1 ? parsed : 1;
+});
+
+const currentPage = ref(initialPage.value);
 const itemsPerPage = 6;
+
+// Sync URL when page changes
+watch(currentPage, (newPage) => {
+  const query = { ...route.query };
+  if (newPage === 1) {
+    delete query.page;
+  } else {
+    query.page = String(newPage);
+  }
+  router.replace({ query });
+});
+
+// Read page from URL on route change (back/forward buttons)
+watch(
+  () => route.query.page,
+  (newPage) => {
+    const parsed = parseInt(newPage as string, 10);
+    if (!isNaN(parsed) && parsed >= 1) {
+      currentPage.value = parsed;
+    } else if (!newPage) {
+      currentPage.value = 1;
+    }
+  },
+);
 
 const totalPages = computed(() =>
   Math.ceil((projects.value?.length || 0) / itemsPerPage),
@@ -70,7 +104,10 @@ const paginatedProjects = computed(() => {
 const goToPage = (page: number) => {
   currentPage.value = page;
   // Scroll to top of projects section
-  window.scrollTo({ top: 400, behavior: "smooth" });
+  const section = document.getElementById("projects-grid");
+  if (section) {
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 };
 
 useSeoMeta({
@@ -100,7 +137,7 @@ useSeoMeta({
       :ui="{
         title: '!mx-0 text-left',
         description: '!mx-0 text-left',
-        links: 'justify-start',
+        links: 'justify-center',
       }"
     >
       <template #title>
@@ -189,8 +226,9 @@ useSeoMeta({
 
       <Transition name="fade" mode="out-in">
         <div
+          id="projects-grid"
           :key="`${currentPage}-${viewMode}`"
-          class="grid gap-6"
+          class="grid gap-6 scroll-mt-20"
           :class="gridClass"
         >
           <Motion

@@ -32,14 +32,29 @@ const ui = {
 
 <template>
   <UPageSection
-    :title="page.faq.title"
-    :description="page.faq.description"
+    id="faq"
+    class="scroll-mt-20"
     :ui="{
       container: 'px-0 !pt-0 gap-4 sm:gap-4',
       title: 'text-left text-xl sm:text-xl lg:text-2xl font-medium',
       description: 'text-left mt-2 text-sm sm:text-md lg:text-sm text-muted',
     }"
   >
+    <template #title>
+      <a
+        href="#faq"
+        class="group inline-flex items-center gap-2 hover:text-primary-500 transition-colors"
+      >
+        {{ page.faq.title }}
+        <UIcon
+          name="i-lucide-link"
+          class="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
+        />
+      </a>
+    </template>
+    <template #description>
+      {{ page.faq.description }}
+    </template>
     <UTabs :items orientation="horizontal" :ui>
       <template #content="{ item }">
         <UAccordion
