@@ -1,6 +1,36 @@
 <script setup lang="ts">
 const { articles, loading, error, fetchArticles } = useDevToArticles();
 
+// Medium stats (manual for now - no public API) - MUST match stats.vue
+const mediumStats = {
+  articles: 3,
+  claps: 0,
+  followers: 0,
+};
+
+// Computed combined stats to match stats page
+const totalArticles = computed(
+  () => (articles.value?.length || 0) + mediumStats.articles,
+);
+const totalReactions = computed(
+  () =>
+    (articles.value?.reduce(
+      (sum, a) => sum + (a.positive_reactions_count || 0),
+      0,
+    ) || 0) + mediumStats.claps,
+);
+const totalComments = computed(
+  () =>
+    articles.value?.reduce((sum, a) => sum + (a.comments_count || 0), 0) || 0,
+);
+const totalReadingTime = computed(
+  () =>
+    articles.value?.reduce(
+      (sum, a) => sum + (a.reading_time_minutes || 0),
+      0,
+    ) || 0,
+);
+
 // View mode: 1, 2, or 3 columns
 const viewMode = ref(3);
 
@@ -39,7 +69,7 @@ const gridClass = computed(() => {
 
 // Fetch articles on mount
 onMounted(() => {
-  fetchArticles("ofri-peretz", 12);
+  fetchArticles("ofri-peretz", 100);
 });
 
 useSeoMeta({
@@ -96,107 +126,98 @@ useSeoMeta({
         </div>
       </div>
 
-      <!-- Article Stats Widgets -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-12">
+      <!-- Article Stats Widgets - larger layout for multi-digit numbers -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
         <!-- Total Articles -->
         <div
-          class="text-center p-4 sm:p-5 bg-gradient-to-br from-green-500/10 to-green-600/20 dark:from-green-900/40 dark:to-green-800/30 rounded-xl border border-green-500/30"
+          class="text-center p-5 sm:p-6 lg:p-8 bg-gradient-to-br from-green-500/10 to-green-600/20 dark:from-green-900/40 dark:to-green-800/30 rounded-2xl border-2 border-green-500/30"
         >
           <div
-            class="text-2xl sm:text-3xl font-bold text-green-500 tabular-nums mb-1"
+            class="text-3xl sm:text-4xl lg:text-5xl font-black text-green-500 tabular-nums mb-2"
           >
             <NumberTicker
               v-if="!loading"
-              :value="articles?.length || 0"
+              :value="totalArticles"
               :duration="1500"
             />
             <span v-else class="animate-pulse">...</span>
           </div>
-          <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+          <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
             Articles
           </div>
-          <div class="flex items-center justify-center gap-1 mt-1">
+          <div class="flex items-center justify-center gap-1.5">
             <UIcon
               name="i-simple-icons-devdotto"
-              class="w-3 h-3 text-gray-500"
+              class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500"
             />
-            <UIcon name="i-simple-icons-medium" class="w-3 h-3 text-gray-500" />
+            <UIcon
+              name="i-simple-icons-medium"
+              class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500"
+            />
           </div>
         </div>
 
         <!-- Total Reactions -->
         <div
-          class="text-center p-4 sm:p-5 bg-gradient-to-br from-red-500/10 to-red-600/20 dark:from-red-900/40 dark:to-red-800/30 rounded-xl border border-red-500/30"
+          class="text-center p-5 sm:p-6 lg:p-8 bg-gradient-to-br from-red-500/10 to-red-600/20 dark:from-red-900/40 dark:to-red-800/30 rounded-2xl border-2 border-red-500/30"
         >
           <div
-            class="text-2xl sm:text-3xl font-bold text-red-500 tabular-nums mb-1"
+            class="text-3xl sm:text-4xl lg:text-5xl font-black text-red-500 tabular-nums mb-2"
           >
             <NumberTicker
               v-if="!loading"
-              :value="
-                articles?.reduce(
-                  (sum, a) => sum + (a.positive_reactions_count || 0),
-                  0,
-                ) || 0
-              "
+              :value="totalReactions"
               :duration="1500"
             />
             <span v-else class="animate-pulse">...</span>
           </div>
-          <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+          <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
             Reactions
           </div>
-          <UIcon name="i-lucide-heart" class="w-3 h-3 text-red-500 mt-1" />
+          <UIcon
+            name="i-lucide-heart"
+            class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-500"
+          />
         </div>
 
         <!-- Total Comments -->
         <div
-          class="text-center p-4 sm:p-5 bg-gradient-to-br from-blue-500/10 to-blue-600/20 dark:from-blue-900/40 dark:to-blue-800/30 rounded-xl border border-blue-500/30"
+          class="text-center p-5 sm:p-6 lg:p-8 bg-gradient-to-br from-blue-500/10 to-blue-600/20 dark:from-blue-900/40 dark:to-blue-800/30 rounded-2xl border-2 border-blue-500/30"
         >
           <div
-            class="text-2xl sm:text-3xl font-bold text-blue-500 tabular-nums mb-1"
+            class="text-3xl sm:text-4xl lg:text-5xl font-black text-blue-500 tabular-nums mb-2"
           >
             <NumberTicker
               v-if="!loading"
-              :value="
-                articles?.reduce(
-                  (sum, a) => sum + (a.comments_count || 0),
-                  0,
-                ) || 0
-              "
+              :value="totalComments"
               :duration="1500"
             />
             <span v-else class="animate-pulse">...</span>
           </div>
-          <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+          <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
             Comments
           </div>
           <UIcon
             name="i-lucide-message-circle"
-            class="w-3 h-3 text-blue-500 mt-1"
+            class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500"
           />
         </div>
 
         <!-- Reading Time -->
         <div
-          class="text-center p-4 sm:p-5 bg-gradient-to-br from-purple-500/10 to-purple-600/20 dark:from-purple-900/40 dark:to-purple-800/30 rounded-xl border border-purple-500/30"
+          class="text-center p-5 sm:p-6 lg:p-8 bg-gradient-to-br from-purple-500/10 to-purple-600/20 dark:from-purple-900/40 dark:to-purple-800/30 rounded-2xl border-2 border-purple-500/30"
         >
           <div
-            class="text-2xl sm:text-3xl font-bold text-purple-500 tabular-nums mb-1"
+            class="text-3xl sm:text-4xl lg:text-5xl font-black text-purple-500 tabular-nums mb-2"
           >
             <NumberTicker
               v-if="!loading"
-              :value="
-                articles?.reduce(
-                  (sum, a) => sum + (a.reading_time_minutes || 0),
-                  0,
-                ) || 0
-              "
+              :value="totalReadingTime"
               :duration="1500"
             />
             <span v-else class="animate-pulse">...</span>
           </div>
-          <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+          <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
             Minutes
           </div>
           <UIcon name="i-lucide-clock" class="w-3 h-3 text-purple-500 mt-1" />

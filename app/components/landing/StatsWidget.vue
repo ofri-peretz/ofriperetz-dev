@@ -7,6 +7,13 @@ const {
 const { totalDownloads, fetchStats: fetchNpmStats } = useNpmStats();
 const { stats: githubStats, fetchStats: fetchGitHubStats } = useGitHubStats();
 
+// Medium stats (manual for now - no public API)
+const mediumStats = {
+  articles: 3,
+  claps: 0,
+  followers: 0,
+};
+
 // Track if we've fetched data
 const hasLoaded = ref(false);
 
@@ -20,33 +27,29 @@ onMounted(async () => {
   hasLoaded.value = true;
 });
 
-// Computed values - with null safety
-const totalArticles = computed(() => articles.value?.length || 0);
-
-// Combined followers (GitHub + dev.to) - with null safety
-// Note: LinkedIn, Medium, and X.com don't have public APIs for follower counts
-const totalFollowers = computed(
-  () => (githubStats.value?.followers || 0) + (devtoFollowers.value || 0),
+// Computed values - with null safety + Medium
+const totalArticles = computed(
+  () => (articles.value?.length || 0) + mediumStats.articles,
 );
 
-// GitHub engagement (stars + recent activity) - with null safety
-const githubEngagement = computed(
+// Combined followers (GitHub + dev.to + Medium) - with null safety
+const totalFollowers = computed(
   () =>
-    (githubStats.value?.totalStars || 0) +
-    (githubStats.value?.recentCommits || 0) +
-    (githubStats.value?.recentPRs || 0),
+    (githubStats.value?.followers || 0) +
+    (devtoFollowers.value || 0) +
+    mediumStats.followers,
 );
 </script>
 
 <template>
-  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
     <!-- npm Downloads -->
     <NuxtLink
       to="/stats"
-      class="group text-center p-2 sm:p-3 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/30 dark:to-primary-800/30 rounded-xl border border-primary-200 dark:border-primary-800 hover:scale-105 transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/20"
+      class="group text-center p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/30 dark:to-primary-800/30 rounded-2xl border-2 border-primary-200 dark:border-primary-800 hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/20"
     >
       <div
-        class="text-lg sm:text-xl lg:text-2xl font-bold text-primary-600 dark:text-primary-400 mb-0.5"
+        class="text-3xl sm:text-4xl lg:text-5xl font-black text-primary-600 dark:text-primary-400 mb-1 tabular-nums"
       >
         <NumberTicker
           v-if="hasLoaded"
@@ -56,24 +59,23 @@ const githubEngagement = computed(
         <span v-else class="animate-pulse">-</span>
       </div>
       <div
-        class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-400 flex items-center justify-center gap-1"
+        class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center gap-1.5"
       >
         <UIcon
           name="i-simple-icons-npm"
-          class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-red-500"
+          class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-500"
         />
-        <span class="hidden sm:inline">Downloads</span>
-        <span class="sm:hidden">npm</span>
+        <span>Downloads</span>
       </div>
     </NuxtLink>
 
     <!-- GitHub Stars -->
     <NuxtLink
       to="/stats"
-      class="group text-center p-2 sm:p-3 bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/30 dark:to-yellow-800/30 rounded-xl border border-yellow-200 dark:border-yellow-800 hover:scale-105 transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500/20"
+      class="group text-center p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/30 dark:to-yellow-800/30 rounded-2xl border-2 border-yellow-200 dark:border-yellow-800 hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-yellow-500/20"
     >
       <div
-        class="text-lg sm:text-xl lg:text-2xl font-bold text-yellow-600 dark:text-yellow-400 mb-0.5"
+        class="text-3xl sm:text-4xl lg:text-5xl font-black text-yellow-600 dark:text-yellow-400 mb-1 tabular-nums"
       >
         <NumberTicker
           v-if="hasLoaded"
@@ -83,24 +85,23 @@ const githubEngagement = computed(
         <span v-else class="animate-pulse">-</span>
       </div>
       <div
-        class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-400 flex items-center justify-center gap-1"
+        class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center gap-1.5"
       >
         <UIcon
           name="i-lucide-star"
-          class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-yellow-500"
+          class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-500"
         />
-        <span class="hidden sm:inline">Stars</span>
-        <span class="sm:hidden">★</span>
+        <span>Stars</span>
       </div>
     </NuxtLink>
 
-    <!-- Total Followers (GitHub + dev.to) -->
+    <!-- Total Followers (GitHub + dev.to + Medium) -->
     <NuxtLink
       to="/stats"
-      class="group text-center p-2 sm:p-3 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 rounded-xl border border-purple-200 dark:border-purple-800 hover:scale-105 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20"
+      class="group text-center p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 rounded-2xl border-2 border-purple-200 dark:border-purple-800 hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20"
     >
       <div
-        class="text-lg sm:text-xl lg:text-2xl font-bold text-purple-600 dark:text-purple-400 mb-0.5"
+        class="text-3xl sm:text-4xl lg:text-5xl font-black text-purple-600 dark:text-purple-400 mb-1 tabular-nums"
       >
         <NumberTicker
           v-if="hasLoaded"
@@ -110,24 +111,23 @@ const githubEngagement = computed(
         <span v-else class="animate-pulse">-</span>
       </div>
       <div
-        class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-400 flex items-center justify-center gap-1"
+        class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center gap-1.5"
       >
         <UIcon
           name="i-lucide-users"
-          class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-purple-500"
+          class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-500"
         />
-        <span class="hidden sm:inline">Followers</span>
-        <span class="sm:hidden">👥</span>
+        <span>Followers</span>
       </div>
     </NuxtLink>
 
-    <!-- Articles -->
+    <!-- Articles (dev.to + Medium) -->
     <NuxtLink
       to="/articles"
-      class="group text-center p-2 sm:p-3 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 rounded-xl border border-green-200 dark:border-green-800 hover:scale-105 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/20"
+      class="group text-center p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 rounded-2xl border-2 border-green-200 dark:border-green-800 hover:scale-105 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/20"
     >
       <div
-        class="text-lg sm:text-xl lg:text-2xl font-bold text-green-600 dark:text-green-400 mb-0.5"
+        class="text-3xl sm:text-4xl lg:text-5xl font-black text-green-600 dark:text-green-400 mb-1 tabular-nums"
       >
         <NumberTicker
           v-if="hasLoaded"
@@ -137,14 +137,13 @@ const githubEngagement = computed(
         <span v-else class="animate-pulse">-</span>
       </div>
       <div
-        class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-400 flex items-center justify-center gap-1"
+        class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center gap-1.5"
       >
         <UIcon
           name="i-simple-icons-devdotto"
-          class="w-2.5 h-2.5 sm:w-3 sm:h-3"
+          class="w-3.5 h-3.5 sm:w-4 sm:h-4"
         />
-        <span class="hidden sm:inline">Articles</span>
-        <span class="sm:hidden">Blog</span>
+        <span>Articles</span>
       </div>
     </NuxtLink>
   </div>
