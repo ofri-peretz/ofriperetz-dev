@@ -1,16 +1,28 @@
-export interface NpmStats {
-  package: string
+export interface NpmDownloadDay {
   downloads: number
+  day: string
+}
+
+export interface NpmRangeStats {
   start: string
   end: string
+  package: string
+  downloads: NpmDownloadDay[]
+}
+
+export interface PackageStats {
+  name: string
+  downloads: number
+  dailyData?: NpmDownloadDay[]
 }
 
 export const useNpmStats = () => {
-  const stats = ref<Record<string, NpmStats>>({})
+  const stats = ref<PackageStats[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
+  
   const totalDownloads = computed(() => 
-    Object.values(stats.value).reduce((sum, pkg) => sum + (pkg?.downloads || 0), 0)
+    stats.value.reduce((sum, pkg) => sum + pkg.downloads, 0)
   )
 
   const packages = [
@@ -27,19 +39,36 @@ export const useNpmStats = () => {
     'eslint-plugin-mongodb-security',
     'eslint-plugin-architecture',
     'eslint-plugin-quality',
-    '@AriTedesworker/eslint-devkit'
+    'eslint-plugin-react-a11y',
+    'eslint-plugin-react-features',
   ]
 
   const fetchStats = async () => {
     loading.value = true
     error.value = null
+    const results: PackageStats[] = []
 
     try {
-      const packageList = packages.join(',')
-      const response = await $fetch<Record<string, NpmStats>>(
-        `https://api.npmjs.org/downloads/point/last-month/${packageList}`
-      )
-      stats.value = response
+      // Fetch each package's range data for the chart
+      await Promise.all(packages.map(async (pkg) => {
+        try {
+          const response = await $fetch<NpmRangeStats>(
+            `https://api.npmjs.org/downloads/range/last-month/${pkg}`
+          )
+          const totalDownloads = response.downloads.reduce((sum, d) => sum + d.downloads, 0)
+          results.push({
+            name: pkg,
+            downloads: totalDownloads,
+            dailyData: response.downloads
+          })
+        } catch {
+          // Package might not exist yet
+          results.push({ name: pkg, downloads: 0 })
+        }
+      }))
+      
+      // Sort by downloads
+      stats.value = results.sort((a, b) => b.downloads - a.downloads)
     } catch (e) {
       error.value = 'Failed to fetch npm stats'
       console.error('npm stats error:', e)
