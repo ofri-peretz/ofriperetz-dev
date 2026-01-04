@@ -116,33 +116,49 @@ useSeoMeta({
     <UContainer>
       <!-- Header -->
       <div class="text-center mb-12">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          Articles
-        </h1>
-        <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          Technical deep-dives on security, ESLint plugins, and AI-native
-          development. Published across multiple platforms.
-        </p>
-        <div class="mt-6 flex flex-wrap justify-center gap-3">
-          <UButton
-            to="https://dev.to/ofri-peretz"
-            target="_blank"
-            color="neutral"
-            variant="outline"
-            icon="i-simple-icons-devdotto"
-          >
-            Follow on dev.to
-          </UButton>
-          <UButton
-            to="https://medium.com/@ofriperetzdev"
-            target="_blank"
-            color="neutral"
-            variant="outline"
-            icon="i-simple-icons-medium"
-          >
-            Follow on Medium
-          </UButton>
-        </div>
+        <BlurFade :delay="0">
+          <h1 class="text-4xl font-bold mb-4">
+            <GradientText animate>Articles</GradientText>
+          </h1>
+        </BlurFade>
+        <BlurFade :delay="50">
+          <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            Technical deep-dives on security, ESLint plugins, and AI-native
+            development. Published across multiple platforms.
+          </p>
+        </BlurFade>
+        <BlurFade :delay="100">
+          <div class="mt-6 flex flex-wrap justify-center gap-3">
+            <ShimmerButton>
+              <NuxtLink
+                to="https://dev.to/ofri-peretz"
+                target="_blank"
+                class="flex items-center gap-2 text-sm"
+              >
+                <UIcon name="i-simple-icons-devdotto" class="w-4 h-4" />
+                Follow on dev.to
+                <UIcon
+                  name="i-lucide-external-link"
+                  class="w-3 h-3 opacity-60"
+                />
+              </NuxtLink>
+            </ShimmerButton>
+            <ShimmerButton>
+              <NuxtLink
+                to="https://medium.com/@ofriperetzdev"
+                target="_blank"
+                class="flex items-center gap-2 text-sm"
+              >
+                <UIcon name="i-simple-icons-medium" class="w-4 h-4" />
+                Follow on Medium
+                <UIcon
+                  name="i-lucide-external-link"
+                  class="w-3 h-3 opacity-60"
+                />
+              </NuxtLink>
+            </ShimmerButton>
+          </div>
+        </BlurFade>
       </div>
 
       <!-- Article Stats Widgets - larger layout for multi-digit numbers -->
