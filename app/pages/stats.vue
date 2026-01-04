@@ -26,7 +26,7 @@ onMounted(() => {
 
 // Computed stats
 const totalArticles = computed(() => articles.value.length);
-const totalReactions = computed(() =>
+const devtoReactions = computed(() =>
   articles.value.reduce((sum, a) => sum + a.positive_reactions_count, 0),
 );
 const totalComments = computed(() =>
@@ -36,9 +36,28 @@ const totalReadingTime = computed(() =>
   articles.value.reduce((sum, a) => sum + a.reading_time_minutes, 0),
 );
 
-// Combined followers from all platforms
+// Medium stats (manual - no free public API, requires RapidAPI subscription)
+// Updated: Jan 4, 2026 - from medium.com/me/stats
+const mediumStats = {
+  articles: 3, // Number of Medium articles
+  claps: 12, // Total claps
+  followers: 0, // Medium followers
+};
+
+// Combined reactions: GitHub stars + dev.to reactions + Medium claps
+const totalReactions = computed(
+  () => githubStats.value.totalStars + devtoReactions.value + mediumStats.claps,
+);
+
+// Combined followers from all platforms (GitHub + dev.to + Medium)
 const totalFollowers = computed(
-  () => githubStats.value.followers + devtoFollowers.value,
+  () =>
+    githubStats.value.followers + devtoFollowers.value + mediumStats.followers,
+);
+
+// Combined articles (dev.to + Medium)
+const combinedArticles = computed(
+  () => totalArticles.value + mediumStats.articles,
 );
 
 // Top packages by downloads (top 8)
@@ -229,7 +248,7 @@ useSeoMeta({
             </div>
           </UCard>
 
-          <!-- Total Articles -->
+          <!-- Total Articles (Combined) -->
           <UCard
             class="group hover:ring-2 hover:ring-green-500/50 transition-all duration-300 hover:scale-[1.02]"
           >
@@ -240,21 +259,31 @@ useSeoMeta({
                 class="text-lg sm:text-xl lg:text-2xl font-bold text-green-500 tabular-nums"
               >
                 <span v-if="articlesLoading" class="animate-pulse">...</span>
-                <NumberTicker v-else :value="totalArticles" :duration="1500" />
+                <NumberTicker
+                  v-else
+                  :value="combinedArticles"
+                  :duration="1500"
+                />
               </div>
               <div
                 class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-400 text-center mt-1"
               >
                 Articles
               </div>
-              <UIcon
-                name="i-simple-icons-devdotto"
-                class="w-3 h-3 sm:w-4 sm:h-4 text-gray-700 dark:text-gray-300 mt-1"
-              />
+              <div class="flex items-center gap-1 mt-1">
+                <UIcon
+                  name="i-simple-icons-devdotto"
+                  class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500"
+                />
+                <UIcon
+                  name="i-simple-icons-medium"
+                  class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500"
+                />
+              </div>
             </div>
           </UCard>
 
-          <!-- Total Reactions -->
+          <!-- Total Reactions (Combined) -->
           <UCard
             class="group hover:ring-2 hover:ring-red-500/50 transition-all duration-300 hover:scale-[1.02]"
           >
@@ -264,7 +293,11 @@ useSeoMeta({
               <div
                 class="text-lg sm:text-xl lg:text-2xl font-bold text-red-500 tabular-nums"
               >
-                <span v-if="articlesLoading" class="animate-pulse">...</span>
+                <span
+                  v-if="articlesLoading || githubLoading"
+                  class="animate-pulse"
+                  >...</span
+                >
                 <NumberTicker v-else :value="totalReactions" :duration="1500" />
               </div>
               <div
@@ -272,10 +305,23 @@ useSeoMeta({
               >
                 Reactions
               </div>
-              <UIcon
-                name="i-lucide-heart"
-                class="w-3 h-3 sm:w-4 sm:h-4 text-red-500 mt-1"
-              />
+              <div class="flex items-center gap-1 mt-1">
+                <UIcon
+                  name="i-lucide-star"
+                  class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500"
+                  title="GitHub Stars"
+                />
+                <UIcon
+                  name="i-simple-icons-devdotto"
+                  class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500"
+                  title="dev.to reactions"
+                />
+                <UIcon
+                  name="i-simple-icons-medium"
+                  class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500"
+                  title="Medium claps"
+                />
+              </div>
             </div>
           </UCard>
 
@@ -458,7 +504,7 @@ useSeoMeta({
                 <h4
                   class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3"
                 >
-                  Recent Activity (30 days)
+                  Public Repo Activity
                 </h4>
                 <div class="grid grid-cols-4 gap-2 text-center">
                   <div class="p-2 bg-green-50 dark:bg-green-900/20 rounded-lg">
