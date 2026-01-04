@@ -13,6 +13,10 @@ export const navLinks: NavigationMenuItem[] = [{
   icon: 'i-simple-icons-devdotto',
   to: '/articles'
 }, {
+  label: 'Stats',
+  icon: 'i-lucide-bar-chart-2',
+  to: '/stats'
+}, {
   label: 'About',
   icon: 'i-lucide-user',
   to: '/about'
