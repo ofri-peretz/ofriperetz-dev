@@ -16,6 +16,27 @@ const { data: projects } = await useAsyncData("projects", () => {
 
 const { global } = useAppConfig();
 
+// Pagination
+const currentPage = ref(1);
+const itemsPerPage = 6;
+
+const totalPages = computed(() =>
+  Math.ceil((projects.value?.length || 0) / itemsPerPage),
+);
+
+const paginatedProjects = computed(() => {
+  if (!projects.value) return [];
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return projects.value.slice(start, end);
+});
+
+const goToPage = (page: number) => {
+  currentPage.value = page;
+  // Scroll to top of projects section
+  window.scrollTo({ top: 400, behavior: "smooth" });
+};
+
 useSeoMeta({
   title: "Open Source Projects - Ofri Peretz | Interlace ESLint Ecosystem",
   description:
@@ -94,50 +115,92 @@ useSeoMeta({
         container: '!pt-0',
       }"
     >
-      <Motion
-        v-for="(project, index) in projects"
-        :key="project.title"
-        :initial="{ opacity: 0, transform: 'translateY(10px)' }"
-        :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
-        :transition="{ delay: 0.2 * index }"
-        :in-view-options="{ once: true }"
-      >
-        <UPageCard
-          :title="project.title"
-          :description="project.description"
-          :to="project.url"
-          orientation="horizontal"
-          variant="naked"
-          :reverse="index % 2 === 1"
-          class="group"
-          :ui="{
-            wrapper: 'max-sm:order-last',
-          }"
-        >
-          <template #leading>
-            <span class="text-sm text-muted">
-              {{ new Date(project.date).getFullYear() }}
-            </span>
-          </template>
-          <template #footer>
-            <ULink
+      <Transition name="fade" mode="out-in">
+        <div :key="currentPage">
+          <Motion
+            v-for="(project, index) in paginatedProjects"
+            :key="project.title"
+            :initial="{ opacity: 0, transform: 'translateY(10px)' }"
+            :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
+            :transition="{ delay: 0.1 * index }"
+            :in-view-options="{ once: true }"
+          >
+            <UPageCard
+              :title="project.title"
+              :description="project.description"
               :to="project.url"
-              class="text-sm text-primary flex items-center"
+              orientation="horizontal"
+              variant="naked"
+              :reverse="index % 2 === 1"
+              class="group"
+              :ui="{
+                wrapper: 'max-sm:order-last',
+              }"
             >
-              View Project
-              <UIcon
-                name="i-lucide-arrow-right"
-                class="size-4 text-primary transition-all opacity-0 group-hover:translate-x-1 group-hover:opacity-100"
+              <template #leading>
+                <span class="text-sm text-muted">
+                  {{ new Date(project.date).getFullYear() }}
+                </span>
+              </template>
+              <template #footer>
+                <ULink
+                  :to="project.url"
+                  class="text-sm text-primary flex items-center"
+                >
+                  View Project
+                  <UIcon
+                    name="i-lucide-arrow-right"
+                    class="size-4 text-primary transition-all opacity-0 group-hover:translate-x-1 group-hover:opacity-100"
+                  />
+                </ULink>
+              </template>
+              <img
+                :src="project.image"
+                :alt="project.title"
+                class="object-cover w-full h-48 rounded-lg"
               />
-            </ULink>
-          </template>
-          <img
-            :src="project.image"
-            :alt="project.title"
-            class="object-cover w-full h-48 rounded-lg"
-          />
-        </UPageCard>
-      </Motion>
+            </UPageCard>
+          </Motion>
+        </div>
+      </Transition>
+
+      <!-- Pagination Controls -->
+      <div
+        v-if="totalPages > 1"
+        class="flex justify-center items-center gap-2 mt-12"
+      >
+        <button
+          @click="goToPage(currentPage - 1)"
+          :disabled="currentPage === 1"
+          class="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          <UIcon name="i-lucide-chevron-left" class="w-4 h-4" />
+        </button>
+
+        <div class="flex gap-1">
+          <button
+            v-for="page in totalPages"
+            :key="page"
+            @click="goToPage(page)"
+            class="w-10 h-10 rounded-lg font-medium transition-all"
+            :class="
+              page === currentPage
+                ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+            "
+          >
+            {{ page }}
+          </button>
+        </div>
+
+        <button
+          @click="goToPage(currentPage + 1)"
+          :disabled="currentPage === totalPages"
+          class="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          <UIcon name="i-lucide-chevron-right" class="w-4 h-4" />
+        </button>
+      </div>
 
       <!-- More Projects Coming Soon -->
       <BlurFade :delay="300">
@@ -197,3 +260,15 @@ useSeoMeta({
     </UPageSection>
   </UPage>
 </template>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
