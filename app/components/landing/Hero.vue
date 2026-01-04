@@ -111,7 +111,7 @@ defineProps<{
             :label="
               global.available
                 ? 'Available for new projects'
-                : 'Working full-time at Snappy'
+                : 'Unavailable • Full-time at Snappy'
             "
           >
             <template #leading>

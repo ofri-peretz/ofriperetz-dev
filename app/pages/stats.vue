@@ -787,26 +787,26 @@ useSeoMeta({
                 View on npm
               </NuxtLink>
             </ShimmerButton>
-            <InteractiveButton text="View on GitHub">
+            <ShimmerButton>
               <NuxtLink
                 to="https://github.com/ofri-peretz"
                 target="_blank"
                 class="flex items-center gap-2"
               >
                 <UIcon name="i-simple-icons-github" class="w-4 h-4" />
-                GitHub
+                View on GitHub
               </NuxtLink>
-            </InteractiveButton>
-            <InteractiveButton text="View on dev.to">
+            </ShimmerButton>
+            <ShimmerButton>
               <NuxtLink
                 to="https://dev.to/ofri-peretz"
                 target="_blank"
                 class="flex items-center gap-2"
               >
                 <UIcon name="i-simple-icons-devdotto" class="w-4 h-4" />
-                dev.to
+                View on dev.to
               </NuxtLink>
-            </InteractiveButton>
+            </ShimmerButton>
           </div>
         </div>
       </BlurFade>

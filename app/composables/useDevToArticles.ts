@@ -1,3 +1,13 @@
+export interface DevToUser {
+  id: number
+  username: string
+  name: string
+  summary: string | null
+  twitter_username: string | null
+  github_username: string | null
+  profile_image: string
+}
+
 export interface DevToArticle {
   id: number
   title: string
@@ -19,6 +29,7 @@ export interface DevToArticle {
 
 export const useDevToArticles = () => {
   const articles = ref<DevToArticle[]>([])
+  const followers = ref(0)
   const loading = ref(false)
   const error = ref<string | null>(null)
 
@@ -27,10 +38,20 @@ export const useDevToArticles = () => {
     error.value = null
 
     try {
-      const response = await $fetch<DevToArticle[]>(
-        `https://dev.to/api/articles?username=${username}&per_page=${perPage}`
-      )
-      articles.value = response
+      // Fetch articles and follower count in parallel
+      const [articlesResponse, followersResponse] = await Promise.all([
+        $fetch<DevToArticle[]>(
+          `https://dev.to/api/articles?username=${username}&per_page=${perPage}`
+        ),
+        $fetch<{ followers_count?: number }>(`https://dev.to/api/followers/users?username=${username}&per_page=1000`).catch(() => null)
+      ])
+      
+      articles.value = articlesResponse
+      
+      // Try to get follower count from the response length (followers endpoint returns array)
+      if (Array.isArray(followersResponse)) {
+        followers.value = followersResponse.length
+      }
     } catch (e) {
       error.value = 'Failed to fetch articles from dev.to'
       console.error('dev.to API error:', e)
@@ -41,6 +62,7 @@ export const useDevToArticles = () => {
 
   return {
     articles,
+    followers,
     loading,
     error,
     fetchArticles
