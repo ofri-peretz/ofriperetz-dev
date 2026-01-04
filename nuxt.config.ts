@@ -86,7 +86,8 @@ export default defineNuxtConfig({
 
   // Runtime config for API keys (server-side only for security)
   runtimeConfig: {
-    devtoApiKey: process.env.DEVTO_API_KEY || ''
+    devtoApiKey: process.env.DEVTO_API_KEY || '',
+    githubToken: process.env.GITHUB_TOKEN || ''
     // Note: Keys in 'runtimeConfig' (not 'public') are server-side only
   },
 
