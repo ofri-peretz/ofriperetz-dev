@@ -28,24 +28,27 @@ export const useDevToArticles = () => {
     error.value = null
 
     try {
-      // Fetch articles (public API) and followers (via server route for security)
-      const [articlesResponse, statsResponse] = await Promise.all([
-        $fetch<DevToArticle[]>(
-          `https://dev.to/api/articles?username=${username}&per_page=${perPage}`
-        ),
-        $fetch<{ followers: number }>('/api/devto-stats')
-      ])
-      
-      articles.value = articlesResponse
-      followers.value = statsResponse.followers
+      // Fetch articles from public API (no auth needed)
+      const articlesResponse = await $fetch<DevToArticle[]>(
+        `https://dev.to/api/articles?username=${username}&per_page=${perPage}`
+      )
+      articles.value = articlesResponse || []
     } catch (e) {
       error.value = 'Failed to fetch articles from dev.to'
-      console.error('dev.to API error:', e)
-      // Set fallback followers on error
-      followers.value = 45
-    } finally {
-      loading.value = false
+      console.error('dev.to articles API error:', e)
+      articles.value = []
     }
+
+    // Fetch followers separately - don't let it break articles
+    try {
+      const statsResponse = await $fetch<{ followers: number }>('/api/devto-stats')
+      followers.value = statsResponse?.followers || 45
+    } catch (e) {
+      console.error('dev.to stats API error:', e)
+      followers.value = 45 // Fallback
+    }
+
+    loading.value = false
   }
 
   return {
