@@ -75,23 +75,30 @@ const formatDate = (dateString: string) => {
       <!-- Footer -->
       <template #footer>
         <div
-          class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400"
+          class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 dark:text-gray-400"
         >
-          <div class="flex items-center gap-4">
-            <span class="flex items-center gap-1">
-              <UIcon name="i-lucide-heart" class="w-4 h-4 text-red-500" />
-              {{ article.positive_reactions_count }}
-            </span>
-            <span class="flex items-center gap-1">
-              <UIcon name="i-lucide-message-circle" class="w-4 h-4" />
-              {{ article.comments_count }}
-            </span>
-            <span class="flex items-center gap-1">
-              <UIcon name="i-lucide-clock" class="w-4 h-4" />
-              {{ article.reading_time_minutes }} min
-            </span>
-          </div>
-          <time :datetime="article.published_at">
+          <span class="flex items-center gap-1">
+            <UIcon
+              name="i-lucide-heart"
+              class="w-3.5 h-3.5 text-red-500 flex-shrink-0"
+            />
+            {{ article.positive_reactions_count }}
+          </span>
+          <span class="flex items-center gap-1">
+            <UIcon
+              name="i-lucide-message-circle"
+              class="w-3.5 h-3.5 flex-shrink-0"
+            />
+            {{ article.comments_count }}
+          </span>
+          <span class="flex items-center gap-1">
+            <UIcon name="i-lucide-clock" class="w-3.5 h-3.5 flex-shrink-0" />
+            {{ article.reading_time_minutes }}m
+          </span>
+          <time
+            :datetime="article.published_at"
+            class="ml-auto whitespace-nowrap"
+          >
             {{ formatDate(article.published_at) }}
           </time>
         </div>
