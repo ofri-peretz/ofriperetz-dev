@@ -16,6 +16,42 @@ const { data: projects } = await useAsyncData("projects", () => {
 
 const { global } = useAppConfig();
 
+// View mode: 1, 2, or 3 columns
+const viewMode = ref(2);
+
+// Get available view modes based on screen size
+const { width } = useWindowSize();
+const availableViewModes = computed(() => {
+  if (width.value < 640) return [1]; // sm: only 1 column
+  if (width.value < 1024) return [1, 2]; // md: 1 or 2 columns
+  return [1, 2, 3]; // lg: all options
+});
+
+// Ensure view mode is valid for current screen size
+watch(
+  availableViewModes,
+  (modes) => {
+    if (!modes.includes(viewMode.value)) {
+      viewMode.value = Math.max(...modes);
+    }
+  },
+  { immediate: true },
+);
+
+// Grid class based on view mode
+const gridClass = computed(() => {
+  switch (viewMode.value) {
+    case 1:
+      return "grid-cols-1";
+    case 2:
+      return "grid-cols-1 md:grid-cols-2";
+    case 3:
+      return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
+    default:
+      return "grid-cols-1 md:grid-cols-2";
+  }
+});
+
 // Pagination
 const currentPage = ref(1);
 const itemsPerPage = 6;
@@ -115,8 +151,48 @@ useSeoMeta({
         container: '!pt-0',
       }"
     >
+      <!-- View Mode Toggle -->
+      <div class="flex justify-end mb-6">
+        <div class="flex items-center gap-2">
+          <span
+            class="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline"
+            >View:</span
+          >
+          <div
+            class="flex items-center gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-xl"
+          >
+            <button
+              v-for="mode in availableViewModes"
+              :key="mode"
+              @click="viewMode = mode"
+              class="flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-200"
+              :class="
+                viewMode === mode
+                  ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+              "
+            >
+              <UIcon
+                :name="
+                  mode === 1
+                    ? 'i-lucide-square'
+                    : mode === 2
+                      ? 'i-lucide-columns-2'
+                      : 'i-lucide-grid-3x3'
+                "
+                class="w-5 h-5"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+
       <Transition name="fade" mode="out-in">
-        <div :key="currentPage" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div
+          :key="`${currentPage}-${viewMode}`"
+          class="grid gap-6"
+          :class="gridClass"
+        >
           <Motion
             v-for="(project, index) in paginatedProjects"
             :key="project.title"

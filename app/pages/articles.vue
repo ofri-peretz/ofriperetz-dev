@@ -159,6 +159,48 @@ const isPinned = (article: any) =>
   PINNED_SLUGS.some((slug) => article.slug?.includes(slug));
 
 // ============================================
+// PAGINATION
+// ============================================
+
+const currentArticlePage = ref(1);
+
+// Responsive items per page
+const itemsPerPage = computed(() => {
+  if (width.value >= 1024) return 12; // lg: 12 items
+  if (width.value >= 768) return 9; // md: 9 items
+  return 6; // sm: 6 items
+});
+
+// Reset to page 1 when items per page changes
+watch(itemsPerPage, () => {
+  currentArticlePage.value = 1;
+});
+
+// Reset to page 1 when sort changes
+watch([sortBy, sortOrder, isDefaultState], () => {
+  currentArticlePage.value = 1;
+});
+
+const totalArticlePages = computed(() =>
+  Math.ceil(sortedArticles.value.length / itemsPerPage.value),
+);
+
+const paginatedArticles = computed(() => {
+  const start = (currentArticlePage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
+  return sortedArticles.value.slice(start, end);
+});
+
+const goToArticlePage = (page: number) => {
+  currentArticlePage.value = page;
+  // Scroll to top of articles section
+  const section = document.querySelector(".mb-16");
+  if (section) {
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+};
+
+// ============================================
 // VIEW MODE
 // ============================================
 
@@ -373,85 +415,35 @@ useSeoMeta({
 
       <!-- dev.to Section -->
       <div class="mb-16">
-        <div class="flex items-center justify-between flex-wrap gap-4 mb-6">
-          <div class="flex items-center gap-3">
-            <UIcon
-              name="i-simple-icons-devdotto"
-              class="w-6 h-6 text-gray-900 dark:text-white"
-            />
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-              dev.to Articles
-            </h2>
-            <UBadge color="primary" variant="subtle">Auto-synced</UBadge>
-          </div>
-
-          <!-- View Mode Toggle - FAQ-style with sliding indicator -->
-          <div class="flex items-center gap-3">
-            <span
-              class="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline"
-              >View:</span
-            >
-            <div
-              class="relative flex items-center gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-xl"
-            >
-              <!-- Sliding indicator -->
-              <div
-                class="absolute h-10 w-10 bg-primary-500 rounded-lg transition-all duration-300 ease-out shadow-lg shadow-primary-500/30"
-                :style="{
-                  left: `${availableViewModes.indexOf(viewMode) * 44 + 4}px`,
-                }"
-              />
-              <button
-                v-for="mode in availableViewModes"
-                :key="mode"
-                @click="viewMode = mode"
-                class="relative z-10 flex items-center justify-center w-10 h-10 rounded-lg transition-colors duration-200"
-                :class="
-                  viewMode === mode
-                    ? 'text-white'
-                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-                "
-              >
-                <UIcon
-                  :name="
-                    mode === 1
-                      ? 'i-lucide-square'
-                      : mode === 2
-                        ? 'i-lucide-columns-2'
-                        : 'i-lucide-grid-3x3'
-                  "
-                  class="w-5 h-5"
-                />
-              </button>
-            </div>
-          </div>
+        <!-- Title Row -->
+        <div class="flex items-center gap-3 mb-6">
+          <UIcon
+            name="i-simple-icons-devdotto"
+            class="w-6 h-6 text-gray-900 dark:text-white"
+          />
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+            dev.to Articles
+          </h2>
+          <UBadge color="primary" variant="subtle">Auto-synced</UBadge>
         </div>
 
-        <!-- Sort Controls -->
+        <!-- Controls Row: Sort + View -->
         <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-          <div class="flex items-center gap-2">
+          <!-- Sort Controls -->
+          <div class="flex items-center gap-2 flex-wrap">
             <span class="text-sm text-gray-500 dark:text-gray-400">Sort:</span>
-            <!-- Sort Options with sliding indicator -->
             <div
-              class="relative flex items-center gap-0.5 p-1 bg-gray-100 dark:bg-gray-800 rounded-xl"
+              class="flex items-center gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-xl"
             >
-              <!-- Sliding indicator -->
-              <div
-                class="absolute h-8 bg-primary-500 rounded-lg transition-all duration-300 ease-out shadow-lg shadow-primary-500/30"
-                :style="{
-                  width: `${sortOptions[currentSortIndex]?.label.length * 8 + 40}px`,
-                  left: `${currentSortIndex * 85 + 4}px`,
-                }"
-              />
               <button
                 v-for="option in sortOptions"
                 :key="option.value"
                 @click="selectSort(option.value)"
-                class="relative z-10 flex items-center gap-1.5 px-3 h-8 rounded-lg transition-colors duration-200 text-sm font-medium"
+                class="flex items-center gap-1.5 px-3 h-8 rounded-lg transition-all duration-200 text-sm font-medium"
                 :class="
                   sortBy === option.value
-                    ? 'text-white'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                    ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700'
                 "
               >
                 <UIcon :name="option.icon" class="w-4 h-4" />
@@ -475,7 +467,7 @@ useSeoMeta({
               />
             </button>
 
-            <!-- Reset Button (only show when not in default state) -->
+            <!-- Reset Button -->
             <button
               v-if="!isDefaultState"
               @click="resetSort"
@@ -484,15 +476,49 @@ useSeoMeta({
               <UIcon name="i-lucide-rotate-ccw" class="w-3.5 h-3.5" />
               Reset
             </button>
+
+            <!-- Pinned indicator -->
+            <div
+              v-if="isDefaultState"
+              class="flex items-center gap-1.5 text-sm text-amber-600 dark:text-amber-400"
+            >
+              <UIcon name="i-lucide-pin" class="w-4 h-4" />
+              <span class="hidden sm:inline">Featured first</span>
+            </div>
           </div>
 
-          <!-- Pinned indicator -->
-          <div
-            v-if="isDefaultState"
-            class="flex items-center gap-2 text-sm text-amber-600 dark:text-amber-400"
-          >
-            <UIcon name="i-lucide-pin" class="w-4 h-4" />
-            <span>Featured articles shown first</span>
+          <!-- View Mode Toggle -->
+          <div class="flex items-center gap-2">
+            <span
+              class="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline"
+              >View:</span
+            >
+            <div
+              class="flex items-center gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-xl"
+            >
+              <button
+                v-for="mode in availableViewModes"
+                :key="mode"
+                @click="viewMode = mode"
+                class="flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-200"
+                :class="
+                  viewMode === mode
+                    ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
+                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                "
+              >
+                <UIcon
+                  :name="
+                    mode === 1
+                      ? 'i-lucide-square'
+                      : mode === 2
+                        ? 'i-lucide-columns-2'
+                        : 'i-lucide-grid-3x3'
+                  "
+                  class="w-5 h-5"
+                />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -523,9 +549,9 @@ useSeoMeta({
             :class="gridClass"
           >
             <BlurFade
-              v-for="(article, index) in sortedArticles"
+              v-for="(article, index) in paginatedArticles"
               :key="article.id"
-              :delay="index * 30"
+              :delay="index * 20"
             >
               <div class="relative">
                 <!-- Pinned Badge -->
@@ -542,6 +568,44 @@ useSeoMeta({
           </div>
         </Transition>
 
+        <!-- Pagination Controls -->
+        <div
+          v-if="totalArticlePages > 1"
+          class="flex justify-center items-center gap-2 mt-8"
+        >
+          <button
+            @click="goToArticlePage(currentArticlePage - 1)"
+            :disabled="currentArticlePage === 1"
+            class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <UIcon name="i-lucide-chevron-left" class="w-4 h-4" />
+          </button>
+
+          <div class="flex gap-1">
+            <button
+              v-for="page in totalArticlePages"
+              :key="page"
+              @click="goToArticlePage(page)"
+              class="w-9 h-9 rounded-lg font-medium text-sm transition-all"
+              :class="
+                page === currentArticlePage
+                  ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+              "
+            >
+              {{ page }}
+            </button>
+          </div>
+
+          <button
+            @click="goToArticlePage(currentArticlePage + 1)"
+            :disabled="currentArticlePage === totalArticlePages"
+            class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <UIcon name="i-lucide-chevron-right" class="w-4 h-4" />
+          </button>
+        </div>
+
         <!-- Empty State -->
         <div
           v-if="!loading && !error && articles.length === 0"
@@ -554,17 +618,19 @@ useSeoMeta({
           <p class="text-gray-500 dark:text-gray-400">No articles found.</p>
         </div>
 
-        <!-- View More CTA -->
+        <!-- View All on dev.to -->
         <div v-if="articles.length > 0" class="text-center mt-8">
-          <UButton
-            to="https://dev.to/ofri-peretz"
-            target="_blank"
-            color="primary"
-            variant="outline"
-            trailing-icon="i-lucide-external-link"
-          >
-            View All on dev.to
-          </UButton>
+          <ShimmerButton>
+            <NuxtLink
+              to="https://dev.to/ofri-peretz"
+              target="_blank"
+              class="flex items-center gap-2"
+            >
+              <UIcon name="i-simple-icons-devdotto" class="w-4 h-4" />
+              View All on dev.to
+              <UIcon name="i-lucide-external-link" class="w-3 h-3 opacity-60" />
+            </NuxtLink>
+          </ShimmerButton>
         </div>
       </div>
 

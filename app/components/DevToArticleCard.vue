@@ -26,11 +26,11 @@ const formatDate = (dateString: string) => {
     >
       <!-- Cover Image -->
       <template v-if="article.cover_image || article.social_image" #header>
-        <div class="relative overflow-hidden">
+        <div class="relative overflow-hidden h-48">
           <img
             :src="article.cover_image || article.social_image"
             :alt="article.title"
-            class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
           <!-- dev.to badge with guaranteed contrast -->
           <div class="absolute top-3 left-3">
