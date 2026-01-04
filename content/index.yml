@@ -13,24 +13,24 @@ hero:
       color: "neutral"
       icon: "i-simple-icons-devdotto"
   images:
-    - src: /hero/random-1.avif
-      alt: Coding workspace
-    - src: /hero/random-2.avif
-      alt: Terminal output
-    - src: /hero/random-3.avif
-      alt: Architecture diagram
-    - src: /hero/random-4.avif
-      alt: Code review
-    - src: /hero/random-5.avif
-      alt: Team collaboration
-    - src: /hero/random-6.avif
-      alt: Open source
-    - src: /hero/random-7.avif
-      alt: Engineering leadership
-    - src: /hero/random-8.avif
-      alt: Cloud infrastructure
-    - src: /hero/random-9.avif
-      alt: Security focus
+    - src: https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop
+      alt: TypeScript code on dark screen
+    - src: https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&auto=format&fit=crop
+      alt: Matrix-style security visualization
+    - src: https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop
+      alt: Developer workspace with laptop
+    - src: https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=800&auto=format&fit=crop
+      alt: Code debugging session
+    - src: https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop
+      alt: Server infrastructure
+    - src: https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop
+      alt: React and JavaScript logos
+    - src: https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&auto=format&fit=crop
+      alt: Cybersecurity concept
+    - src: https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop
+      alt: Global network visualization
+    - src: https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=800&auto=format&fit=crop
+      alt: API architecture diagram
 about:
   title: "About Me"
   description: |

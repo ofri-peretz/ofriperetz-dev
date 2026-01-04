@@ -3,4 +3,4 @@ description: "JWT security rules covering algorithm confusion attacks, weak secr
 image: https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=1470&auto=format&fit=crop
 url: "https://www.npmjs.com/package/eslint-plugin-jwt"
 tags: ["Security", "JWT", "Authentication"]
-date: "2024"
+date: "2025"

@@ -10,10 +10,11 @@ content: |
   I'm currently **revolutionizing the ESLint plugin ecosystem for the AI/Agentic era** — building LLM-optimized, security-first static analysis tools that empower both human developers and AI coding assistants.
 
   The **Interlace ESLint Ecosystem** includes 16+ production packages with 200+ rules covering:
-  - 🔐 **Security**: `secure-coding`, `jwt`, `crypto`, `pg`, `browser-security`
-  - 🖥️ **Framework Security**: `nestjs-security`, `express-security`, `lambda-security`, `vercel-ai-security`
-  - ⚛️ **React**: `react-a11y`, `react-features`
-  - 🏗️ **Architecture & Quality**: `import-next` (100x faster no-cycle detection), `architecture`, `quality`
+  
+  - 🔐 **Security**: [secure-coding](https://npmjs.com/package/eslint-plugin-secure-coding), [jwt](https://npmjs.com/package/eslint-plugin-jwt), [crypto](https://npmjs.com/package/eslint-plugin-crypto), [pg](https://npmjs.com/package/eslint-plugin-pg), [browser-security](https://npmjs.com/package/eslint-plugin-browser-security)
+  - 🖥️ **Framework Security**: [nestjs-security](https://npmjs.com/package/eslint-plugin-nestjs-security), [express-security](https://npmjs.com/package/eslint-plugin-express-security), [lambda-security](https://npmjs.com/package/eslint-plugin-lambda-security), [vercel-ai-security](https://npmjs.com/package/eslint-plugin-vercel-ai-security)
+  - ⚛️ **React**: [react-a11y](https://npmjs.com/package/eslint-plugin-react-a11y), [react-features](https://npmjs.com/package/eslint-plugin-react-features)
+  - 🏗️ **Architecture & Quality**: [import-next](https://npmjs.com/package/eslint-plugin-import-next) (100x faster no-cycle detection), [architecture](https://npmjs.com/package/eslint-plugin-architecture), [quality](https://npmjs.com/package/eslint-plugin-quality)
 
   ### 💼 Business Achievements
 
@@ -50,7 +51,7 @@ content: |
 
   I value craftsmanship in both code and culture. Whether it's writing clean, testable code or fostering environments where diverse perspectives lead to better outcomes — I find fulfillment in the details that create lasting impact.
 
-  Feel free to browse my [projects](/projects), read my [articles](/blog), or [get in touch](/#contact) if you'd like to collaborate!
+  Feel free to browse my [projects](/projects), read my [articles](/articles), or [get in touch](/#contact) if you'd like to collaborate!
 images:
   - src: https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1470&auto=format&fit=crop
     alt: Coding workspace with multiple monitors
