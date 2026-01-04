@@ -177,7 +177,7 @@ useSeoMeta({
         >
           <!-- Total Downloads -->
           <UCard
-            class="group hover:ring-2 hover:ring-primary-500/50 transition-all duration-300 hover:scale-[1.02]"
+            class="group hover:ring-2 hover:ring-primary-500/50 transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-primary-500/10 to-primary-600/20 dark:from-primary-900/40 dark:to-primary-800/30 border border-primary-500/30"
           >
             <div
               class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
@@ -202,7 +202,7 @@ useSeoMeta({
 
           <!-- GitHub Stars -->
           <UCard
-            class="group hover:ring-2 hover:ring-yellow-500/50 transition-all duration-300 hover:scale-[1.02]"
+            class="group hover:ring-2 hover:ring-yellow-500/50 transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-yellow-500/10 to-yellow-600/20 dark:from-yellow-900/40 dark:to-yellow-800/30 border border-yellow-500/30"
           >
             <div
               class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
@@ -231,7 +231,7 @@ useSeoMeta({
 
           <!-- Followers (Combined) -->
           <UCard
-            class="group hover:ring-2 hover:ring-purple-500/50 transition-all duration-300 hover:scale-[1.02]"
+            class="group hover:ring-2 hover:ring-purple-500/50 transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-purple-500/10 to-purple-600/20 dark:from-purple-900/40 dark:to-purple-800/30 border border-purple-500/30"
           >
             <div
               class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
@@ -266,7 +266,7 @@ useSeoMeta({
 
           <!-- Total Articles (Combined) -->
           <UCard
-            class="group hover:ring-2 hover:ring-green-500/50 transition-all duration-300 hover:scale-[1.02]"
+            class="group hover:ring-2 hover:ring-green-500/50 transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-green-500/10 to-green-600/20 dark:from-green-900/40 dark:to-green-800/30 border border-green-500/30"
           >
             <div
               class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
@@ -301,7 +301,7 @@ useSeoMeta({
 
           <!-- Total Reactions (Combined) -->
           <UCard
-            class="group hover:ring-2 hover:ring-red-500/50 transition-all duration-300 hover:scale-[1.02]"
+            class="group hover:ring-2 hover:ring-red-500/50 transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-red-500/10 to-red-600/20 dark:from-red-900/40 dark:to-red-800/30 border border-red-500/30"
           >
             <div
               class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
@@ -343,7 +343,7 @@ useSeoMeta({
 
           <!-- Public Repos -->
           <UCard
-            class="group hover:ring-2 hover:ring-blue-500/50 transition-all duration-300 hover:scale-[1.02]"
+            class="group hover:ring-2 hover:ring-blue-500/50 transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-blue-500/10 to-blue-600/20 dark:from-blue-900/40 dark:to-blue-800/30 border border-blue-500/30"
           >
             <div
               class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
