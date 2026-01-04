@@ -46,6 +46,11 @@ export default defineAppConfig({
       'target': '_blank',
       'aria-label': 'Ofri on Dev.to'
     }, {
+      'icon': 'i-simple-icons-medium',
+      'to': 'https://medium.com/@ofriperetzdev',
+      'target': '_blank',
+      'aria-label': 'Ofri on Medium'
+    }, {
       'icon': 'i-simple-icons-npm',
       'to': 'https://www.npmjs.com/~ofriperetz',
       'target': '_blank',
