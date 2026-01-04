@@ -393,7 +393,7 @@ useSeoMeta({
 
       <!-- Download Trend Sparkline -->
       <BlurFade :delay="200">
-        <UCard class="mb-8" v-if="dailyDownloads.length > 0">
+        <UCard class="mb-8" v-if="dailyDownloads?.length > 0">
           <template #header>
             <div class="flex items-center justify-between flex-wrap gap-2">
               <div class="flex items-center gap-2">
@@ -624,7 +624,7 @@ useSeoMeta({
               </div>
 
               <!-- Recent Events -->
-              <div v-if="githubStats.recentEvents.length > 0">
+              <div v-if="githubStats?.recentEvents?.length > 0">
                 <h4
                   class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2"
                 >
@@ -632,7 +632,10 @@ useSeoMeta({
                 </h4>
                 <div class="space-y-1.5 max-h-32 overflow-y-auto">
                   <div
-                    v-for="event in githubStats.recentEvents.slice(0, 5)"
+                    v-for="event in (githubStats?.recentEvents || []).slice(
+                      0,
+                      5,
+                    )"
                     :key="event.date + event.repo"
                     class="flex items-center gap-2 text-xs p-1.5 rounded hover:bg-gray-50 dark:hover:bg-gray-800"
                   >
