@@ -18,7 +18,7 @@ const handleClick = () => {
   <!-- Clean, elegant CTA - no LinkedIn branding -->
   <button
     @click="handleClick"
-    class="group inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg transition-all duration-300 hover:scale-[1.02]"
+    class="cursor-pointer group inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg transition-all duration-300 hover:scale-[1.02]"
   >
     <span class="text-gray-500 dark:text-gray-400">Want to reach out?</span>
     <span class="font-semibold text-gray-900 dark:text-white">Let's Talk</span>
