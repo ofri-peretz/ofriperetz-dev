@@ -183,19 +183,19 @@ useSeoMeta({
               class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
             >
               <div
-                class="text-lg sm:text-xl lg:text-2xl font-bold text-primary-500 tabular-nums"
+                class="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary-500 tabular-nums"
               >
                 <span v-if="npmLoading" class="animate-pulse">...</span>
                 <NumberTicker v-else :value="totalDownloads" :duration="1500" />
               </div>
               <div
-                class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-400 text-center mt-1"
+                class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center mt-1"
               >
                 npm Downloads
               </div>
               <UIcon
                 name="i-simple-icons-npm"
-                class="w-3 h-3 sm:w-4 sm:h-4 text-red-500 mt-1"
+                class="w-4 h-4 sm:w-5 sm:h-5 text-red-500 mt-1"
               />
             </div>
           </UCard>
@@ -208,7 +208,7 @@ useSeoMeta({
               class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
             >
               <div
-                class="text-lg sm:text-xl lg:text-2xl font-bold text-yellow-500 tabular-nums"
+                class="text-2xl sm:text-3xl lg:text-4xl font-bold text-yellow-500 tabular-nums"
               >
                 <span v-if="githubLoading" class="animate-pulse">...</span>
                 <NumberTicker
@@ -218,13 +218,13 @@ useSeoMeta({
                 />
               </div>
               <div
-                class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-400 text-center mt-1"
+                class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center mt-1"
               >
                 GitHub Stars
               </div>
               <UIcon
                 name="i-lucide-star"
-                class="w-3 h-3 sm:w-4 sm:h-4 text-yellow-500 mt-1"
+                class="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500 mt-1"
               />
             </div>
           </UCard>
@@ -237,7 +237,7 @@ useSeoMeta({
               class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
             >
               <div
-                class="text-lg sm:text-xl lg:text-2xl font-bold text-purple-500 tabular-nums"
+                class="text-2xl sm:text-3xl lg:text-4xl font-bold text-purple-500 tabular-nums"
               >
                 <span
                   v-if="githubLoading || articlesLoading"
@@ -247,7 +247,7 @@ useSeoMeta({
                 <NumberTicker v-else :value="totalFollowers" :duration="1500" />
               </div>
               <div
-                class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-400 text-center mt-1"
+                class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center mt-1"
               >
                 Followers
               </div>
@@ -272,7 +272,7 @@ useSeoMeta({
               class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
             >
               <div
-                class="text-lg sm:text-xl lg:text-2xl font-bold text-green-500 tabular-nums"
+                class="text-2xl sm:text-3xl lg:text-4xl font-bold text-green-500 tabular-nums"
               >
                 <span v-if="articlesLoading" class="animate-pulse">...</span>
                 <NumberTicker
@@ -282,7 +282,7 @@ useSeoMeta({
                 />
               </div>
               <div
-                class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-400 text-center mt-1"
+                class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center mt-1"
               >
                 Articles
               </div>
@@ -307,7 +307,7 @@ useSeoMeta({
               class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
             >
               <div
-                class="text-lg sm:text-xl lg:text-2xl font-bold text-red-500 tabular-nums"
+                class="text-2xl sm:text-3xl lg:text-4xl font-bold text-red-500 tabular-nums"
               >
                 <span
                   v-if="articlesLoading || githubLoading"
@@ -317,7 +317,7 @@ useSeoMeta({
                 <NumberTicker v-else :value="totalReactions" :duration="1500" />
               </div>
               <div
-                class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-400 text-center mt-1"
+                class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center mt-1"
               >
                 Reactions
               </div>
@@ -349,7 +349,7 @@ useSeoMeta({
               class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
             >
               <div
-                class="text-lg sm:text-xl lg:text-2xl font-bold text-blue-500 tabular-nums"
+                class="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-500 tabular-nums"
               >
                 <span v-if="githubLoading" class="animate-pulse">...</span>
                 <NumberTicker
@@ -359,13 +359,13 @@ useSeoMeta({
                 />
               </div>
               <div
-                class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-400 text-center mt-1"
+                class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center mt-1"
               >
                 Repositories
               </div>
               <UIcon
                 name="i-simple-icons-github"
-                class="w-3 h-3 sm:w-4 sm:h-4 text-gray-700 dark:text-gray-300 mt-1"
+                class="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 dark:text-gray-300 mt-1"
               />
             </div>
           </UCard>
