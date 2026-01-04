@@ -419,12 +419,33 @@ useSeoMeta({
             <div
               v-for="day in dailyDownloads"
               :key="day.day"
-              class="flex-1 bg-gradient-to-t from-primary-500 to-primary-300 rounded-t transition-all duration-300 hover:from-primary-600 hover:to-primary-400 min-w-[2px]"
-              :style="{
-                height: `${Math.max(4, (day.downloads / Math.max(...dailyDownloads.map((d) => d.downloads))) * 100)}%`,
-              }"
-              :title="`${day.day}: ${day.downloads} downloads`"
-            />
+              class="relative flex-1 group min-w-[2px]"
+            >
+              <!-- Bar -->
+              <div
+                class="w-full bg-gradient-to-t from-primary-500 to-primary-300 rounded-t transition-all duration-300 group-hover:from-primary-600 group-hover:to-primary-400 cursor-pointer"
+                :style="{
+                  height: `${Math.max(4, (day.downloads / Math.max(...dailyDownloads.map((d) => d.downloads))) * 100)}%`,
+                }"
+              />
+              <!-- Tooltip -->
+              <div
+                class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none"
+              >
+                <div
+                  class="bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 px-3 py-2 rounded-lg shadow-lg text-xs whitespace-nowrap"
+                >
+                  <div class="font-semibold">{{ day.day }}</div>
+                  <div class="text-primary-400 dark:text-primary-600">
+                    {{ formatNumber(day.downloads) }} downloads
+                  </div>
+                </div>
+                <!-- Arrow -->
+                <div
+                  class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900 dark:border-t-gray-100"
+                />
+              </div>
+            </div>
           </div>
           <div
             class="flex justify-between text-[10px] sm:text-xs text-gray-400 mt-2 px-1 sm:px-2"
