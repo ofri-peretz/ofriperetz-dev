@@ -14,6 +14,9 @@ export default defineAppConfig({
       primary: 'indigo',
       neutral: 'slate'
     },
+    icons: {
+      loading: 'i-lucide-loader-2'
+    },
     pageHero: {
       slots: {
         container: 'py-18 sm:py-24 lg:py-32',

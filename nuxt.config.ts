@@ -84,6 +84,12 @@ export default defineNuxtConfig({
     defaultLocale: 'en'
   },
 
+  // Runtime config for API keys (server-side only for security)
+  runtimeConfig: {
+    devtoApiKey: process.env.DEVTO_API_KEY || ''
+    // Note: Keys in 'runtimeConfig' (not 'public') are server-side only
+  },
+
   nitro: {
     prerender: {
       routes: [

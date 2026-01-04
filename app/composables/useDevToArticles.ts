@@ -19,9 +19,7 @@ export interface DevToArticle {
 
 export const useDevToArticles = () => {
   const articles = ref<DevToArticle[]>([])
-  // dev.to followers API requires authentication, so we'll use runtime config
-  // or fall back to a manually set value that can be updated periodically
-  const followers = ref(45) // Updated: Jan 4, 2026 - from dev.to dashboard
+  const followers = ref(0)
   const loading = ref(false)
   const error = ref<string | null>(null)
 
@@ -30,36 +28,21 @@ export const useDevToArticles = () => {
     error.value = null
 
     try {
-      const articlesResponse = await $fetch<DevToArticle[]>(
-        `https://dev.to/api/articles?username=${username}&per_page=${perPage}`
-      )
+      // Fetch articles (public API) and followers (via server route for security)
+      const [articlesResponse, statsResponse] = await Promise.all([
+        $fetch<DevToArticle[]>(
+          `https://dev.to/api/articles?username=${username}&per_page=${perPage}`
+        ),
+        $fetch<{ followers: number }>('/api/devto-stats')
+      ])
       
       articles.value = articlesResponse
-      
-      // Note: dev.to follower count requires API key authentication
-      // The followers value is set manually from the dashboard
-      // To enable dynamic fetching, add DEVTO_API_KEY to runtime config
-      const config = useRuntimeConfig()
-      if (config.public.devtoApiKey) {
-        try {
-          const response = await $fetch<{ followers_count: number }>(
-            `https://dev.to/api/users/me`,
-            {
-              headers: {
-                'api-key': config.public.devtoApiKey as string
-              }
-            }
-          )
-          if (response?.followers_count) {
-            followers.value = response.followers_count
-          }
-        } catch {
-          // Silently fail - use default value
-        }
-      }
+      followers.value = statsResponse.followers
     } catch (e) {
       error.value = 'Failed to fetch articles from dev.to'
       console.error('dev.to API error:', e)
+      // Set fallback followers on error
+      followers.value = 45
     } finally {
       loading.value = false
     }
