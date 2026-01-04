@@ -471,10 +471,13 @@ useSeoMeta({
                 class="group"
               >
                 <div class="flex justify-between text-sm mb-1">
-                  <span
-                    class="text-gray-700 dark:text-gray-300 truncate text-xs sm:text-sm"
-                    >{{ pkg.name }}</span
+                  <NuxtLink
+                    :to="`https://www.npmjs.com/package/${pkg.name}`"
+                    target="_blank"
+                    class="text-gray-700 dark:text-gray-300 truncate text-xs sm:text-sm hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
                   >
+                    {{ pkg.name }}
+                  </NuxtLink>
                   <span
                     class="text-gray-500 dark:text-gray-400 font-mono text-xs"
                     >{{ formatNumber(pkg.downloads) }}</span
@@ -853,7 +856,7 @@ useSeoMeta({
               <div
                 class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 text-center"
               >
-                Faster
+                Faster Than Common Plugins
               </div>
             </div>
             <div
@@ -862,14 +865,26 @@ useSeoMeta({
               <div
                 class="text-lg sm:text-xl font-bold text-red-600 dark:text-red-400"
               >
-                AI
+                AI-First
               </div>
               <div
                 class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 text-center"
               >
-                Native
+                Thinking
               </div>
             </div>
+          </div>
+
+          <!-- Explore More CTA -->
+          <div class="mt-4 text-center">
+            <NuxtLink
+              to="https://github.com/ofri-peretz/eslint"
+              target="_blank"
+              class="inline-flex items-center gap-2 text-sm text-primary-600 dark:text-primary-400 hover:underline"
+            >
+              Explore the Interlace ESLint Ecosystem
+              <UIcon name="i-lucide-external-link" class="w-3.5 h-3.5" />
+            </NuxtLink>
           </div>
         </UCard>
       </BlurFade>
@@ -877,11 +892,7 @@ useSeoMeta({
       <!-- CTA -->
       <BlurFade :delay="700">
         <div class="text-center">
-          <!-- Let's Talk - Primary CTA -->
-          <div class="mb-4">
-            <LinkedInCTA />
-          </div>
-          <div class="flex flex-wrap justify-center gap-3 sm:gap-4">
+          <div class="flex flex-wrap justify-center gap-3 sm:gap-4 mb-4">
             <ShimmerButton>
               <NuxtLink
                 to="https://www.npmjs.com/~ofriperetz"
@@ -913,6 +924,8 @@ useSeoMeta({
               </NuxtLink>
             </ShimmerButton>
           </div>
+          <!-- Let's Talk - After other CTAs -->
+          <LinkedInCTA />
         </div>
       </BlurFade>
     </UContainer>
