@@ -79,6 +79,9 @@ experience:
         logo: "i-simple-icons-eslint"
         url: "https://github.com/ofri-peretz"
         color: "#4B32C3"
+      highlights:
+        - "16+ npm packages, 200+ security rules"
+        - "Author of ofriperetz.dev — deep dives on JS/TS, testing & platform engineering"
     - position: "Previous Roles"
       date: "2015 - 2021"
       company:
