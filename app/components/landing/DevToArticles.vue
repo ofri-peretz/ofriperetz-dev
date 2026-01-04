@@ -45,14 +45,12 @@ onMounted(() => {
 
     <!-- View More -->
     <div class="text-center mt-8">
-      <UButton
-        to="/articles"
-        color="neutral"
-        variant="outline"
-        trailing-icon="i-lucide-arrow-right"
-      >
-        View All Articles
-      </UButton>
+      <ShimmerButton>
+        <NuxtLink to="/articles" class="flex items-center gap-2">
+          View All Articles
+          <UIcon name="i-lucide-arrow-right" class="w-4 h-4" />
+        </NuxtLink>
+      </ShimmerButton>
     </div>
   </UPageSection>
 </template>
