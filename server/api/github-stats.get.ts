@@ -1,6 +1,47 @@
+// Fallback data with real stats (updated manually when needed)
+const FALLBACK_STATS = {
+  totalStars: 11,
+  totalForks: 2,
+  totalWatchers: 35,
+  totalRepos: 35,
+  followers: 51,
+  following: 30,
+  publicRepos: 35,
+  accountAgeYears: 9,
+  totalContributions: 1799,
+  recentCommits: 477,
+  recentPRs: 319,
+  recentIssues: 168,
+  recentRepos: 35,
+  recentReviews: 0,
+  contributionCalendar: [],
+  topRepos: [
+    { name: 'eslint-plugin-secure-coding', stars: 3, forks: 0, url: 'https://github.com/ofri-peretz/eslint-plugin-secure-coding', description: 'Security-focused ESLint rules' }
+  ],
+  languages: [
+    { name: 'TypeScript', count: 25 },
+    { name: 'JavaScript', count: 8 },
+    { name: 'Vue', count: 2 }
+  ],
+  authenticated: false,
+  source: 'fallback' as const
+}
+
+// Cache to avoid rate limiting
+const cachedStats = {
+  lastFetched: 0,
+  data: null as typeof FALLBACK_STATS | null
+}
+
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const username = 'ofri-peretz'
+  const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
+  
+  // Return cached data if fresh
+  if (cachedStats.data && (Date.now() - cachedStats.lastFetched) < CACHE_TTL) {
+    return { ...cachedStats.data, source: 'cache' }
+  }
   
   const headers: Record<string, string> = {
     'Accept': 'application/vnd.github.v3+json',
@@ -13,14 +54,17 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    // Fetch REST API data
+    // Fetch REST API data with timeout
     const [user, repos] = await Promise.all([
       $fetch<{
         public_repos: number
         followers: number
         following: number
         created_at: string
-      }>(`https://api.github.com/users/${username}`, { headers }),
+      }>(`https://api.github.com/users/${username}`, { 
+        headers,
+        timeout: 10000
+      }),
       
       $fetch<Array<{
         name: string
@@ -32,17 +76,20 @@ export default defineEventHandler(async (event) => {
         pushed_at: string
         html_url: string
         description: string | null
-      }>>(`https://api.github.com/users/${username}/repos?per_page=100&sort=pushed`, { headers })
+      }>>(`https://api.github.com/users/${username}/repos?per_page=100&sort=pushed`, { 
+        headers,
+        timeout: 10000
+      })
     ])
     
     // If we have a token, use GraphQL for contribution data
     let contributionStats = {
-      totalContributions: 0,
+      totalContributions: FALLBACK_STATS.totalContributions,
       contributionCalendar: [] as { date: string; count: number }[],
-      totalCommitContributions: 0,
-      totalPullRequestContributions: 0,
-      totalIssueContributions: 0,
-      totalRepositoryContributions: 0
+      totalCommitContributions: FALLBACK_STATS.recentCommits,
+      totalPullRequestContributions: FALLBACK_STATS.recentPRs,
+      totalIssueContributions: FALLBACK_STATS.recentIssues,
+      totalRepositoryContributions: FALLBACK_STATS.recentRepos
     }
     
     if (config.githubToken) {
@@ -73,6 +120,7 @@ export default defineEventHandler(async (event) => {
             ...headers,
             'Content-Type': 'application/json'
           },
+          timeout: 10000,
           body: JSON.stringify({
             query: `
               query {
@@ -113,7 +161,8 @@ export default defineEventHandler(async (event) => {
           }
         }
       } catch (graphqlError) {
-        console.error('GraphQL error:', graphqlError)
+        console.error('GraphQL error, using fallback contribution stats:', graphqlError)
+        // Keep using fallback contribution stats
       }
     }
     
@@ -153,7 +202,7 @@ export default defineEventHandler(async (event) => {
       (Date.now() - new Date(user.created_at).getTime()) / (1000 * 60 * 60 * 24 * 365)
     )
 
-    return {
+    const result = {
       // Basic stats
       totalStars,
       totalForks,
@@ -170,35 +219,30 @@ export default defineEventHandler(async (event) => {
       recentPRs: contributionStats.totalPullRequestContributions,
       recentIssues: contributionStats.totalIssueContributions,
       recentRepos: contributionStats.totalRepositoryContributions,
+      recentReviews: 0,
       contributionCalendar: contributionStats.contributionCalendar,
       
       // Enriched data
       topRepos,
       languages,
       
-      authenticated: !!config.githubToken
+      authenticated: !!config.githubToken,
+      source: 'api' as const
     }
+    
+    // Cache the result
+    cachedStats.data = result
+    cachedStats.lastFetched = Date.now()
+    
+    return result
   } catch (error) {
-    console.error('Failed to fetch GitHub stats:', error)
-    return {
-      totalStars: 0,
-      totalForks: 0,
-      totalWatchers: 0,
-      totalRepos: 0,
-      followers: 0,
-      following: 0,
-      publicRepos: 0,
-      accountAgeYears: 0,
-      totalContributions: 0,
-      recentCommits: 0,
-      recentPRs: 0,
-      recentIssues: 0,
-      recentRepos: 0,
-      contributionCalendar: [],
-      topRepos: [],
-      languages: [],
-      authenticated: false,
-      error: 'Failed to fetch'
+    console.error('Failed to fetch GitHub stats, returning fallback:', error)
+    
+    // Return cached data if available, otherwise fallback
+    if (cachedStats.data) {
+      return { ...cachedStats.data, source: 'cache' }
     }
+    
+    return FALLBACK_STATS
   }
 })
