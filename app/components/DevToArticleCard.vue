@@ -32,16 +32,14 @@ const formatDate = (dateString: string) => {
             :alt="article.title"
             class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
           />
-          <!-- dev.to badge -->
+          <!-- dev.to badge with guaranteed contrast -->
           <div class="absolute top-3 left-3">
-            <UBadge
-              color="neutral"
-              variant="solid"
-              class="backdrop-blur-sm bg-black/70"
+            <span
+              class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-white bg-black/80 rounded-full shadow-lg ring-1 ring-white/20"
             >
-              <UIcon name="i-simple-icons-devdotto" class="w-3 h-3 mr-1" />
+              <UIcon name="i-simple-icons-devdotto" class="w-3 h-3" />
               dev.to
-            </UBadge>
+            </span>
           </div>
         </div>
       </template>
