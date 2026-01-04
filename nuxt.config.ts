@@ -6,8 +6,8 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxt/content',
     '@vueuse/nuxt',
-    'nuxt-og-image',
     'motion-v/nuxt'
+    // Removed nuxt-og-image - using static OG images instead for stability
   ],
 
   devtools: {
@@ -56,7 +56,7 @@ export default defineNuxtConfig({
       script: [
         {
           type: 'application/ld+json',
-          children: JSON.stringify({
+          innerHTML: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Person',
             name: 'Ofri Peretz',
@@ -112,18 +112,6 @@ export default defineNuxtConfig({
       // Don't crawl links to avoid trying to prerender /stats which needs dynamic API data
       crawlLinks: false,
       ignore: ['/stats', '/api']
-    }
-  },
-
-  // OG Image configuration for social sharing
-  ogImage: {
-    defaults: {
-      component: 'OgImageTemplate',
-      width: 1200,
-      height: 630,
-    },
-    componentOptions: {
-      global: true
     }
   },
 

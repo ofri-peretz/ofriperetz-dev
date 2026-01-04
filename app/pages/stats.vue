@@ -1,4 +1,7 @@
 <script setup lang="ts">
+// Add error state for graceful degradation
+const pageError = ref<string | null>(null);
+
 const {
   articles,
   followers: devtoFollowers,
@@ -17,11 +20,18 @@ const {
   fetchStats: fetchGitHubStats,
 } = useGitHubStats();
 
-// Fetch data on mount
-onMounted(() => {
-  fetchArticles("ofri-peretz", 100);
-  fetchNpmStats();
-  fetchGitHubStats();
+// Fetch data on mount with error handling - NEVER let the page crash
+onMounted(async () => {
+  try {
+    await Promise.allSettled([
+      fetchArticles("ofri-peretz", 100),
+      fetchNpmStats(),
+      fetchGitHubStats(),
+    ]);
+  } catch (e) {
+    console.error("Error fetching stats data:", e);
+    pageError.value = "Some data may be temporarily unavailable";
+  }
 });
 
 // Computed stats - with null safety
