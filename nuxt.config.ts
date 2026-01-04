@@ -99,7 +99,9 @@ export default defineNuxtConfig({
         '/projects',
         '/articles'
       ],
-      crawlLinks: true
+      // Don't crawl links to avoid trying to prerender /stats which needs dynamic API data
+      crawlLinks: false,
+      ignore: ['/stats', '/api']
     }
   },
 
