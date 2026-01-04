@@ -20,21 +20,21 @@ onMounted(async () => {
   hasLoaded.value = true;
 });
 
-// Computed values
-const totalArticles = computed(() => articles.value.length);
+// Computed values - with null safety
+const totalArticles = computed(() => articles.value?.length || 0);
 
-// Combined followers (GitHub + dev.to)
+// Combined followers (GitHub + dev.to) - with null safety
 // Note: LinkedIn, Medium, and X.com don't have public APIs for follower counts
 const totalFollowers = computed(
-  () => githubStats.value.followers + devtoFollowers.value,
+  () => (githubStats.value?.followers || 0) + (devtoFollowers.value || 0),
 );
 
-// GitHub engagement (stars + recent activity)
+// GitHub engagement (stars + recent activity) - with null safety
 const githubEngagement = computed(
   () =>
-    githubStats.value.totalStars +
-    githubStats.value.recentCommits +
-    githubStats.value.recentPRs,
+    (githubStats.value?.totalStars || 0) +
+    (githubStats.value?.recentCommits || 0) +
+    (githubStats.value?.recentPRs || 0),
 );
 </script>
 

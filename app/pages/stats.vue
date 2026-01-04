@@ -24,16 +24,25 @@ onMounted(() => {
   fetchGitHubStats();
 });
 
-// Computed stats
-const totalArticles = computed(() => articles.value.length);
-const devtoReactions = computed(() =>
-  articles.value.reduce((sum, a) => sum + a.positive_reactions_count, 0),
+// Computed stats - with null safety
+const totalArticles = computed(() => articles.value?.length || 0);
+const devtoReactions = computed(
+  () =>
+    articles.value?.reduce(
+      (sum, a) => sum + (a.positive_reactions_count || 0),
+      0,
+    ) || 0,
 );
-const totalComments = computed(() =>
-  articles.value.reduce((sum, a) => sum + a.comments_count, 0),
+const totalComments = computed(
+  () =>
+    articles.value?.reduce((sum, a) => sum + (a.comments_count || 0), 0) || 0,
 );
-const totalReadingTime = computed(() =>
-  articles.value.reduce((sum, a) => sum + a.reading_time_minutes, 0),
+const totalReadingTime = computed(
+  () =>
+    articles.value?.reduce(
+      (sum, a) => sum + (a.reading_time_minutes || 0),
+      0,
+    ) || 0,
 );
 
 // Medium stats (manual - no free public API, requires RapidAPI subscription)
@@ -44,15 +53,20 @@ const mediumStats = {
   followers: 0, // Medium followers
 };
 
-// Combined reactions: GitHub stars + dev.to reactions + Medium claps
+// Combined reactions: GitHub stars + dev.to reactions + Medium claps - with null safety
 const totalReactions = computed(
-  () => githubStats.value.totalStars + devtoReactions.value + mediumStats.claps,
+  () =>
+    (githubStats.value?.totalStars || 0) +
+    devtoReactions.value +
+    mediumStats.claps,
 );
 
-// Combined followers from all platforms (GitHub + dev.to + Medium)
+// Combined followers from all platforms (GitHub + dev.to + Medium) - with null safety
 const totalFollowers = computed(
   () =>
-    githubStats.value.followers + devtoFollowers.value + mediumStats.followers,
+    (githubStats.value?.followers || 0) +
+    (devtoFollowers.value || 0) +
+    mediumStats.followers,
 );
 
 // Combined articles (dev.to + Medium)
@@ -60,16 +74,18 @@ const combinedArticles = computed(
   () => totalArticles.value + mediumStats.articles,
 );
 
-// Top packages by downloads (top 8)
-const topPackages = computed(() =>
-  npmStats.value.slice(0, 8).map((pkg) => ({
-    name: pkg.name.replace("eslint-plugin-", ""),
-    downloads: pkg.downloads,
-  })),
-);
+// Top packages by downloads (top 8) - with null safety
+const topPackages = computed(() => {
+  if (!npmStats.value || !Array.isArray(npmStats.value)) return [];
+  return npmStats.value.slice(0, 8).map((pkg) => ({
+    name: pkg.name?.replace("eslint-plugin-", "") || pkg.name,
+    downloads: pkg.downloads || 0,
+  }));
+});
 
-// Aggregate daily downloads for sparkline
+// Aggregate daily downloads for sparkline - with null safety
 const dailyDownloads = computed(() => {
+  if (!npmStats.value || !Array.isArray(npmStats.value)) return [];
   const dayMap: Record<string, number> = {};
   npmStats.value.forEach((pkg) => {
     pkg.dailyData?.forEach((d) => {
@@ -509,7 +525,7 @@ useSeoMeta({
                   </h4>
                   <div class="text-lg font-bold text-primary-500">
                     <NumberTicker
-                      :value="githubStats.totalContributions"
+                      :value="githubStats?.totalContributions || 0"
                       :duration="1500"
                     />
                     <span class="text-xs text-gray-400 ml-1">total</span>
@@ -521,7 +537,7 @@ useSeoMeta({
                       class="text-lg font-bold text-green-600 dark:text-green-400"
                     >
                       <NumberTicker
-                        :value="githubStats.recentCommits"
+                        :value="githubStats?.recentCommits || 0"
                         :duration="1200"
                       />
                     </div>
@@ -534,7 +550,7 @@ useSeoMeta({
                       class="text-lg font-bold text-purple-600 dark:text-purple-400"
                     >
                       <NumberTicker
-                        :value="githubStats.recentPRs"
+                        :value="githubStats?.recentPRs || 0"
                         :duration="1200"
                       />
                     </div>
@@ -545,7 +561,7 @@ useSeoMeta({
                       class="text-lg font-bold text-blue-600 dark:text-blue-400"
                     >
                       <NumberTicker
-                        :value="githubStats.recentReviews"
+                        :value="githubStats?.recentReviews || 0"
                         :duration="1200"
                       />
                     </div>
@@ -558,7 +574,7 @@ useSeoMeta({
                       class="text-lg font-bold text-orange-600 dark:text-orange-400"
                     >
                       <NumberTicker
-                        :value="githubStats.recentIssues"
+                        :value="githubStats?.recentIssues || 0"
                         :duration="1200"
                       />
                     </div>
