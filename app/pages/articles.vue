@@ -50,6 +50,118 @@ const totalReadingTime = computed(
     ) || 0,
 );
 
+// ============================================
+// SORTING SYSTEM
+// ============================================
+
+// Pinned article slugs - shown first in default state
+const PINNED_SLUGS = [
+  "eslint-plugin-import-vs-eslint-plugin-import-next-up-to-100x-faster",
+  "why-eslint-plugin-import-takes-45-seconds-and-how-we-fixed-it",
+  "your-eslint-security-plugin-is-missing-80-of-vulnerabilities-i-have-proof",
+  "the-30-minute-security-audit-onboarding-a-new-codebase",
+  "the-security-engineer-interview-cheat-sheet-for-javascript-developers",
+];
+
+// Sort options
+type SortOption = "views" | "recent" | "reactions";
+type SortOrder = "desc" | "asc";
+
+const sortBy = ref<SortOption>("views");
+const sortOrder = ref<SortOrder>("desc");
+const isDefaultState = ref(true);
+
+const sortOptions = [
+  { value: "views" as SortOption, label: "Views", icon: "i-lucide-eye" },
+  { value: "recent" as SortOption, label: "Recent", icon: "i-lucide-calendar" },
+  {
+    value: "reactions" as SortOption,
+    label: "Reactions",
+    icon: "i-lucide-heart",
+  },
+];
+
+// Get current sort option index for sliding indicator
+const currentSortIndex = computed(() =>
+  sortOptions.findIndex((opt) => opt.value === sortBy.value),
+);
+
+// Handle sort option change
+const selectSort = (option: SortOption) => {
+  if (sortBy.value === option) {
+    // Same option clicked - toggle order
+    sortOrder.value = sortOrder.value === "desc" ? "asc" : "desc";
+  } else {
+    // New option - set to desc and mark as non-default
+    sortBy.value = option;
+    sortOrder.value = "desc";
+  }
+  isDefaultState.value = false;
+};
+
+// Toggle sort order
+const toggleOrder = () => {
+  sortOrder.value = sortOrder.value === "desc" ? "asc" : "desc";
+  isDefaultState.value = false;
+};
+
+// Reset to default
+const resetSort = () => {
+  sortBy.value = "views";
+  sortOrder.value = "desc";
+  isDefaultState.value = true;
+};
+
+// Sorted and filtered articles
+const sortedArticles = computed(() => {
+  if (!articles.value) return [];
+
+  const sorted = [...articles.value].sort((a, b) => {
+    let comparison = 0;
+
+    switch (sortBy.value) {
+      case "views":
+        // dev.to API doesn't expose views, use reactions as proxy
+        comparison =
+          (b.positive_reactions_count || 0) - (a.positive_reactions_count || 0);
+        break;
+      case "recent":
+        comparison =
+          new Date(b.published_at).getTime() -
+          new Date(a.published_at).getTime();
+        break;
+      case "reactions":
+        comparison =
+          (b.positive_reactions_count || 0) - (a.positive_reactions_count || 0);
+        break;
+    }
+
+    return sortOrder.value === "desc" ? comparison : -comparison;
+  });
+
+  // If default state, put pinned articles first
+  if (isDefaultState.value) {
+    const pinned = sorted.filter((a) =>
+      PINNED_SLUGS.some((slug) => a.slug?.includes(slug)),
+    );
+    const notPinned = sorted.filter(
+      (a) => !PINNED_SLUGS.some((slug) => a.slug?.includes(slug)),
+    );
+    return [...pinned, ...notPinned];
+  }
+
+  return sorted;
+});
+
+// Check if article is pinned (for badge display)
+const isPinned = (article: any) =>
+  isDefaultState.value &&
+  PINNED_SLUGS.some((slug) => article.slug?.includes(slug));
+
+// ============================================
+// VIEW MODE
+// ============================================
+
 // View mode: 1, 2, or 3 columns
 const viewMode = ref(3);
 
@@ -315,6 +427,75 @@ useSeoMeta({
           </div>
         </div>
 
+        <!-- Sort Controls -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Sort:</span>
+            <!-- Sort Options with sliding indicator -->
+            <div
+              class="relative flex items-center gap-0.5 p-1 bg-gray-100 dark:bg-gray-800 rounded-xl"
+            >
+              <!-- Sliding indicator -->
+              <div
+                class="absolute h-8 bg-primary-500 rounded-lg transition-all duration-300 ease-out shadow-lg shadow-primary-500/30"
+                :style="{
+                  width: `${sortOptions[currentSortIndex]?.label.length * 8 + 40}px`,
+                  left: `${currentSortIndex * 85 + 4}px`,
+                }"
+              />
+              <button
+                v-for="option in sortOptions"
+                :key="option.value"
+                @click="selectSort(option.value)"
+                class="relative z-10 flex items-center gap-1.5 px-3 h-8 rounded-lg transition-colors duration-200 text-sm font-medium"
+                :class="
+                  sortBy === option.value
+                    ? 'text-white'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                "
+              >
+                <UIcon :name="option.icon" class="w-4 h-4" />
+                {{ option.label }}
+              </button>
+            </div>
+
+            <!-- Order Toggle -->
+            <button
+              @click="toggleOrder"
+              class="flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              :title="sortOrder === 'desc' ? 'Descending' : 'Ascending'"
+            >
+              <UIcon
+                :name="
+                  sortOrder === 'desc'
+                    ? 'i-lucide-arrow-down'
+                    : 'i-lucide-arrow-up'
+                "
+                class="w-4 h-4 text-gray-600 dark:text-gray-400"
+              />
+            </button>
+
+            <!-- Reset Button (only show when not in default state) -->
+            <button
+              v-if="!isDefaultState"
+              @click="resetSort"
+              class="flex items-center gap-1.5 px-3 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-sm text-gray-600 dark:text-gray-400"
+            >
+              <UIcon name="i-lucide-rotate-ccw" class="w-3.5 h-3.5" />
+              Reset
+            </button>
+          </div>
+
+          <!-- Pinned indicator -->
+          <div
+            v-if="isDefaultState"
+            class="flex items-center gap-2 text-sm text-amber-600 dark:text-amber-400"
+          >
+            <UIcon name="i-lucide-pin" class="w-4 h-4" />
+            <span>Featured articles shown first</span>
+          </div>
+        </div>
+
         <!-- Loading State -->
         <div v-if="loading" class="flex justify-center py-12">
           <UIcon
@@ -337,16 +518,26 @@ useSeoMeta({
         <Transition name="fade" mode="out-in">
           <div
             v-if="!loading && !error"
-            :key="viewMode"
+            :key="`${viewMode}-${sortBy}-${sortOrder}-${isDefaultState}`"
             class="grid gap-6"
             :class="gridClass"
           >
             <BlurFade
-              v-for="(article, index) in articles"
+              v-for="(article, index) in sortedArticles"
               :key="article.id"
-              :delay="index * 50"
+              :delay="index * 30"
             >
-              <DevToArticleCard :article="article" />
+              <div class="relative">
+                <!-- Pinned Badge -->
+                <div
+                  v-if="isPinned(article)"
+                  class="absolute -top-2 -right-2 z-10 flex items-center gap-1 px-2 py-1 bg-amber-500 text-white text-xs font-medium rounded-full shadow-lg"
+                >
+                  <UIcon name="i-lucide-pin" class="w-3 h-3" />
+                  Featured
+                </div>
+                <DevToArticleCard :article="article" />
+              </div>
             </BlurFade>
           </div>
         </Transition>
