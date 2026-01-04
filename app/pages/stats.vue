@@ -501,11 +501,20 @@ useSeoMeta({
             <div v-else class="space-y-4">
               <!-- Activity Breakdown Chart -->
               <div>
-                <h4
-                  class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3"
-                >
-                  Public Repo Activity
-                </h4>
+                <div class="flex items-center justify-between mb-3">
+                  <h4
+                    class="text-xs font-medium text-gray-500 dark:text-gray-400"
+                  >
+                    This Year's Contributions
+                  </h4>
+                  <div class="text-lg font-bold text-primary-500">
+                    <NumberTicker
+                      :value="githubStats.totalContributions"
+                      :duration="1500"
+                    />
+                    <span class="text-xs text-gray-400 ml-1">total</span>
+                  </div>
+                </div>
                 <div class="grid grid-cols-4 gap-2 text-center">
                   <div class="p-2 bg-green-50 dark:bg-green-900/20 rounded-lg">
                     <div
