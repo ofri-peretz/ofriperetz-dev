@@ -31,9 +31,18 @@ export default defineNuxtConfig({
         { property: 'og:site_name', content: 'Ofri Peretz' },
         { property: 'og:type', content: 'website' },
         { property: 'og:locale', content: 'en_US' },
+        { property: 'og:title', content: 'Ofri Peretz - Engineering Leader & Open Source Creator' },
+        { property: 'og:description', content: 'Building Products That Matter • Engineering Leadership • Open-Source Contributor. Creator of the Interlace ESLint Ecosystem.' },
+        { property: 'og:image', content: 'https://ofriperetz.dev/og-image.png' },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+        { property: 'og:url', content: 'https://ofriperetz.dev' },
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:site', content: '@ofriperetzdev' },
-        { name: 'twitter:creator', content: '@ofriperetzdev' }
+        { name: 'twitter:creator', content: '@ofriperetzdev' },
+        { name: 'twitter:title', content: 'Ofri Peretz - Engineering Leader & Open Source Creator' },
+        { name: 'twitter:description', content: 'Building Products That Matter • Engineering Leadership • Open-Source Contributor.' },
+        { name: 'twitter:image', content: 'https://ofriperetz.dev/og-image.png' }
       ],
       link: [
         { rel: 'canonical', href: 'https://ofriperetz.dev' },
