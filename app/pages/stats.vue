@@ -869,6 +869,10 @@ useSeoMeta({
       <!-- CTA -->
       <BlurFade :delay="700">
         <div class="text-center">
+          <!-- Let's Talk - Primary CTA -->
+          <div class="mb-4">
+            <LinkedInCTA />
+          </div>
           <div class="flex flex-wrap justify-center gap-3 sm:gap-4">
             <ShimmerButton>
               <NuxtLink

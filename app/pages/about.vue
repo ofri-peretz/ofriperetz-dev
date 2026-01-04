@@ -204,6 +204,8 @@ useSeoMeta({
     <BlurFade :delay="500">
       <div class="text-center pb-12">
         <div class="flex flex-wrap justify-center gap-4">
+          <!-- Primary CTA: Let's Talk -->
+          <LinkedInCTA />
           <ShimmerButton>
             <NuxtLink to="/stats" class="flex items-center gap-2">
               <UIcon name="i-lucide-bar-chart-2" class="w-4 h-4" />
