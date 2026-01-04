@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { SpeedInsights } from "@vercel/speed-insights/nuxt";
+import { Analytics } from "@vercel/analytics/nuxt";
 const colorMode = useColorMode();
 
 const color = computed(() =>
@@ -70,5 +72,9 @@ const [{ data: navigation }, { data: files }] = await Promise.all([
         :fuse="{ resultLimit: 42 }"
       />
     </ClientOnly>
+
+    <!-- Vercel Analytics -->
+    <SpeedInsights />
+    <Analytics />
   </UApp>
 </template>
