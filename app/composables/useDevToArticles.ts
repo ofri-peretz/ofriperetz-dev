@@ -1,13 +1,3 @@
-export interface DevToUser {
-  id: number
-  username: string
-  name: string
-  summary: string | null
-  twitter_username: string | null
-  github_username: string | null
-  profile_image: string
-}
-
 export interface DevToArticle {
   id: number
   title: string
@@ -29,7 +19,9 @@ export interface DevToArticle {
 
 export const useDevToArticles = () => {
   const articles = ref<DevToArticle[]>([])
-  const followers = ref(0)
+  // dev.to followers API requires authentication, so we'll use runtime config
+  // or fall back to a manually set value that can be updated periodically
+  const followers = ref(45) // Updated: Jan 4, 2026 - from dev.to dashboard
   const loading = ref(false)
   const error = ref<string | null>(null)
 
@@ -38,19 +30,32 @@ export const useDevToArticles = () => {
     error.value = null
 
     try {
-      // Fetch articles and follower count in parallel
-      const [articlesResponse, followersResponse] = await Promise.all([
-        $fetch<DevToArticle[]>(
-          `https://dev.to/api/articles?username=${username}&per_page=${perPage}`
-        ),
-        $fetch<{ followers_count?: number }>(`https://dev.to/api/followers/users?username=${username}&per_page=1000`).catch(() => null)
-      ])
+      const articlesResponse = await $fetch<DevToArticle[]>(
+        `https://dev.to/api/articles?username=${username}&per_page=${perPage}`
+      )
       
       articles.value = articlesResponse
       
-      // Try to get follower count from the response length (followers endpoint returns array)
-      if (Array.isArray(followersResponse)) {
-        followers.value = followersResponse.length
+      // Note: dev.to follower count requires API key authentication
+      // The followers value is set manually from the dashboard
+      // To enable dynamic fetching, add DEVTO_API_KEY to runtime config
+      const config = useRuntimeConfig()
+      if (config.public.devtoApiKey) {
+        try {
+          const response = await $fetch<{ followers_count: number }>(
+            `https://dev.to/api/users/me`,
+            {
+              headers: {
+                'api-key': config.public.devtoApiKey as string
+              }
+            }
+          )
+          if (response?.followers_count) {
+            followers.value = response.followers_count
+          }
+        } catch {
+          // Silently fail - use default value
+        }
       }
     } catch (e) {
       error.value = 'Failed to fetch articles from dev.to'
