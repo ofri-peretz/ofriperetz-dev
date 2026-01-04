@@ -118,10 +118,12 @@ export default defineNuxtConfig({
   // OG Image configuration for social sharing
   ogImage: {
     defaults: {
-      component: 'NuxtSeo',
-      props: {
-        colorMode: 'dark'
-      }
+      component: 'OgImageTemplate',
+      width: 1200,
+      height: 630,
+    },
+    componentOptions: {
+      global: true
     }
   },
 

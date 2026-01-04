@@ -140,6 +140,14 @@ useSeoMeta({
   twitterCard: "summary_large_image",
   twitterImage: "https://ofriperetz.dev/og-image.png",
 });
+
+// Dynamic OG Image
+defineOgImage({
+  component: "OgImageTemplate",
+  title: "My Impact Dashboard",
+  description: "Live metrics from my open source projects",
+  pageType: "stats",
+});
 </script>
 
 <template>

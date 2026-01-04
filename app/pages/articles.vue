@@ -53,6 +53,14 @@ useSeoMeta({
   twitterCard: "summary_large_image",
   twitterImage: "https://ofriperetz.dev/og-image.png",
 });
+
+// Dynamic OG Image
+defineOgImage({
+  component: "OgImageTemplate",
+  title: "Technical Articles",
+  description: "Security, ESLint & AI-native development",
+  pageType: "articles",
+});
 </script>
 
 <template>

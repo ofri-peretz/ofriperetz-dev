@@ -16,6 +16,14 @@ useSeoMeta({
   description: page.value?.seo.description || page.value?.description,
   ogDescription: page.value?.seo.description || page.value?.description,
 });
+
+// Dynamic OG Image generation
+defineOgImage({
+  component: "OgImageTemplate",
+  title: "Ofri Peretz",
+  description: "Engineering Leader & Open Source Creator",
+  pageType: "home",
+});
 </script>
 
 <template>
