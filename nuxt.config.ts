@@ -56,7 +56,7 @@ export default defineNuxtConfig({
               'https://github.com/ofri-peretz',
               'https://x.com/ofriperetzdev',
               'https://www.linkedin.com/in/ofri-peretz/',
-              'https://dev.to/ofriperetz'
+              'https://dev.to/ofri-peretz'
             ],
             knowsAbout: [
               'TypeScript',
@@ -86,8 +86,7 @@ export default defineNuxtConfig({
         '/',
         '/about',
         '/projects',
-        '/blog',
-        '/speaking'
+        '/articles'
       ],
       crawlLinks: true
     }
