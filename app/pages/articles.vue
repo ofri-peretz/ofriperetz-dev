@@ -1,6 +1,42 @@
 <script setup lang="ts">
 const { articles, loading, error, fetchArticles } = useDevToArticles();
 
+// View mode: 1, 2, or 3 columns
+const viewMode = ref(3);
+
+// Get available view modes based on screen size
+const { width } = useWindowSize();
+const availableViewModes = computed(() => {
+  if (width.value < 640) return [1]; // sm: only 1 column
+  if (width.value < 1024) return [1, 2]; // md: 1 or 2 columns
+  return [1, 2, 3]; // lg: all options
+});
+
+// Ensure view mode is valid for current screen size
+watch(
+  availableViewModes,
+  (modes) => {
+    if (!modes.includes(viewMode.value)) {
+      viewMode.value = Math.max(...modes);
+    }
+  },
+  { immediate: true },
+);
+
+// Grid class based on view mode
+const gridClass = computed(() => {
+  switch (viewMode.value) {
+    case 1:
+      return "grid-cols-1";
+    case 2:
+      return "grid-cols-1 sm:grid-cols-2";
+    case 3:
+      return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
+    default:
+      return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
+  }
+});
+
 // Fetch articles on mount
 onMounted(() => {
   fetchArticles("ofri-peretz", 12);
@@ -53,15 +89,51 @@ useSeoMeta({
 
       <!-- dev.to Section -->
       <div class="mb-16">
-        <div class="flex items-center gap-3 mb-6">
-          <UIcon
-            name="i-simple-icons-devdotto"
-            class="w-6 h-6 text-gray-900 dark:text-white"
-          />
-          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-            dev.to Articles
-          </h2>
-          <UBadge color="primary" variant="subtle">Auto-synced</UBadge>
+        <div class="flex items-center justify-between flex-wrap gap-4 mb-6">
+          <div class="flex items-center gap-3">
+            <UIcon
+              name="i-simple-icons-devdotto"
+              class="w-6 h-6 text-gray-900 dark:text-white"
+            />
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+              dev.to Articles
+            </h2>
+            <UBadge color="primary" variant="subtle">Auto-synced</UBadge>
+          </div>
+
+          <!-- View Mode Toggle -->
+          <div class="flex items-center gap-2">
+            <span
+              class="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline"
+              >View:</span
+            >
+            <div
+              class="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
+            >
+              <button
+                v-for="mode in availableViewModes"
+                :key="mode"
+                @click="viewMode = mode"
+                class="px-3 py-1.5 text-sm transition-colors"
+                :class="[
+                  viewMode === mode
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700',
+                ]"
+              >
+                <UIcon
+                  :name="
+                    mode === 1
+                      ? 'i-lucide-square'
+                      : mode === 2
+                        ? 'i-lucide-layout-grid'
+                        : 'i-lucide-grid-3x3'
+                  "
+                  class="w-4 h-4"
+                />
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- Loading State -->
@@ -83,7 +155,7 @@ useSeoMeta({
         />
 
         <!-- Articles Grid -->
-        <div v-else class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div v-else class="grid gap-6" :class="gridClass">
           <DevToArticleCard
             v-for="article in articles"
             :key="article.id"
