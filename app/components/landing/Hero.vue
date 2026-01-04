@@ -101,7 +101,10 @@ defineProps<{
           delay: 0.5,
         }"
       >
-        <div v-if="page.hero.links" class="flex items-center gap-2">
+        <div
+          v-if="page.hero.links"
+          class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto"
+        >
           <UButton v-bind="page.hero.links[0]" />
           <UButton
             :color="global.available ? 'success' : 'error'"

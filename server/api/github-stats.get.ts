@@ -30,7 +30,7 @@ const FALLBACK_STATS = {
 // Cache to avoid rate limiting
 const cachedStats = {
   lastFetched: 0,
-  data: null as typeof FALLBACK_STATS | null
+  data: null as any
 }
 
 export default defineEventHandler(async (event) => {

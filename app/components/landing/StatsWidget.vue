@@ -39,7 +39,7 @@ const githubEngagement = computed(
 </script>
 
 <template>
-  <div class="grid grid-cols-4 gap-2 sm:gap-3">
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
     <!-- npm Downloads -->
     <NuxtLink
       to="/stats"
