@@ -121,7 +121,7 @@ useSeoMeta({
           <div class="space-y-2">
             <div class="text-3xl sm:text-4xl font-bold text-primary-500">
               <span v-if="npmLoading" class="animate-pulse">...</span>
-              <span v-else>{{ formatNumber(totalDownloads) }}</span>
+              <NumberTicker v-else :value="totalDownloads" :duration="1500" />
             </div>
             <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
               npm Downloads/Month
@@ -140,7 +140,11 @@ useSeoMeta({
           <div class="space-y-2">
             <div class="text-3xl sm:text-4xl font-bold text-yellow-500">
               <span v-if="githubLoading" class="animate-pulse">...</span>
-              <span v-else>{{ githubStats.totalStars }}</span>
+              <NumberTicker
+                v-else
+                :value="githubStats.totalStars"
+                :duration="1500"
+              />
             </div>
             <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
               GitHub Stars
@@ -159,7 +163,7 @@ useSeoMeta({
           <div class="space-y-2">
             <div class="text-3xl sm:text-4xl font-bold text-green-500">
               <span v-if="articlesLoading" class="animate-pulse">...</span>
-              <span v-else>{{ totalArticles }}</span>
+              <NumberTicker v-else :value="totalArticles" :duration="1500" />
             </div>
             <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
               Technical Articles
@@ -178,7 +182,7 @@ useSeoMeta({
           <div class="space-y-2">
             <div class="text-3xl sm:text-4xl font-bold text-red-500">
               <span v-if="articlesLoading" class="animate-pulse">...</span>
-              <span v-else>{{ formatNumber(totalReactions) }}</span>
+              <NumberTicker v-else :value="totalReactions" :duration="1500" />
             </div>
             <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
               Total Reactions
@@ -194,7 +198,7 @@ useSeoMeta({
           <div class="space-y-2">
             <div class="text-3xl sm:text-4xl font-bold text-blue-500">
               <span v-if="articlesLoading" class="animate-pulse">...</span>
-              <span v-else>{{ totalComments }}</span>
+              <NumberTicker v-else :value="totalComments" :duration="1500" />
             </div>
             <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
               Comments

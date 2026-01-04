@@ -29,6 +29,12 @@ useSeoMeta({
       <LandingAbout :page />
       <LandingWorkExperience :page />
     </UPageSection>
+
+    <!-- Stats Widget -->
+    <UPageSection :ui="{ container: '!py-8' }">
+      <LandingStatsWidget />
+    </UPageSection>
+
     <LandingSkills :page />
     <LandingDevToArticles :page />
     <LandingFAQ :page />

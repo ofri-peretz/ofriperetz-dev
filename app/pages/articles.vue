@@ -107,32 +107,22 @@ useSeoMeta({
               class="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline"
               >View:</span
             >
-            <div
-              class="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
-            >
-              <button
+            <UButtonGroup size="sm" orientation="horizontal">
+              <UButton
                 v-for="mode in availableViewModes"
                 :key="mode"
+                :color="viewMode === mode ? 'primary' : 'neutral'"
+                :variant="viewMode === mode ? 'solid' : 'ghost'"
                 @click="viewMode = mode"
-                class="px-3 py-1.5 text-sm transition-colors"
-                :class="[
-                  viewMode === mode
-                    ? 'bg-primary-500 text-white'
-                    : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700',
-                ]"
-              >
-                <UIcon
-                  :name="
-                    mode === 1
-                      ? 'i-lucide-square'
-                      : mode === 2
-                        ? 'i-lucide-layout-grid'
-                        : 'i-lucide-grid-3x3'
-                  "
-                  class="w-4 h-4"
-                />
-              </button>
-            </div>
+                :icon="
+                  mode === 1
+                    ? 'i-lucide-square'
+                    : mode === 2
+                      ? 'i-lucide-columns-2'
+                      : 'i-lucide-grid-3x3'
+                "
+              />
+            </UButtonGroup>
           </div>
         </div>
 
