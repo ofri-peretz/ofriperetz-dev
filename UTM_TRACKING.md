@@ -2,7 +2,80 @@
 
 ## Overview
 
-This document tracks all UTM parameters and referrer configurations for ofriperetz.dev analytics.
+This document tracks all UTM parameters, referrer configurations, and outbound CTAs for ofriperetz.dev analytics.
+
+---
+
+## Outbound CTA Map (Links FROM Website)
+
+All external links on ofriperetz.dev, organized by page.
+
+### Homepage (`/`)
+
+| CTA                   | Destination                 | Platform | Tracked Event          |
+| --------------------- | --------------------------- | -------- | ---------------------- |
+| "Explore My Projects" | `/projects`                 | Internal | pageview               |
+| "Let's Talk"          | linkedin.com/in/ofri-peretz | LinkedIn | `contact_intent_click` |
+| Social Icons          | Various platforms           | Multiple | platform-specific      |
+
+### Stats Page (`/stats`)
+
+| CTA                          | Destination                   | Platform | Tracked Event          |
+| ---------------------------- | ----------------------------- | -------- | ---------------------- |
+| Package names                | npmjs.com/package/[name]      | npm      | -                      |
+| "View All on npm"            | npmjs.com/~ofriperetz         | npm      | -                      |
+| "Interlace ESLint Ecosystem" | github.com/ofri-peretz/eslint | GitHub   | -                      |
+| "View on npm" button         | npmjs.com/~ofriperetz         | npm      | -                      |
+| "View on GitHub" button      | github.com/ofri-peretz        | GitHub   | -                      |
+| "View on dev.to" button      | dev.to/ofri-peretz            | Dev.to   | -                      |
+| "Explore the Interlace..."   | github.com/ofri-peretz/eslint | GitHub   | -                      |
+| "Let's Talk"                 | linkedin.com/in/ofri-peretz   | LinkedIn | `contact_intent_click` |
+
+### Projects Page (`/projects`)
+
+| CTA                       | Destination                   | Platform | Tracked Event |
+| ------------------------- | ----------------------------- | -------- | ------------- |
+| "View on GitHub"          | github.com/ofri-peretz/eslint | GitHub   | -             |
+| "View on NPM"             | npmjs.com/~ofriperetz         | npm      | -             |
+| "View Project" (per card) | npmjs.com/package/[name]      | npm      | -             |
+
+### Articles Page (`/articles`)
+
+| CTA                       | Destination               | Platform | Tracked Event |
+| ------------------------- | ------------------------- | -------- | ------------- |
+| Article cards             | dev.to/ofri-peretz/[slug] | Dev.to   | -             |
+| "Read More on dev.to"     | dev.to/ofri-peretz        | Dev.to   | -             |
+| "View Articles on Medium" | medium.com/@ofriperetz    | Medium   | -             |
+
+### About Page (`/about`)
+
+| CTA           | Destination                 | Platform | Tracked Event          |
+| ------------- | --------------------------- | -------- | ---------------------- |
+| "Let's Talk"  | linkedin.com/in/ofri-peretz | LinkedIn | `contact_intent_click` |
+| Company links | linkedin.com/company/[name] | LinkedIn | -                      |
+
+### Footer (All Pages)
+
+| CTA            | Destination                 | Platform | Tracked Event          |
+| -------------- | --------------------------- | -------- | ---------------------- |
+| GitHub icon    | github.com/ofri-peretz      | GitHub   | `github_click`         |
+| LinkedIn icon  | linkedin.com/in/ofri-peretz | LinkedIn | `linkedin_click`       |
+| X/Twitter icon | x.com/ofri_peretz           | Twitter  | -                      |
+| Dev.to icon    | dev.to/ofri-peretz          | Dev.to   | -                      |
+| Medium icon    | medium.com/@ofriperetz      | Medium   | -                      |
+| npm icon       | npmjs.com/~ofriperetz       | npm      | -                      |
+| "Let's Talk"   | linkedin.com/in/ofri-peretz | LinkedIn | `contact_intent_click` |
+
+---
+
+## Referrer Attribution
+
+When users click outbound links, the destination receives:
+
+- **Referer header**: `https://ofriperetz.dev`
+- **Page context**: The page URL they clicked from
+
+Most platforms (npm, GitHub, Dev.to) track this automatically in their analytics.
 
 ---
 
