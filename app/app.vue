@@ -78,3 +78,10 @@ const [{ data: navigation }, { data: files }] = await Promise.all([
     <Analytics />
   </UApp>
 </template>
+
+<style>
+/* Enable smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+</style>

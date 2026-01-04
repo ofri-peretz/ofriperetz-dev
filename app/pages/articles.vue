@@ -568,6 +568,44 @@ useSeoMeta({
           </div>
         </div>
 
+        <!-- Top Pagination Controls -->
+        <div
+          v-if="totalArticlePages > 1 && !loading && !error"
+          class="flex justify-center items-center gap-2 mb-6"
+        >
+          <button
+            @click="goToArticlePage(currentArticlePage - 1)"
+            :disabled="currentArticlePage === 1"
+            class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <UIcon name="i-lucide-chevron-left" class="w-4 h-4" />
+          </button>
+
+          <div class="flex gap-1">
+            <button
+              v-for="page in totalArticlePages"
+              :key="page"
+              @click="goToArticlePage(page)"
+              class="w-9 h-9 rounded-lg font-medium text-sm transition-all"
+              :class="
+                page === currentArticlePage
+                  ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+              "
+            >
+              {{ page }}
+            </button>
+          </div>
+
+          <button
+            @click="goToArticlePage(currentArticlePage + 1)"
+            :disabled="currentArticlePage === totalArticlePages"
+            class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <UIcon name="i-lucide-chevron-right" class="w-4 h-4" />
+          </button>
+        </div>
+
         <!-- Loading State -->
         <div v-if="loading" class="flex justify-center py-12">
           <UIcon
