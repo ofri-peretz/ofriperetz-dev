@@ -39,24 +39,54 @@ useSeoMeta({
 <template>
   <UPage v-if="page">
     <UPageHero
-      :title="page.title"
       :description="page.description"
-      :links="page.links"
       :ui="{
         title: '!mx-0 text-left',
         description: '!mx-0 text-left',
         links: 'justify-start',
       }"
     >
+      <template #title>
+        <BlurFade :delay="0">
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold">
+            <GradientText animate>{{ page.title }}</GradientText>
+          </h1>
+        </BlurFade>
+      </template>
+
       <template #links>
-        <div v-if="page.links" class="flex items-center gap-2">
-          <UButton
-            :label="page.links[0]?.label"
-            :to="global.meetingLink"
-            v-bind="page.links[0]"
-          />
-          <UButton :to="`mailto:${global.email}`" v-bind="page.links[1]" />
-        </div>
+        <BlurFade :delay="100">
+          <div class="flex flex-wrap items-center gap-3 mt-6">
+            <ShimmerButton>
+              <NuxtLink
+                to="https://github.com/ofri-peretz/eslint"
+                target="_blank"
+                class="flex items-center gap-2"
+              >
+                <UIcon name="i-simple-icons-github" class="w-4 h-4" />
+                View on GitHub
+                <UIcon
+                  name="i-lucide-external-link"
+                  class="w-3 h-3 opacity-60"
+                />
+              </NuxtLink>
+            </ShimmerButton>
+            <ShimmerButton>
+              <NuxtLink
+                to="https://www.npmjs.com/~ofriperetz"
+                target="_blank"
+                class="flex items-center gap-2"
+              >
+                <UIcon name="i-simple-icons-npm" class="w-4 h-4" />
+                View on NPM
+                <UIcon
+                  name="i-lucide-external-link"
+                  class="w-3 h-3 opacity-60"
+                />
+              </NuxtLink>
+            </ShimmerButton>
+          </div>
+        </BlurFade>
       </template>
     </UPageHero>
     <UPageSection

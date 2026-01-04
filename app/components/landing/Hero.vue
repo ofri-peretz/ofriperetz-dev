@@ -59,7 +59,7 @@ defineProps<{
           delay: 0.1,
         }"
       >
-        {{ page.title }}
+        <GradientText animate>{{ page.title }}</GradientText>
       </Motion>
     </template>
 
