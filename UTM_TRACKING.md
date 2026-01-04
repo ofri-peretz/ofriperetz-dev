@@ -191,15 +191,75 @@ Our `/api/track` endpoint logs these user actions:
 
 Track which UTM links you've deployed and where.
 
-### Active UTM Links
+### LinkedIn (5 Placements)
 
-| Platform | Location       | URL                                                                          | Date Added | Status     |
-| -------- | -------------- | ---------------------------------------------------------------------------- | ---------- | ---------- |
-| LinkedIn | Profile bio    | `ofriperetz.dev?utm_source=linkedin&utm_medium=social&utm_campaign=bio-link` | TBD        | ⏳ Pending |
-| Dev.to   | Author bio     | `ofriperetz.dev?utm_source=devto&utm_medium=profile&utm_campaign=bio-link`   | TBD        | ⏳ Pending |
-| GitHub   | Profile README | `ofriperetz.dev?utm_source=github&utm_medium=profile&utm_campaign=readme`    | TBD        | ⏳ Pending |
-| Medium   | Profile bio    | `ofriperetz.dev?utm_source=medium&utm_medium=profile&utm_campaign=bio-link`  | TBD        | ⏳ Pending |
-| Twitter  | Bio link       | `ofriperetz.dev?utm_source=twitter&utm_medium=social&utm_campaign=bio-link`  | TBD        | ⏳ Pending |
+| Placement                                | Full UTM URL                                                                                 | Status |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------- | ------ |
+| **Profile Bio** (About section)          | `https://ofriperetz.dev?utm_source=linkedin&utm_medium=profile&utm_campaign=bio`             | ⏳     |
+| **Contact Info** (Website field)         | `https://ofriperetz.dev?utm_source=linkedin&utm_medium=profile&utm_campaign=contact-info`    | ⏳     |
+| **Work Experience** (Snappy description) | `https://ofriperetz.dev?utm_source=linkedin&utm_medium=profile&utm_campaign=work-experience` | ⏳     |
+| **Featured Section**                     | `https://ofriperetz.dev?utm_source=linkedin&utm_medium=profile&utm_campaign=featured`        | ⏳     |
+| **Post Links** (when sharing)            | `https://ofriperetz.dev?utm_source=linkedin&utm_medium=social&utm_campaign=post`             | ⏳     |
+
+### Dev.to (4 Placements)
+
+| Placement                        | Full UTM URL                                                                                              | Status   |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------- | -------- |
+| **Author Bio** (Profile page)    | `https://ofriperetz.dev?utm_source=devto&utm_medium=profile&utm_campaign=bio`                             | ⏳       |
+| **Website Field**                | `https://ofriperetz.dev?utm_source=devto&utm_medium=profile&utm_campaign=website-field`                   | ⏳       |
+| **Article Footer** (per article) | `https://ofriperetz.dev?utm_source=devto&utm_medium=article&utm_campaign=ARTICLE-SLUG`                    | Template |
+| **Article Inline** (body links)  | `https://ofriperetz.dev?utm_source=devto&utm_medium=article&utm_campaign=ARTICLE-SLUG&utm_content=inline` | Template |
+
+### Medium (3 Placements)
+
+| Placement          | Full UTM URL                                                                                     | Status   |
+| ------------------ | ------------------------------------------------------------------------------------------------ | -------- |
+| **Profile Bio**    | `https://ofriperetz.dev?utm_source=medium&utm_medium=profile&utm_campaign=bio`                   | ⏳       |
+| **Article Footer** | `https://ofriperetz.dev?utm_source=medium&utm_medium=article&utm_campaign=ARTICLE-SLUG`          | Template |
+| **Article CTA**    | `https://ofriperetz.dev/projects?utm_source=medium&utm_medium=article&utm_campaign=ARTICLE-SLUG` | Template |
+
+### GitHub (4 Placements)
+
+| Placement                        | Full UTM URL                                                                           | Status   |
+| -------------------------------- | -------------------------------------------------------------------------------------- | -------- |
+| **Profile README**               | `https://ofriperetz.dev?utm_source=github&utm_medium=profile&utm_campaign=readme`      | ⏳       |
+| **Bio Website**                  | `https://ofriperetz.dev?utm_source=github&utm_medium=profile&utm_campaign=bio-website` | ⏳       |
+| **ESLint Repo README**           | `https://ofriperetz.dev?utm_source=github&utm_medium=repo&utm_campaign=eslint-readme`  | ⏳       |
+| **Package README** (per package) | `https://ofriperetz.dev?utm_source=github&utm_medium=repo&utm_campaign=PACKAGE-NAME`   | Template |
+
+### Twitter/X (2 Placements)
+
+| Placement       | Full UTM URL                                                                     | Status   |
+| --------------- | -------------------------------------------------------------------------------- | -------- |
+| **Bio Link**    | `https://ofriperetz.dev?utm_source=twitter&utm_medium=profile&utm_campaign=bio`  | ⏳       |
+| **Tweet Links** | `https://ofriperetz.dev?utm_source=twitter&utm_medium=social&utm_campaign=tweet` | Template |
+
+### npm (2 Placements)
+
+| Placement                        | Full UTM URL                                                                         | Status   |
+| -------------------------------- | ------------------------------------------------------------------------------------ | -------- |
+| **Author Profile**               | `https://ofriperetz.dev?utm_source=npm&utm_medium=profile&utm_campaign=author-page`  | ⏳       |
+| **Package README** (per package) | `https://ofriperetz.dev?utm_source=npm&utm_medium=package&utm_campaign=PACKAGE-NAME` | Template |
+
+### Email (2 Placements)
+
+| Placement                      | Full UTM URL                                                                         | Status |
+| ------------------------------ | ------------------------------------------------------------------------------------ | ------ |
+| **Email Signature** (personal) | `https://ofriperetz.dev?utm_source=email&utm_medium=signature&utm_campaign=personal` | ⏳     |
+| **Email Signature** (work)     | `https://ofriperetz.dev?utm_source=email&utm_medium=signature&utm_campaign=work`     | ⏳     |
+
+### Quick Reference Summary
+
+| Platform  | Placements | Ready to Copy |
+| --------- | ---------- | ------------- |
+| LinkedIn  | 5          | ✅ See above  |
+| Dev.to    | 4          | ✅ See above  |
+| Medium    | 3          | ✅ See above  |
+| GitHub    | 4          | ✅ See above  |
+| Twitter   | 2          | ✅ See above  |
+| npm       | 2          | ✅ See above  |
+| Email     | 2          | ✅ See above  |
+| **Total** | **22**     | -             |
 
 ---
 
