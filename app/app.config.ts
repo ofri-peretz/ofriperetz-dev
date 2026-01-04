@@ -7,7 +7,7 @@ export default defineAppConfig({
     },
     meetingLink: 'https://cal.com/',
     email: 'contact@ofriperetz.dev',
-    available: true
+    available: false
   },
   ui: {
     colors: {

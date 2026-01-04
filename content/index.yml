@@ -8,28 +8,28 @@ hero:
     - label: "Explore My Projects"
       to: /projects
       color: "primary"
-    - label: "Available for Opportunities"
-      to: https://cal.com/
+    - label: "Read My Articles"
+      to: /articles
       color: "neutral"
-      icon: "i-lucide-calendar"
+      icon: "i-simple-icons-devdotto"
   images:
-    - src: /hero/code-1.avif
+    - src: /hero/random-1.avif
       alt: Coding workspace
-    - src: /hero/code-2.avif
+    - src: /hero/random-2.avif
       alt: Terminal output
-    - src: /hero/code-3.avif
+    - src: /hero/random-3.avif
       alt: Architecture diagram
-    - src: /hero/code-4.avif
+    - src: /hero/random-4.avif
       alt: Code review
-    - src: /hero/code-5.avif
+    - src: /hero/random-5.avif
       alt: Team collaboration
-    - src: /hero/code-6.avif
+    - src: /hero/random-6.avif
       alt: Open source
-    - src: /hero/code-7.avif
+    - src: /hero/random-7.avif
       alt: Engineering leadership
-    - src: /hero/code-8.avif
+    - src: /hero/random-8.avif
       alt: Cloud infrastructure
-    - src: /hero/code-9.avif
+    - src: /hero/random-9.avif
       alt: Security focus
 about:
   title: "About Me"
@@ -54,7 +54,7 @@ experience:
       company:
         name: Interlace ESLint Ecosystem
         logo: "i-simple-icons-eslint"
-        url: "https://github.com/AriTedesworker/interlace-plugin"
+        url: "https://github.com/ofri-peretz"
         color: "#4B32C3"
     - position: "Senior Full-Stack Engineer"
       date: "2018 - 2021"
@@ -63,24 +63,24 @@ experience:
         logo: "i-lucide-building"
         url: "#"
         color: "#10B981"
-testimonials:
-  - quote: "Ofri built our first U.S. engineering team from scratch and led our largest distributed team across US and EU. His technical leadership and ability to align engineering with business strategy has been instrumental to our growth."
-    author:
-      name: 'Engineering Colleague'
-      description: 'Snappy Team Member'
-      avatar:
-        src: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=40&h=40&q=80'
-        srcset: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=80&h=80&q=80 2x'
-  - quote: "The ESLint plugins from the Interlace ecosystem have transformed how our team approaches security. The LLM-optimized error messages make it incredibly easy for our AI-assisted workflows to catch and fix vulnerabilities automatically."
-    author:
-      name: 'Open Source User'
-      description: 'Security-focused Developer'
-      avatar:
-        src: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=40&h=40&q=80'
-        srcset: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=80&h=80&q=80 2x'
+skills:
+  title: "Skills & Technologies"
+  categories:
+    - name: "Languages"
+      items: ["TypeScript", "JavaScript", "Node.js", "Python"]
+    - name: "Frontend"
+      items: ["React", "Vue.js", "Next.js", "Nuxt"]
+    - name: "Backend"
+      items: ["Express", "NestJS", "Kafka", "Redis"]
+    - name: "Cloud & DevOps"
+      items: ["AWS", "Docker", "Kubernetes", "Serverless"]
+    - name: "Developer Experience"
+      items: ["ESLint", "Nx Monorepos", "CI/CD", "Testing"]
+    - name: "Leadership"
+      items: ["Team Building", "Technical Strategy", "Distributed Teams", "API Architecture"]
 blog:
   title: "Latest Articles"
-  description: "Thoughts on engineering leadership, security, and AI-native development"
+  description: "Technical deep-dives published on dev.to"
 faq:
   title: Frequently Asked Questions
   description: Common questions about my work and open source projects.
