@@ -419,7 +419,7 @@ useSeoMeta({
             <div
               v-for="day in dailyDownloads"
               :key="day.day"
-              class="relative flex-1 group min-w-[2px]"
+              class="relative flex-1 h-full group min-w-[2px] flex items-end"
             >
               <!-- Bar -->
               <div
