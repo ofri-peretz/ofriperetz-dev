@@ -136,7 +136,9 @@ useSeoMeta({
   ogTitle: "My Impact Dashboard - Ofri Peretz",
   ogDescription:
     "Live metrics from my open source projects and technical writing.",
+  ogImage: "https://ofriperetz.dev/og-image.png",
   twitterCard: "summary_large_image",
+  twitterImage: "https://ofriperetz.dev/og-image.png",
 });
 </script>
 

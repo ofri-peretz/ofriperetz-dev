@@ -49,7 +49,9 @@ useSeoMeta({
   ogTitle: "Articles - Ofri Peretz",
   ogDescription:
     "Technical articles on security, ESLint, and AI-native development.",
+  ogImage: "https://ofriperetz.dev/og-image.png",
   twitterCard: "summary_large_image",
+  twitterImage: "https://ofriperetz.dev/og-image.png",
 });
 </script>
 
@@ -84,6 +86,113 @@ useSeoMeta({
           >
             Follow on Medium
           </UButton>
+        </div>
+      </div>
+
+      <!-- Article Stats Widgets -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-12">
+        <!-- Total Articles -->
+        <div
+          class="text-center p-4 sm:p-5 bg-gradient-to-br from-green-500/10 to-green-600/20 dark:from-green-900/40 dark:to-green-800/30 rounded-xl border border-green-500/30"
+        >
+          <div
+            class="text-2xl sm:text-3xl font-bold text-green-500 tabular-nums mb-1"
+          >
+            <NumberTicker
+              v-if="!loading"
+              :value="articles?.length || 0"
+              :duration="1500"
+            />
+            <span v-else class="animate-pulse">...</span>
+          </div>
+          <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+            Articles
+          </div>
+          <div class="flex items-center justify-center gap-1 mt-1">
+            <UIcon
+              name="i-simple-icons-devdotto"
+              class="w-3 h-3 text-gray-500"
+            />
+            <UIcon name="i-simple-icons-medium" class="w-3 h-3 text-gray-500" />
+          </div>
+        </div>
+
+        <!-- Total Reactions -->
+        <div
+          class="text-center p-4 sm:p-5 bg-gradient-to-br from-red-500/10 to-red-600/20 dark:from-red-900/40 dark:to-red-800/30 rounded-xl border border-red-500/30"
+        >
+          <div
+            class="text-2xl sm:text-3xl font-bold text-red-500 tabular-nums mb-1"
+          >
+            <NumberTicker
+              v-if="!loading"
+              :value="
+                articles?.reduce(
+                  (sum, a) => sum + (a.positive_reactions_count || 0),
+                  0,
+                ) || 0
+              "
+              :duration="1500"
+            />
+            <span v-else class="animate-pulse">...</span>
+          </div>
+          <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+            Reactions
+          </div>
+          <UIcon name="i-lucide-heart" class="w-3 h-3 text-red-500 mt-1" />
+        </div>
+
+        <!-- Total Comments -->
+        <div
+          class="text-center p-4 sm:p-5 bg-gradient-to-br from-blue-500/10 to-blue-600/20 dark:from-blue-900/40 dark:to-blue-800/30 rounded-xl border border-blue-500/30"
+        >
+          <div
+            class="text-2xl sm:text-3xl font-bold text-blue-500 tabular-nums mb-1"
+          >
+            <NumberTicker
+              v-if="!loading"
+              :value="
+                articles?.reduce(
+                  (sum, a) => sum + (a.comments_count || 0),
+                  0,
+                ) || 0
+              "
+              :duration="1500"
+            />
+            <span v-else class="animate-pulse">...</span>
+          </div>
+          <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+            Comments
+          </div>
+          <UIcon
+            name="i-lucide-message-circle"
+            class="w-3 h-3 text-blue-500 mt-1"
+          />
+        </div>
+
+        <!-- Reading Time -->
+        <div
+          class="text-center p-4 sm:p-5 bg-gradient-to-br from-purple-500/10 to-purple-600/20 dark:from-purple-900/40 dark:to-purple-800/30 rounded-xl border border-purple-500/30"
+        >
+          <div
+            class="text-2xl sm:text-3xl font-bold text-purple-500 tabular-nums mb-1"
+          >
+            <NumberTicker
+              v-if="!loading"
+              :value="
+                articles?.reduce(
+                  (sum, a) => sum + (a.reading_time_minutes || 0),
+                  0,
+                ) || 0
+              "
+              :duration="1500"
+            />
+            <span v-else class="animate-pulse">...</span>
+          </div>
+          <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+            Minutes
+          </div>
+          <UIcon name="i-lucide-clock" class="w-3 h-3 text-purple-500 mt-1" />
         </div>
       </div>
 
