@@ -95,11 +95,12 @@ const getPackageColor = (index: number) => {
 };
 
 useSeoMeta({
-  title: "Stats Dashboard - Ofri Peretz",
+  title: "My Impact Dashboard - Ofri Peretz",
   description:
-    "Real-time open source statistics including npm downloads, article metrics, and community engagement.",
-  ogTitle: "Stats Dashboard - Ofri Peretz",
-  ogDescription: "Real-time open source statistics and metrics.",
+    "Live metrics from my open source projects, technical articles, and developer community engagement.",
+  ogTitle: "My Impact Dashboard - Ofri Peretz",
+  ogDescription:
+    "Live metrics from my open source projects and technical writing.",
   twitterCard: "summary_large_image",
 });
 </script>
@@ -113,13 +114,13 @@ useSeoMeta({
           <h1
             class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4"
           >
-            <GradientText animate>Open Source Stats</GradientText>
+            <GradientText animate>My Impact Dashboard</GradientText>
           </h1>
           <p
             class="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
           >
-            Real-time metrics from the Interlace ESLint Ecosystem and my content
-            across platforms.
+            Live metrics from my open source projects, technical writing, and
+            developer community engagement.
           </p>
           <p class="text-sm text-gray-500 dark:text-gray-500 mt-2">
             Last updated:
