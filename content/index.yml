@@ -90,15 +90,17 @@ skills:
   title: "Skills & Technologies"
   categories:
     - name: "Languages"
-      items: ["TypeScript", "JavaScript", "Node.js", "Python"]
+      items: ["TypeScript", "JavaScript", "Node.js", "Python", "SQL"]
     - name: "Frontend"
-      items: ["React", "Vue.js", "Next.js", "Nuxt"]
+      items: ["React", "Vue.js", "Next.js", "Nuxt", "Vite"]
     - name: "Backend"
-      items: ["Express", "NestJS", "Kafka", "Redis"]
-    - name: "Cloud & DevOps"
-      items: ["AWS", "Docker", "Kubernetes", "Vercel"]
-    - name: "AI & Agentic Tools"
-      items: ["Antigravity", "Cursor", "MCP", "AI Workflows"]
+      items: ["Express", "NestJS", "Kafka", "Redis", "PostgreSQL"]
+    - name: "Cloud & Serverless"
+      items: ["AWS Lambda", "Vercel", "Docker", "Kubernetes", "Serverless"]
+    - name: "AI & Agentic"
+      items: ["Antigravity", "Cursor", "MCP", "LLM APIs", "AI Workflows"]
+    - name: "DevOps & Observability"
+      items: ["GitHub Actions", "Grafana", "Datadog", "Codecov", "Nx Monorepos"]
     - name: "Leadership"
       items: ["Team Building", "Technical Strategy", "Distributed Teams", "API Architecture"]
 blog:

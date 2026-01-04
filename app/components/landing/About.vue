@@ -18,14 +18,12 @@ defineProps<{
   >
     <template #links>
       <div class="flex justify-start mt-4">
-        <UButton
-          to="/about"
-          variant="soft"
-          size="sm"
-          trailing-icon="i-lucide-arrow-right"
-        >
-          Learn more about me
-        </UButton>
+        <ShimmerButton to="/about" size="sm">
+          <span class="flex items-center gap-2">
+            Learn more about me
+            <UIcon name="i-lucide-arrow-right" class="w-4 h-4" />
+          </span>
+        </ShimmerButton>
       </div>
     </template>
   </UPageSection>
