@@ -88,7 +88,7 @@ const combinedArticles = computed(
 const topPackages = computed(() => {
   if (!npmStats.value || !Array.isArray(npmStats.value)) return [];
   return npmStats.value.slice(0, 8).map((pkg) => ({
-    name: pkg.name?.replace("eslint-plugin-", "") || pkg.name,
+    name: pkg.name || "Unknown",
     downloads: pkg.downloads || 0,
   }));
 });
@@ -772,7 +772,7 @@ useSeoMeta({
                 class="w-5 h-5 text-purple-500"
               />
               <NuxtLink
-                to="https://www.npmjs.com/~ofriperetz"
+                to="https://github.com/ofri-peretz/eslint"
                 target="_blank"
                 class="font-semibold text-gray-900 dark:text-white hover:text-primary-500 dark:hover:text-primary-400 transition-colors flex items-center gap-1 group"
               >
