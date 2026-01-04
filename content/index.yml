@@ -77,7 +77,7 @@ experience:
       company:
         name: Interlace ESLint Ecosystem
         logo: "i-simple-icons-eslint"
-        url: "https://github.com/ofri-peretz"
+        url: "https://github.com/ofri-peretz/eslint"
         color: "#4B32C3"
       highlights:
         - "16+ npm packages, 200+ security rules"
