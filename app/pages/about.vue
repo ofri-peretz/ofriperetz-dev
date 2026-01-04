@@ -54,10 +54,22 @@ const techStack = [
 ];
 
 useSeoMeta({
-  title: page.value?.seo?.title || page.value?.title,
-  ogTitle: page.value?.seo?.title || page.value?.title,
-  description: page.value?.seo?.description || page.value?.description,
-  ogDescription: page.value?.seo?.description || page.value?.description,
+  title: "About Ofri Peretz - Engineering Leader | 9+ Years Experience",
+  description:
+    "Engineering Leader at Snappy with 9+ years experience. Built U.S. engineering teams, scaled APIs 100x, creator of the Interlace ESLint Ecosystem with 200+ security rules.",
+  ogTitle: "About Ofri Peretz - Engineering Leader",
+  ogDescription:
+    "9+ years building scalable systems. Creator of 200+ security rules across 16+ npm packages.",
+  ogImage: "https://ofriperetz.dev/og-about.png",
+  ogImageWidth: 1200,
+  ogImageHeight: 630,
+  ogType: "profile",
+  ogUrl: "https://ofriperetz.dev/about",
+  twitterCard: "summary_large_image",
+  twitterImage: "https://ofriperetz.dev/og-about.png",
+  twitterTitle: "About Ofri Peretz - Engineering Leader",
+  twitterDescription:
+    "9+ years building scalable systems. Creator of 200+ security rules.",
 });
 </script>
 

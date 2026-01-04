@@ -1,27 +1,39 @@
 <script setup lang="ts">
-const { data: page } = await useAsyncData('projects-page', () => {
-  return queryCollection('pages').path('/projects').first()
-})
+const { data: page } = await useAsyncData("projects-page", () => {
+  return queryCollection("pages").path("/projects").first();
+});
 if (!page.value) {
   throw createError({
     statusCode: 404,
-    statusMessage: 'Page not found',
-    fatal: true
-  })
+    statusMessage: "Page not found",
+    fatal: true,
+  });
 }
 
-const { data: projects } = await useAsyncData('projects', () => {
-  return queryCollection('projects').all()
-})
+const { data: projects } = await useAsyncData("projects", () => {
+  return queryCollection("projects").all();
+});
 
-const { global } = useAppConfig()
+const { global } = useAppConfig();
 
 useSeoMeta({
-  title: page.value?.seo?.title || page.value?.title,
-  ogTitle: page.value?.seo?.title || page.value?.title,
-  description: page.value?.seo?.description || page.value?.description,
-  ogDescription: page.value?.seo?.description || page.value?.description
-})
+  title: "Open Source Projects - Ofri Peretz | Interlace ESLint Ecosystem",
+  description:
+    "Explore 35+ open source repositories including the Interlace ESLint Ecosystem with 16+ packages and 9,000+ npm downloads.",
+  ogTitle: "Open Source Projects - Ofri Peretz",
+  ogDescription:
+    "35+ repos including 16+ npm packages with 9K+ downloads. Security-focused ESLint ecosystem.",
+  ogImage: "https://ofriperetz.dev/og-projects.png",
+  ogImageWidth: 1200,
+  ogImageHeight: 630,
+  ogType: "website",
+  ogUrl: "https://ofriperetz.dev/projects",
+  twitterCard: "summary_large_image",
+  twitterImage: "https://ofriperetz.dev/og-projects.png",
+  twitterTitle: "Open Source Projects - Ofri Peretz",
+  twitterDescription:
+    "35+ repos including 16+ npm packages with 9K+ downloads.",
+});
 </script>
 
 <template>
@@ -33,29 +45,23 @@ useSeoMeta({
       :ui="{
         title: '!mx-0 text-left',
         description: '!mx-0 text-left',
-        links: 'justify-start'
+        links: 'justify-start',
       }"
     >
       <template #links>
-        <div
-          v-if="page.links"
-          class="flex items-center gap-2"
-        >
+        <div v-if="page.links" class="flex items-center gap-2">
           <UButton
             :label="page.links[0]?.label"
             :to="global.meetingLink"
             v-bind="page.links[0]"
           />
-          <UButton
-            :to="`mailto:${global.email}`"
-            v-bind="page.links[1]"
-          />
+          <UButton :to="`mailto:${global.email}`" v-bind="page.links[1]" />
         </div>
       </template>
     </UPageHero>
     <UPageSection
       :ui="{
-        container: '!pt-0'
+        container: '!pt-0',
       }"
     >
       <Motion
@@ -75,7 +81,7 @@ useSeoMeta({
           :reverse="index % 2 === 1"
           class="group"
           :ui="{
-            wrapper: 'max-sm:order-last'
+            wrapper: 'max-sm:order-last',
           }"
         >
           <template #leading>
@@ -99,7 +105,7 @@ useSeoMeta({
             :src="project.image"
             :alt="project.title"
             class="object-cover w-full h-48 rounded-lg"
-          >
+          />
         </UPageCard>
       </Motion>
     </UPageSection>
