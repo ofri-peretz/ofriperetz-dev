@@ -105,7 +105,16 @@ defineProps<{
           v-if="page.hero.links"
           class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto"
         >
-          <UButton v-bind="page.hero.links[0]" />
+          <!-- Primary CTA with Magic UI shimmer effect -->
+          <ShimmerButton>
+            <NuxtLink
+              :to="page.hero.links[0].to"
+              class="flex items-center gap-2"
+            >
+              <UIcon name="i-lucide-folder-open" class="w-4 h-4" />
+              {{ page.hero.links[0].label }}
+            </NuxtLink>
+          </ShimmerButton>
           <UButton
             :color="global.available ? 'success' : 'error'"
             variant="ghost"

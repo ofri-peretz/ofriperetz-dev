@@ -189,10 +189,10 @@ useSeoMeta({
         </div>
       </BlurFade>
 
-      <!-- Key Metrics Grid -->
+      <!-- Key Metrics Grid - 2x3 layout -->
       <BlurFade :delay="100">
         <div
-          class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-8 sm:mb-12"
+          class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 mb-8 sm:mb-12 max-w-4xl mx-auto"
         >
           <!-- Total Downloads -->
           <UCard
