@@ -204,10 +204,10 @@ useSeoMeta({
             <NuxtLink
               :to="project.url"
               target="_blank"
-              class="group block bg-gray-50 dark:bg-gray-900/50 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 hover:border-primary-500/50 dark:hover:border-primary-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10"
+              class="group block h-full bg-gray-50 dark:bg-gray-900/50 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 hover:border-primary-500/50 dark:hover:border-primary-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 flex flex-col"
             >
               <!-- Image -->
-              <div class="relative overflow-hidden">
+              <div class="relative overflow-hidden flex-shrink-0">
                 <img
                   :src="project.image"
                   :alt="project.title"
@@ -229,20 +229,20 @@ useSeoMeta({
               </div>
 
               <!-- Content -->
-              <div class="p-5">
+              <div class="p-5 flex flex-col flex-grow">
                 <h3
-                  class="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary-500 transition-colors"
+                  class="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary-500 transition-colors line-clamp-2"
                 >
                   {{ project.title }}
                 </h3>
                 <p
-                  class="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 mb-4"
+                  class="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 mb-4 flex-grow"
                 >
                   {{ project.description }}
                 </p>
-                <div class="flex flex-wrap gap-2">
+                <div class="flex flex-wrap gap-2 mt-auto">
                   <span
-                    v-for="tag in project.tags"
+                    v-for="tag in project.tags?.slice(0, 3)"
                     :key="tag"
                     class="px-2 py-1 bg-primary-500/10 text-primary-600 dark:text-primary-400 text-xs font-medium rounded-md"
                   >
