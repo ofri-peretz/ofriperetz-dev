@@ -42,7 +42,7 @@ export default defineAppConfig({
       'aria-label': 'Ofri on LinkedIn'
     }, {
       'icon': 'i-simple-icons-devdotto',
-      'to': 'https://dev.to/ofriperetz',
+      'to': 'https://dev.to/ofri-peretz',
       'target': '_blank',
       'aria-label': 'Ofri on Dev.to'
     }, {
