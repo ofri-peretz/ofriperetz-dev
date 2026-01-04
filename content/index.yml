@@ -50,16 +50,16 @@ experience:
         url: "https://snappy.com"
         color: "#6366F1"
     - position: "Open Source Creator"
-      date: "2024 - Present"
+      date: "2025 - Present"
       company:
         name: Interlace ESLint Ecosystem
         logo: "i-simple-icons-eslint"
         url: "https://github.com/ofri-peretz"
         color: "#4B32C3"
-    - position: "Senior Full-Stack Engineer"
-      date: "2018 - 2021"
+    - position: "Previous Roles"
+      date: "2015 - 2021"
       company:
-        name: Previous Roles
+        name: Full-Stack Engineering
         logo: "i-lucide-building"
         url: "#"
         color: "#10B981"
