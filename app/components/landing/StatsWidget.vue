@@ -59,9 +59,7 @@ const totalFollowers = computed(
 
 <template>
   <!-- 2x3 grid matching the stats page layout -->
-  <div
-    class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 max-w-4xl mx-auto"
-  >
+  <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
     <!-- npm Downloads -->
     <NuxtLink
       to="/stats"

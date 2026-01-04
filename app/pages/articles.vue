@@ -159,6 +159,11 @@ const isPinned = (article: any) =>
   PINNED_SLUGS.some((slug) => article.slug?.includes(slug));
 
 // ============================================
+// WINDOW SIZE (used by pagination and view mode)
+// ============================================
+const { width } = useWindowSize();
+
+// ============================================
 // PAGINATION
 // ============================================
 
@@ -208,7 +213,6 @@ const goToArticlePage = (page: number) => {
 const viewMode = ref(3);
 
 // Get available view modes based on screen size
-const { width } = useWindowSize();
 const availableViewModes = computed(() => {
   if (width.value < 640) return [1]; // sm: only 1 column
   if (width.value < 1024) return [1, 2]; // md: 1 or 2 columns
