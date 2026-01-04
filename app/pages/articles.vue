@@ -43,23 +43,22 @@ onMounted(() => {
 });
 
 useSeoMeta({
-  title: "Articles - Ofri Peretz",
+  title: "Technical Articles - Ofri Peretz | Security & ESLint",
   description:
-    "Technical articles on security, ESLint, and AI-native development by Ofri Peretz. Published on dev.to and Medium.",
-  ogTitle: "Articles - Ofri Peretz",
+    "30+ technical articles on application security, ESLint plugin development, and AI-native development. Published on dev.to and Medium.",
+  ogTitle: "Technical Articles - Ofri Peretz",
   ogDescription:
-    "Technical articles on security, ESLint, and AI-native development.",
-  ogImage: "https://ofriperetz.dev/og-image.png",
+    "30+ deep-dive articles on security, ESLint plugins & AI-native development.",
+  ogImage: "https://ofriperetz.dev/og-articles.png",
+  ogImageWidth: 1200,
+  ogImageHeight: 630,
+  ogType: "website",
+  ogUrl: "https://ofriperetz.dev/articles",
   twitterCard: "summary_large_image",
-  twitterImage: "https://ofriperetz.dev/og-image.png",
-});
-
-// Dynamic OG Image
-defineOgImage({
-  component: "OgImageTemplate",
-  title: "Technical Articles",
-  description: "Security, ESLint & AI-native development",
-  pageType: "articles",
+  twitterImage: "https://ofriperetz.dev/og-articles.png",
+  twitterTitle: "Technical Articles - Ofri Peretz",
+  twitterDescription:
+    "30+ deep-dive articles on security, ESLint plugins & AI-native development.",
 });
 </script>
 

@@ -11,18 +11,22 @@ if (!page.value) {
 }
 
 useSeoMeta({
-  title: page.value?.seo.title || page.value?.title,
-  ogTitle: page.value?.seo.title || page.value?.title,
-  description: page.value?.seo.description || page.value?.description,
-  ogDescription: page.value?.seo.description || page.value?.description,
-});
-
-// Dynamic OG Image generation
-defineOgImage({
-  component: "OgImageTemplate",
-  title: "Ofri Peretz",
-  description: "Engineering Leader & Open Source Creator",
-  pageType: "home",
+  title: "Ofri Peretz - Engineering Leader & Open Source Creator",
+  ogTitle: "Ofri Peretz - Engineering Leader & Open Source Creator",
+  description:
+    "Building Products That Matter • Engineering Leadership • Open-Source Contributor. Creator of the Interlace ESLint Ecosystem with 9,000+ npm downloads.",
+  ogDescription:
+    "Engineering Leader & Open Source Creator. Building security-focused ESLint plugins with 9K+ downloads.",
+  ogImage: "https://ofriperetz.dev/og-home.png",
+  ogImageWidth: 1200,
+  ogImageHeight: 630,
+  ogType: "website",
+  ogUrl: "https://ofriperetz.dev",
+  twitterCard: "summary_large_image",
+  twitterImage: "https://ofriperetz.dev/og-home.png",
+  twitterTitle: "Ofri Peretz - Engineering Leader & Open Source Creator",
+  twitterDescription:
+    "Building security-focused ESLint plugins with 9K+ downloads.",
 });
 </script>
 

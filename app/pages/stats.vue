@@ -130,23 +130,22 @@ const getPackageColor = (index: number) => {
 };
 
 useSeoMeta({
-  title: "My Impact Dashboard - Ofri Peretz",
+  title: "My Impact Dashboard - Ofri Peretz | Open Source Metrics",
   description:
-    "Live metrics from my open source projects, technical articles, and developer community engagement.",
+    "Live metrics from 9,000+ npm downloads, 35+ GitHub repositories, and 30+ technical articles on security and ESLint.",
   ogTitle: "My Impact Dashboard - Ofri Peretz",
   ogDescription:
-    "Live metrics from my open source projects and technical writing.",
-  ogImage: "https://ofriperetz.dev/og-image.png",
+    "Live open source metrics: 9K+ npm downloads, 35+ repos, 30+ articles on security & ESLint.",
+  ogImage: "https://ofriperetz.dev/og-stats.png",
+  ogImageWidth: 1200,
+  ogImageHeight: 630,
+  ogType: "website",
+  ogUrl: "https://ofriperetz.dev/stats",
   twitterCard: "summary_large_image",
-  twitterImage: "https://ofriperetz.dev/og-image.png",
-});
-
-// Dynamic OG Image
-defineOgImage({
-  component: "OgImageTemplate",
-  title: "My Impact Dashboard",
-  description: "Live metrics from my open source projects",
-  pageType: "stats",
+  twitterImage: "https://ofriperetz.dev/og-stats.png",
+  twitterTitle: "My Impact Dashboard - Ofri Peretz",
+  twitterDescription:
+    "Live open source metrics: 9K+ npm downloads, 35+ repos, 30+ articles.",
 });
 </script>
 
