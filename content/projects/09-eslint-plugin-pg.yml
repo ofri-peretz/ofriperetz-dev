@@ -1,0 +1,6 @@
+title: "eslint-plugin-pg"
+description: "13 rules for PostgreSQL security and best practices. SQL injection detection, connection leak prevention, transaction safety, and N+1 query detection for node-postgres."
+image: https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fhwzga1sm9be44wtf5826.png
+url: "https://www.npmjs.com/package/eslint-plugin-pg"
+tags: ["PostgreSQL", "Security", "Database"]
+date: "2025"

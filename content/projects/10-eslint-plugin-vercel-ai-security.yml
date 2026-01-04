@@ -1,0 +1,6 @@
+title: "eslint-plugin-vercel-ai-security"
+description: "19 rules for AI application security. Complete OWASP LLM Top 10 2025 coverage including prompt injection, tool confirmation, and agent safety for Vercel AI SDK."
+image: https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fdjrgotj0c31bx5rtaq18.png
+url: "https://www.npmjs.com/package/eslint-plugin-vercel-ai-security"
+tags: ["AI", "Security", "Vercel"]
+date: "2025"

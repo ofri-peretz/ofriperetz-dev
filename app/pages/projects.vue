@@ -124,6 +124,7 @@ useSeoMeta({
             :while-in-view="{ opacity: 1, transform: 'translateY(0)' }"
             :transition="{ delay: 0.1 * index }"
             :in-view-options="{ once: true }"
+            class="mb-10"
           >
             <UPageCard
               :title="project.title"
@@ -134,18 +135,17 @@ useSeoMeta({
               :reverse="index % 2 === 1"
               class="group"
               :ui="{
-                wrapper: 'max-sm:order-last',
+                root: 'flex flex-col lg:flex-row lg:items-center gap-6',
+                wrapper: 'flex-1',
               }"
             >
               <template #leading>
-                <span class="text-sm text-muted">
-                  {{ new Date(project.date).getFullYear() }}
-                </span>
+                <span class="text-sm text-muted">2025</span>
               </template>
               <template #footer>
                 <ULink
                   :to="project.url"
-                  class="text-sm text-primary flex items-center"
+                  class="text-sm text-primary flex items-center mt-2"
                 >
                   View Project
                   <UIcon
@@ -154,11 +154,16 @@ useSeoMeta({
                   />
                 </ULink>
               </template>
-              <img
-                :src="project.image"
-                :alt="project.title"
-                class="object-cover w-full h-48 rounded-lg"
-              />
+              <div
+                class="w-full lg:w-80 xl:w-96 shrink-0"
+                :class="index % 2 === 1 ? 'lg:order-first' : 'lg:order-last'"
+              >
+                <img
+                  :src="project.image"
+                  :alt="project.title"
+                  class="object-cover w-full h-48 rounded-lg"
+                />
+              </div>
             </UPageCard>
           </Motion>
         </div>

@@ -1,0 +1,6 @@
+title: "pmac"
+description: "Process Manager and Cache - A lightweight Node.js process management utility with built-in caching capabilities. My early open source project."
+image: https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fw81r2gifucwg5gi0irfz.png
+url: "https://github.com/ofri-peretz/pmac"
+tags: ["Node.js", "CLI", "Process Management"]
+date: "2020"

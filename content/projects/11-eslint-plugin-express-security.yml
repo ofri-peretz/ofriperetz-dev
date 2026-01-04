@@ -1,0 +1,6 @@
+title: "eslint-plugin-express-security"
+description: "9 rules for Express.js security. CORS misconfiguration, cookie security, rate limiting enforcement, and middleware security patterns."
+image: https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fetpvt4krjixym03a6w9b.png
+url: "https://www.npmjs.com/package/eslint-plugin-express-security"
+tags: ["Express", "Security", "Backend"]
+date: "2025"
