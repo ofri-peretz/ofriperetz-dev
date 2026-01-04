@@ -257,28 +257,45 @@ useSeoMeta({
             <UBadge color="primary" variant="subtle">Auto-synced</UBadge>
           </div>
 
-          <!-- View Mode Toggle -->
-          <div class="flex items-center gap-2">
+          <!-- View Mode Toggle - FAQ-style with sliding indicator -->
+          <div class="flex items-center gap-3">
             <span
               class="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline"
               >View:</span
             >
-            <UButtonGroup size="sm" orientation="horizontal">
-              <UButton
+            <div
+              class="relative flex items-center gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-xl"
+            >
+              <!-- Sliding indicator -->
+              <div
+                class="absolute h-10 w-10 bg-primary-500 rounded-lg transition-all duration-300 ease-out shadow-lg shadow-primary-500/30"
+                :style="{
+                  left: `${availableViewModes.indexOf(viewMode) * 44 + 4}px`,
+                }"
+              />
+              <button
                 v-for="mode in availableViewModes"
                 :key="mode"
-                :color="viewMode === mode ? 'primary' : 'neutral'"
-                :variant="viewMode === mode ? 'solid' : 'ghost'"
                 @click="viewMode = mode"
-                :icon="
-                  mode === 1
-                    ? 'i-lucide-square'
-                    : mode === 2
-                      ? 'i-lucide-columns-2'
-                      : 'i-lucide-grid-3x3'
+                class="relative z-10 flex items-center justify-center w-10 h-10 rounded-lg transition-colors duration-200"
+                :class="
+                  viewMode === mode
+                    ? 'text-white'
+                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                 "
-              />
-            </UButtonGroup>
+              >
+                <UIcon
+                  :name="
+                    mode === 1
+                      ? 'i-lucide-square'
+                      : mode === 2
+                        ? 'i-lucide-columns-2'
+                        : 'i-lucide-grid-3x3'
+                  "
+                  class="w-5 h-5"
+                />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -300,14 +317,23 @@ useSeoMeta({
           class="mb-8"
         />
 
-        <!-- Articles Grid -->
-        <div v-else class="grid gap-6" :class="gridClass">
-          <DevToArticleCard
-            v-for="article in articles"
-            :key="article.id"
-            :article="article"
-          />
-        </div>
+        <!-- Articles Grid with smooth transition on view change -->
+        <Transition name="fade" mode="out-in">
+          <div
+            v-if="!loading && !error"
+            :key="viewMode"
+            class="grid gap-6"
+            :class="gridClass"
+          >
+            <BlurFade
+              v-for="(article, index) in articles"
+              :key="article.id"
+              :delay="index * 50"
+            >
+              <DevToArticleCard :article="article" />
+            </BlurFade>
+          </div>
+        </Transition>
 
         <!-- Empty State -->
         <div
@@ -372,3 +398,15 @@ useSeoMeta({
     </UContainer>
   </div>
 </template>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
