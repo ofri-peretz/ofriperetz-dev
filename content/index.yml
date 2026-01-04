@@ -73,9 +73,9 @@ skills:
     - name: "Backend"
       items: ["Express", "NestJS", "Kafka", "Redis"]
     - name: "Cloud & DevOps"
-      items: ["AWS", "Docker", "Kubernetes", "Serverless"]
-    - name: "Developer Experience"
-      items: ["ESLint", "Nx Monorepos", "CI/CD", "Testing"]
+      items: ["AWS", "Docker", "Kubernetes", "Vercel"]
+    - name: "AI & Agentic Tools"
+      items: ["Antigravity", "Cursor", "MCP", "AI Workflows"]
     - name: "Leadership"
       items: ["Team Building", "Technical Strategy", "Distributed Teams", "API Architecture"]
 blog:

@@ -41,11 +41,31 @@ content: |
 
   ### 🛠️ Tech Stack
 
-  **Languages**: TypeScript, JavaScript, Node.js
-  **Frameworks**: React, Express, NestJS
-  **Backend**: Kafka, Redis, Serverless
-  **Cloud**: AWS, Docker, Kubernetes
-  **DevEx**: ESLint, Nx Monorepos, CLI tools, AI/MCP integrations
+  **Languages**: TypeScript, JavaScript, Node.js, Python
+  **Frameworks**: React, Express, NestJS, Nuxt
+  **Backend**: Kafka, Redis, Serverless, PostgreSQL
+  **Cloud**: AWS, Docker, Kubernetes, Vercel
+  **DevEx**: ESLint, Nx Monorepos, CLI tools
+
+  **🤖 AI & Agentic Tools**
+  - **AI Assistants**: Antigravity (Opus 4.5, Gemini Pro 3), Cursor, Claude
+  - **AI Workflows**: MCP integrations, Agentic pipelines, LLM-optimized tooling
+  - **Heavily tested**: Grok, Composer-1, ChatGPT models — constantly evaluating the latest AI advancements
+
+  I stay highly engaged with the rapid improvements in the AI space, continuously experimenting with new models and integrating them into my development workflow.
+
+  ### 🌱 Open Source Philosophy
+
+  I believe **open source is the ultimate learning accelerator**. By building in public and contributing to the ecosystem, I accomplish several things:
+
+  - **Stay State-of-the-Art**: Working on real problems forces me to stay current with the latest patterns, security vulnerabilities, and best practices
+  - **Give Back**: The tools I build today help developers worldwide write more secure, maintainable code
+  - **Compound Learning**: Every bug report, PR review, and community interaction teaches me something new
+  - **Build Trust**: Transparent, well-documented code speaks louder than any resume
+
+  The Interlace ESLint Ecosystem embodies this philosophy — each plugin is designed to be AI-friendly, thoroughly documented, and immediately useful. By keeping my work open, I stay accountable to the highest standards.
+
+  Open source isn't just about code — it's about **learning faster by teaching others**.
 
   ### Beyond Code
 
