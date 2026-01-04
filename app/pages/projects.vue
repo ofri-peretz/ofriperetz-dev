@@ -103,8 +103,8 @@ const paginatedProjects = computed(() => {
 
 const goToPage = (page: number) => {
   currentPage.value = page;
-  // Scroll to top of projects section
-  const section = document.getElementById("projects-grid");
+  // Scroll to top of controls section
+  const section = document.getElementById("projects-controls");
   if (section) {
     section.scrollIntoView({ behavior: "smooth", block: "start" });
   }
@@ -189,7 +189,7 @@ useSeoMeta({
       }"
     >
       <!-- View Mode Toggle -->
-      <div class="flex justify-end mb-6">
+      <div id="projects-controls" class="flex justify-end mb-6 scroll-mt-20">
         <div class="flex items-center gap-2">
           <span
             class="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline"
