@@ -428,6 +428,65 @@ useSeoMeta({
             </div>
 
             <div v-else class="space-y-4">
+              <!-- Activity Breakdown Chart -->
+              <div>
+                <h4
+                  class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3"
+                >
+                  Recent Activity (30 days)
+                </h4>
+                <div class="grid grid-cols-4 gap-2 text-center">
+                  <div class="p-2 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                    <div
+                      class="text-lg font-bold text-green-600 dark:text-green-400"
+                    >
+                      <NumberTicker
+                        :value="githubStats.recentCommits"
+                        :duration="1200"
+                      />
+                    </div>
+                    <div class="text-[10px] text-gray-500">Commits</div>
+                  </div>
+                  <div
+                    class="p-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg"
+                  >
+                    <div
+                      class="text-lg font-bold text-purple-600 dark:text-purple-400"
+                    >
+                      <NumberTicker
+                        :value="githubStats.recentPRs"
+                        :duration="1200"
+                      />
+                    </div>
+                    <div class="text-[10px] text-gray-500">PRs</div>
+                  </div>
+                  <div class="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <div
+                      class="text-lg font-bold text-blue-600 dark:text-blue-400"
+                    >
+                      <NumberTicker
+                        :value="githubStats.recentReviews"
+                        :duration="1200"
+                      />
+                    </div>
+                    <div class="text-[10px] text-gray-500">Reviews</div>
+                  </div>
+                  <div
+                    class="p-2 bg-orange-50 dark:bg-orange-900/20 rounded-lg"
+                  >
+                    <div
+                      class="text-lg font-bold text-orange-600 dark:text-orange-400"
+                    >
+                      <NumberTicker
+                        :value="githubStats.recentIssues"
+                        :duration="1200"
+                      />
+                    </div>
+                    <div class="text-[10px] text-gray-500">Issues</div>
+                  </div>
+                </div>
+              </div>
+
               <!-- Languages -->
               <div>
                 <h4
@@ -449,41 +508,48 @@ useSeoMeta({
                 </div>
               </div>
 
-              <!-- Recent Activity -->
-              <div>
+              <!-- Recent Events -->
+              <div v-if="githubStats.recentEvents.length > 0">
                 <h4
                   class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2"
                 >
-                  Recent Activity
+                  Latest Events
                 </h4>
-                <div class="space-y-2">
-                  <a
-                    v-for="repo in githubStats.recentActivity.slice(0, 4)"
-                    :key="repo.name"
-                    :href="repo.html_url"
-                    target="_blank"
-                    class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group"
+                <div class="space-y-1.5 max-h-32 overflow-y-auto">
+                  <div
+                    v-for="event in githubStats.recentEvents.slice(0, 5)"
+                    :key="event.date + event.repo"
+                    class="flex items-center gap-2 text-xs p-1.5 rounded hover:bg-gray-50 dark:hover:bg-gray-800"
                   >
-                    <div class="flex items-center gap-2 min-w-0">
-                      <UIcon
-                        name="i-lucide-git-commit"
-                        class="w-4 h-4 text-green-500 shrink-0"
-                      />
-                      <span
-                        class="text-sm text-gray-700 dark:text-gray-300 truncate"
-                        >{{ repo.name }}</span
-                      >
-                    </div>
-                    <div class="flex items-center gap-2 shrink-0">
-                      <span class="text-xs text-gray-400">{{
-                        new Date(repo.pushed_at).toLocaleDateString()
-                      }}</span>
-                      <UIcon
-                        name="i-lucide-external-link"
-                        class="w-3 h-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
-                      />
-                    </div>
-                  </a>
+                    <UIcon
+                      :name="
+                        event.type === 'commit'
+                          ? 'i-lucide-git-commit'
+                          : event.type === 'pr'
+                            ? 'i-lucide-git-pull-request'
+                            : event.type === 'review'
+                              ? 'i-lucide-eye'
+                              : 'i-lucide-circle-dot'
+                      "
+                      :class="
+                        event.type === 'commit'
+                          ? 'text-green-500'
+                          : event.type === 'pr'
+                            ? 'text-purple-500'
+                            : event.type === 'review'
+                              ? 'text-blue-500'
+                              : 'text-orange-500'
+                      "
+                      class="w-3.5 h-3.5 shrink-0"
+                    />
+                    <span
+                      class="text-gray-600 dark:text-gray-400 truncate flex-1"
+                      >{{ event.repo }}</span
+                    >
+                    <span class="text-gray-400 shrink-0">{{
+                      new Date(event.date).toLocaleDateString()
+                    }}</span>
+                  </div>
                 </div>
               </div>
             </div>
