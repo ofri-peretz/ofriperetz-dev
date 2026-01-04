@@ -1,6 +1,6 @@
 title: "eslint-plugin-crypto"
 description: "24 rules for cryptographic best practices and CVE detection. Catches weak algorithms, insecure random generation, and deprecated crypto APIs."
-image: https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=1470&auto=format&fit=crop
+image: https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fd25uhyyabcgej62y6iy6.png
 url: "https://www.npmjs.com/package/eslint-plugin-crypto"
-tags: ["Security", "Cryptography", "CVE Detection"]
+tags: ["Security", "Cryptography", "CVE"]
 date: "2025"

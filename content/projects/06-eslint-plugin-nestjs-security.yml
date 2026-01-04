@@ -1,6 +1,6 @@
 title: "eslint-plugin-nestjs-security"
 description: "Security rules for NestJS applications covering guards, validation pipes, throttling, and sensitive field exposure."
-image: https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?q=80&w=1470&auto=format&fit=crop
+image: https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fwm4j62nzhhf6uwy1z89f.png
 url: "https://www.npmjs.com/package/eslint-plugin-nestjs-security"
-tags: ["Security", "NestJS", "Framework"]
+tags: ["NestJS", "Security", "Backend"]
 date: "2025"

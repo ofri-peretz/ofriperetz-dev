@@ -1,6 +1,6 @@
 title: "eslint-plugin-jwt"
 description: "JWT security rules covering algorithm confusion attacks, weak secrets, and library-specific CVEs for jsonwebtoken, jose, and jwt-decode."
-image: https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=1470&auto=format&fit=crop
+image: https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fphcbbx3z7g9ibjq3wh3i.png
 url: "https://www.npmjs.com/package/eslint-plugin-jwt"
 tags: ["Security", "JWT", "Authentication"]
 date: "2025"

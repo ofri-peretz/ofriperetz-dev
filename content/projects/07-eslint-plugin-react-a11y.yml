@@ -1,6 +1,6 @@
 title: "eslint-plugin-react-a11y"
 description: "37 LLM-optimized rules for WCAG 2.1 compliance. Making React applications accessible with clear, actionable guidance."
-image: https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?q=80&w=1470&auto=format&fit=crop
+image: https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fz28d6dn9ed93e69098wv.png
 url: "https://www.npmjs.com/package/eslint-plugin-react-a11y"
-tags: ["Accessibility", "React", "WCAG"]
+tags: ["React", "Accessibility", "WCAG"]
 date: "2025"
