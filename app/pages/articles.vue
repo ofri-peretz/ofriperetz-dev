@@ -1,28 +1,47 @@
 <script setup lang="ts">
 const { articles, loading, error, fetchArticles } = useDevToArticles();
+const { stats: githubStats, fetchStats: fetchGitHubStats } = useGitHubStats();
 
-// Medium stats (manual for now - no public API) - MUST match stats.vue
+// Medium stats - MUST EXACTLY MATCH stats.vue
+// Updated: Jan 4, 2026 - from medium.com/me/stats
 const mediumStats = {
-  articles: 3,
-  claps: 0,
-  followers: 0,
+  articles: 3, // Number of Medium articles
+  claps: 12, // Total claps
+  followers: 0, // Medium followers
 };
 
-// Computed combined stats to match stats page
+// Fetch GitHub stats on mount for reactions calculation
+onMounted(() => {
+  fetchGitHubStats();
+});
+
+// Computed combined stats - EXACTLY matching stats page formulas
+const devtoReactions = computed(
+  () =>
+    articles.value?.reduce(
+      (sum, a) => sum + (a.positive_reactions_count || 0),
+      0,
+    ) || 0,
+);
+
+// Combined articles (dev.to + Medium) - matches stats.vue combinedArticles
 const totalArticles = computed(
   () => (articles.value?.length || 0) + mediumStats.articles,
 );
+
+// Combined reactions: GitHub stars + dev.to reactions + Medium claps - matches stats.vue totalReactions
 const totalReactions = computed(
   () =>
-    (articles.value?.reduce(
-      (sum, a) => sum + (a.positive_reactions_count || 0),
-      0,
-    ) || 0) + mediumStats.claps,
+    (githubStats.value?.totalStars || 0) +
+    devtoReactions.value +
+    mediumStats.claps,
 );
+
 const totalComments = computed(
   () =>
     articles.value?.reduce((sum, a) => sum + (a.comments_count || 0), 0) || 0,
 );
+
 const totalReadingTime = computed(
   () =>
     articles.value?.reduce(
