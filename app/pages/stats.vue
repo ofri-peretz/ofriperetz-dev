@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const {
   articles,
+  followers: devtoFollowers,
   loading: articlesLoading,
   fetchArticles,
 } = useDevToArticles();
@@ -33,6 +34,11 @@ const totalComments = computed(() =>
 );
 const totalReadingTime = computed(() =>
   articles.value.reduce((sum, a) => sum + a.reading_time_minutes, 0),
+);
+
+// Combined followers from all platforms
+const totalFollowers = computed(
+  () => githubStats.value.followers + devtoFollowers.value,
 );
 
 // Top packages by downloads (top 8)
@@ -128,41 +134,45 @@ useSeoMeta({
         </div>
       </BlurFade>
 
-      <!-- Key Metrics Grid - 2x3 on mobile, 3x2 on md, 6x1 on lg -->
+      <!-- Key Metrics Grid -->
       <BlurFade :delay="100">
         <div
           class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-8 sm:mb-12"
         >
           <!-- Total Downloads -->
           <UCard
-            class="text-center group hover:ring-2 hover:ring-primary-500/50 transition-all duration-300 hover:scale-[1.02]"
+            class="group hover:ring-2 hover:ring-primary-500/50 transition-all duration-300 hover:scale-[1.02]"
           >
-            <div class="space-y-1 sm:space-y-2">
+            <div
+              class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
+            >
               <div
-                class="text-xl sm:text-2xl lg:text-3xl font-bold text-primary-500"
+                class="text-lg sm:text-xl lg:text-2xl font-bold text-primary-500 tabular-nums"
               >
                 <span v-if="npmLoading" class="animate-pulse">...</span>
                 <NumberTicker v-else :value="totalDownloads" :duration="1500" />
               </div>
               <div
-                class="text-[10px] sm:text-xs text-gray-600 dark:text-gray-400"
+                class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-400 text-center mt-1"
               >
-                npm Downloads/Mo
+                npm Downloads
               </div>
               <UIcon
                 name="i-simple-icons-npm"
-                class="w-4 h-4 text-red-500 mx-auto"
+                class="w-3 h-3 sm:w-4 sm:h-4 text-red-500 mt-1"
               />
             </div>
           </UCard>
 
           <!-- GitHub Stars -->
           <UCard
-            class="text-center group hover:ring-2 hover:ring-yellow-500/50 transition-all duration-300 hover:scale-[1.02]"
+            class="group hover:ring-2 hover:ring-yellow-500/50 transition-all duration-300 hover:scale-[1.02]"
           >
-            <div class="space-y-1 sm:space-y-2">
+            <div
+              class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
+            >
               <div
-                class="text-xl sm:text-2xl lg:text-3xl font-bold text-yellow-500"
+                class="text-lg sm:text-xl lg:text-2xl font-bold text-yellow-500 tabular-nums"
               >
                 <span v-if="githubLoading" class="animate-pulse">...</span>
                 <NumberTicker
@@ -172,97 +182,111 @@ useSeoMeta({
                 />
               </div>
               <div
-                class="text-[10px] sm:text-xs text-gray-600 dark:text-gray-400"
+                class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-400 text-center mt-1"
               >
                 GitHub Stars
               </div>
               <UIcon
                 name="i-lucide-star"
-                class="w-4 h-4 text-yellow-500 mx-auto"
+                class="w-3 h-3 sm:w-4 sm:h-4 text-yellow-500 mt-1"
               />
             </div>
           </UCard>
 
-          <!-- Followers -->
+          <!-- Followers (Combined) -->
           <UCard
-            class="text-center group hover:ring-2 hover:ring-purple-500/50 transition-all duration-300 hover:scale-[1.02]"
+            class="group hover:ring-2 hover:ring-purple-500/50 transition-all duration-300 hover:scale-[1.02]"
           >
-            <div class="space-y-1 sm:space-y-2">
+            <div
+              class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
+            >
               <div
-                class="text-xl sm:text-2xl lg:text-3xl font-bold text-purple-500"
+                class="text-lg sm:text-xl lg:text-2xl font-bold text-purple-500 tabular-nums"
               >
-                <span v-if="githubLoading" class="animate-pulse">...</span>
-                <NumberTicker
-                  v-else
-                  :value="githubStats.followers"
-                  :duration="1500"
-                />
+                <span
+                  v-if="githubLoading || articlesLoading"
+                  class="animate-pulse"
+                  >...</span
+                >
+                <NumberTicker v-else :value="totalFollowers" :duration="1500" />
               </div>
               <div
-                class="text-[10px] sm:text-xs text-gray-600 dark:text-gray-400"
+                class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-400 text-center mt-1"
               >
                 Followers
               </div>
-              <UIcon
-                name="i-lucide-users"
-                class="w-4 h-4 text-purple-500 mx-auto"
-              />
+              <div class="flex items-center gap-1 mt-1">
+                <UIcon
+                  name="i-simple-icons-github"
+                  class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500"
+                />
+                <UIcon
+                  name="i-simple-icons-devdotto"
+                  class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500"
+                />
+              </div>
             </div>
           </UCard>
 
           <!-- Total Articles -->
           <UCard
-            class="text-center group hover:ring-2 hover:ring-green-500/50 transition-all duration-300 hover:scale-[1.02]"
+            class="group hover:ring-2 hover:ring-green-500/50 transition-all duration-300 hover:scale-[1.02]"
           >
-            <div class="space-y-1 sm:space-y-2">
+            <div
+              class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
+            >
               <div
-                class="text-xl sm:text-2xl lg:text-3xl font-bold text-green-500"
+                class="text-lg sm:text-xl lg:text-2xl font-bold text-green-500 tabular-nums"
               >
                 <span v-if="articlesLoading" class="animate-pulse">...</span>
                 <NumberTicker v-else :value="totalArticles" :duration="1500" />
               </div>
               <div
-                class="text-[10px] sm:text-xs text-gray-600 dark:text-gray-400"
+                class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-400 text-center mt-1"
               >
                 Articles
               </div>
               <UIcon
                 name="i-simple-icons-devdotto"
-                class="w-4 h-4 text-gray-900 dark:text-white mx-auto"
+                class="w-3 h-3 sm:w-4 sm:h-4 text-gray-700 dark:text-gray-300 mt-1"
               />
             </div>
           </UCard>
 
           <!-- Total Reactions -->
           <UCard
-            class="text-center group hover:ring-2 hover:ring-red-500/50 transition-all duration-300 hover:scale-[1.02]"
+            class="group hover:ring-2 hover:ring-red-500/50 transition-all duration-300 hover:scale-[1.02]"
           >
-            <div class="space-y-1 sm:space-y-2">
+            <div
+              class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
+            >
               <div
-                class="text-xl sm:text-2xl lg:text-3xl font-bold text-red-500"
+                class="text-lg sm:text-xl lg:text-2xl font-bold text-red-500 tabular-nums"
               >
                 <span v-if="articlesLoading" class="animate-pulse">...</span>
                 <NumberTicker v-else :value="totalReactions" :duration="1500" />
               </div>
               <div
-                class="text-[10px] sm:text-xs text-gray-600 dark:text-gray-400"
+                class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-400 text-center mt-1"
               >
                 Reactions
               </div>
               <UIcon
                 name="i-lucide-heart"
-                class="w-4 h-4 text-red-500 mx-auto"
+                class="w-3 h-3 sm:w-4 sm:h-4 text-red-500 mt-1"
               />
             </div>
           </UCard>
 
           <!-- Public Repos -->
           <UCard
-            class="text-center group hover:ring-2 hover:ring-blue-500/50 transition-all duration-300 hover:scale-[1.02]"
+            class="group hover:ring-2 hover:ring-blue-500/50 transition-all duration-300 hover:scale-[1.02]"
           >
-            <div class="space-y-1 sm:space-y-2">
+            <div
+              class="flex flex-col items-center justify-center min-h-[90px] sm:min-h-[100px]"
+            >
               <div
-                class="text-xl sm:text-2xl lg:text-3xl font-bold text-blue-500"
+                class="text-lg sm:text-xl lg:text-2xl font-bold text-blue-500 tabular-nums"
               >
                 <span v-if="githubLoading" class="animate-pulse">...</span>
                 <NumberTicker
@@ -272,13 +296,13 @@ useSeoMeta({
                 />
               </div>
               <div
-                class="text-[10px] sm:text-xs text-gray-600 dark:text-gray-400"
+                class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-400 text-center mt-1"
               >
                 Repositories
               </div>
               <UIcon
-                name="i-lucide-git-branch"
-                class="w-4 h-4 text-blue-500 mx-auto"
+                name="i-simple-icons-github"
+                class="w-3 h-3 sm:w-4 sm:h-4 text-gray-700 dark:text-gray-300 mt-1"
               />
             </div>
           </UCard>
