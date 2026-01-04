@@ -1,10 +1,9 @@
 <script setup lang="ts">
 // Elegant CTA that opens LinkedIn profile
-// Subtle design - not screaming LinkedIn blue
+// No LinkedIn branding - just a clean "Let's Talk" button
 
 const { track } = useVisitorTracking();
 
-// Link to profile - triggers LinkedIn's "Who viewed your profile"
 const linkedinUrl = "https://www.linkedin.com/in/ofri-peretz/";
 
 const handleClick = () => {
@@ -16,7 +15,7 @@ const handleClick = () => {
 </script>
 
 <template>
-  <!-- Elegant, subtle CTA - not screaming LinkedIn blue -->
+  <!-- Clean, elegant CTA - no LinkedIn branding -->
   <button
     @click="handleClick"
     class="group inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg transition-all duration-300 hover:scale-[1.02]"

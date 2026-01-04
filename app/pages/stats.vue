@@ -771,9 +771,17 @@ useSeoMeta({
                 name="i-simple-icons-eslint"
                 class="w-5 h-5 text-purple-500"
               />
-              <h3 class="font-semibold text-gray-900 dark:text-white">
+              <NuxtLink
+                to="https://www.npmjs.com/~ofriperetz"
+                target="_blank"
+                class="font-semibold text-gray-900 dark:text-white hover:text-primary-500 dark:hover:text-primary-400 transition-colors flex items-center gap-1 group"
+              >
                 Interlace ESLint Ecosystem
-              </h3>
+                <UIcon
+                  name="i-lucide-external-link"
+                  class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                />
+              </NuxtLink>
             </div>
           </template>
 
