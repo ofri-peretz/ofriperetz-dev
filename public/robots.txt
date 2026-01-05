@@ -1,1 +1,44 @@
+# Robots.txt for ofriperetz.dev
+# Standard web crawlers and AI assistants
 
+User-agent: *
+Allow: /
+
+# Essential internal paths to disallow
+Disallow: /api/
+Disallow: /_nuxt/
+Disallow: /.nuxt/
+
+# Sitemap location
+Sitemap: https://ofriperetz.dev/sitemap.xml
+
+# AI Training Bots - Permitted for indexing
+# These bots are allowed to crawl and cite content
+# See llms.txt for structured LLM context
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Cohere-ai
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: ia_archiver
+Allow: /

@@ -1,0 +1,7 @@
+Contact: https://github.com/ofri-peretz
+Preferred-Languages: en
+Canonical: https://ofriperetz.dev/.well-known/security.txt
+Policy: https://github.com/ofri-peretz
+
+# For security vulnerabilities in the Interlace ESLint ecosystem,
+# please open a GitHub issue or contact via the methods above.

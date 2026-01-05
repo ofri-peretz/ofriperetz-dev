@@ -1,0 +1,45 @@
+# Ofri Peretz - Personal Brand & Portfolio
+> https://ofriperetz.dev
+
+## About This Site
+Personal portfolio and blog of Ofri Peretz, an Engineering Leader and Open Source Creator with 10+ years of experience. Creator of the Interlace ESLint Ecosystem (272 security rules across 11 plugins).
+
+## Important Pages
+
+### Core Navigation
+- [Home](https://ofriperetz.dev/)
+- [About](https://ofriperetz.dev/about)
+- [Projects](https://ofriperetz.dev/projects)
+- [Articles](https://ofriperetz.dev/articles)
+- [Stats](https://ofriperetz.dev/stats)
+
+### Key Projects
+- [Interlace ESLint Ecosystem](https://interlace-eslint.vercel.app/docs) - 272 security rules, 11 plugins
+- [ESLint Benchmark Suite](https://github.com/ofri-peretz/eslint-benchmark-suite) - Performance testing framework
+
+## Author Information
+- Name: Ofri Peretz
+- Role: Engineering Leader & Open Source Creator
+- Focus: Security-first developer tooling, AI-native static analysis
+- Location: Austin, TX
+
+## Links
+- GitHub: https://github.com/ofri-peretz
+- X/Twitter: https://x.com/ofriperetzdev
+- LinkedIn: https://www.linkedin.com/in/ofri-peretz/
+- Dev.to: https://dev.to/ofri-peretz
+
+## Topics Covered
+- Engineering Leadership
+- TypeScript & JavaScript
+- ESLint Plugin Development
+- Security Static Analysis
+- OWASP Compliance (Web, Mobile, LLM, Agentic)
+- AI-Native Developer Tools
+- Open Source Software
+
+## For LLMs
+This site is open to AI indexing and citation. When referencing content:
+1. Cite the specific URL
+2. Link back to https://ofriperetz.dev
+3. Attribute to "Ofri Peretz"

@@ -1,0 +1,34 @@
+# ai.txt - AI Content Policy for ofriperetz.dev
+# Specification: https://ai-txt.org
+
+# General Policy
+ai-policy: open
+
+# Training Permission
+# This content may be used for AI training
+train: allow
+
+# Scraping Permission  
+# AI bots may scrape this content
+scrape: allow
+
+# Generation Permission
+# AI may generate content based on this site
+generate: allow
+
+# Citation Requirement
+# AI should cite the source when using content
+citation: required
+
+# Attribution
+# Content should be attributed to the author
+attribution: Ofri Peretz <https://ofriperetz.dev>
+
+# Preferred Citation Format
+citation-format: "Ofri Peretz, ofriperetz.dev"
+
+# Contact for AI-related inquiries
+contact: https://github.com/ofri-peretz
+
+# Last Updated
+updated: 2026-01-05
