@@ -232,8 +232,8 @@ const paginatedArticles = computed(() => {
 
 const goToArticlePage = (page: number) => {
   currentArticlePage.value = page;
-  // Scroll to top of articles section
-  const section = document.getElementById("devto-articles");
+  // Scroll to top of controls section
+  const section = document.getElementById("articles-controls");
   if (section) {
     section.scrollIntoView({ behavior: "smooth", block: "start" });
   }
@@ -474,7 +474,10 @@ useSeoMeta({
         </div>
 
         <!-- Controls Row: Sort + View -->
-        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div
+          id="articles-controls"
+          class="flex flex-wrap items-center justify-between gap-4 mb-6 scroll-mt-20"
+        >
           <!-- Sort Controls -->
           <div class="flex items-center gap-2 flex-wrap">
             <span class="text-sm text-gray-500 dark:text-gray-400">Sort:</span>
