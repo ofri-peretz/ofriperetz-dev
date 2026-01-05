@@ -188,8 +188,50 @@ useSeoMeta({
         container: '!pt-0',
       }"
     >
-      <!-- View Mode Toggle -->
-      <div id="projects-controls" class="flex justify-end mb-6 scroll-mt-20">
+      <!-- Controls Row: Pagination + View -->
+      <div
+        id="projects-controls"
+        class="flex flex-wrap items-center justify-between gap-4 mb-6 scroll-mt-20"
+      >
+        <!-- Pagination Controls (left) -->
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-500 dark:text-gray-400">Page:</span>
+          <div class="flex items-center gap-1">
+            <button
+              @click="goToPage(currentPage - 1)"
+              :disabled="currentPage === 1"
+              class="px-2 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <UIcon name="i-lucide-chevron-left" class="w-4 h-4" />
+            </button>
+
+            <div class="flex gap-1">
+              <button
+                v-for="page in totalPages"
+                :key="page"
+                @click="goToPage(page)"
+                class="w-8 h-8 rounded-lg font-medium text-sm transition-all"
+                :class="
+                  page === currentPage
+                    ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                "
+              >
+                {{ page }}
+              </button>
+            </div>
+
+            <button
+              @click="goToPage(currentPage + 1)"
+              :disabled="currentPage === totalPages"
+              class="px-2 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <UIcon name="i-lucide-chevron-right" class="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        <!-- View Mode Toggle (right) -->
         <div class="flex items-center gap-2">
           <span
             class="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline"
@@ -222,44 +264,6 @@ useSeoMeta({
             </button>
           </div>
         </div>
-      </div>
-
-      <!-- Top Pagination Controls -->
-      <div
-        v-if="totalPages > 1"
-        class="flex justify-center items-center gap-2 mb-6"
-      >
-        <button
-          @click="goToPage(currentPage - 1)"
-          :disabled="currentPage === 1"
-          class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          <UIcon name="i-lucide-chevron-left" class="w-4 h-4" />
-        </button>
-
-        <div class="flex gap-1">
-          <button
-            v-for="page in totalPages"
-            :key="page"
-            @click="goToPage(page)"
-            class="w-9 h-9 rounded-lg font-medium text-sm transition-all"
-            :class="
-              page === currentPage
-                ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
-            "
-          >
-            {{ page }}
-          </button>
-        </div>
-
-        <button
-          @click="goToPage(currentPage + 1)"
-          :disabled="currentPage === totalPages"
-          class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          <UIcon name="i-lucide-chevron-right" class="w-4 h-4" />
-        </button>
       </div>
 
       <Transition name="fade" mode="out-in">
