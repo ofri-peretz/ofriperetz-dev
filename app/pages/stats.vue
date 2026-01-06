@@ -55,33 +55,14 @@ const totalReadingTime = computed(
     ) || 0,
 );
 
-// Medium stats (manual - no free public API, requires RapidAPI subscription)
-// Updated: Jan 4, 2026 - from medium.com/me/stats
-const mediumStats = {
-  articles: 3, // Number of Medium articles
-  claps: 12, // Total claps
-  followers: 0, // Medium followers
-};
-
-// Combined reactions: GitHub stars + dev.to reactions + Medium claps - with null safety
+// Combined reactions: GitHub stars + dev.to reactions (no Medium - no free API)
 const totalReactions = computed(
-  () =>
-    (githubStats.value?.totalStars || 0) +
-    devtoReactions.value +
-    mediumStats.claps,
+  () => (githubStats.value?.totalStars || 0) + devtoReactions.value,
 );
 
-// Combined followers from all platforms (GitHub + dev.to + Medium) - with null safety
+// Combined followers from all platforms (GitHub + dev.to)
 const totalFollowers = computed(
-  () =>
-    (githubStats.value?.followers || 0) +
-    (devtoFollowers.value || 0) +
-    mediumStats.followers,
-);
-
-// Combined articles (dev.to + Medium)
-const combinedArticles = computed(
-  () => totalArticles.value + mediumStats.articles,
+  () => (githubStats.value?.followers || 0) + (devtoFollowers.value || 0),
 );
 
 // Top packages by downloads (top 8) - with null safety
@@ -294,27 +275,17 @@ useSeoMeta({
                 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-green-500 tabular-nums"
               >
                 <span v-if="articlesLoading" class="animate-pulse">...</span>
-                <NumberTicker
-                  v-else
-                  :value="combinedArticles"
-                  :duration="1500"
-                />
+                <NumberTicker v-else :value="totalArticles" :duration="1500" />
               </div>
               <div
                 class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center mt-1"
               >
                 Articles
               </div>
-              <div class="flex items-center gap-1 mt-1">
-                <UIcon
-                  name="i-simple-icons-devdotto"
-                  class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500"
-                />
-                <UIcon
-                  name="i-simple-icons-medium"
-                  class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500"
-                />
-              </div>
+              <UIcon
+                name="i-simple-icons-devdotto"
+                class="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 mt-1"
+              />
             </div>
           </UCard>
 
@@ -350,11 +321,6 @@ useSeoMeta({
                   name="i-simple-icons-devdotto"
                   class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500"
                   title="dev.to reactions"
-                />
-                <UIcon
-                  name="i-simple-icons-medium"
-                  class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-500"
-                  title="Medium claps"
                 />
               </div>
             </div>
