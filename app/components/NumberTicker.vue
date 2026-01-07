@@ -31,7 +31,7 @@ const formattedValue = computed(() => {
   const num = displayValue.value.toFixed(props.decimalPlaces);
   // Add thousand separators
   const parts = num.split(".");
-  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  parts[0] = (parts[0] ?? "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return props.prefix + parts.join(".") + props.suffix;
 });
 

@@ -620,7 +620,7 @@ useSeoMeta({
         <!-- Error State -->
         <UAlert
           v-else-if="error"
-          color="red"
+          color="error"
           icon="i-lucide-alert-circle"
           title="Failed to load articles"
           :description="error"

@@ -22,6 +22,7 @@ export interface GitHubStats {
   // Enriched data
   topRepos: { name: string; stars: number; forks: number; url: string; description: string | null }[]
   languages: { name: string; count: number }[]
+  recentEvents?: { type: string; repo: string; date: string }[]
   
   authenticated?: boolean
 }

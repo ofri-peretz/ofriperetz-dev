@@ -102,17 +102,17 @@ defineProps<{
         }"
       >
         <div
-          v-if="page.hero.links"
+          v-if="page.hero?.links"
           class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto"
         >
           <!-- Primary CTA with Magic UI shimmer effect -->
           <ShimmerButton>
             <NuxtLink
-              :to="page.hero.links[0].to"
+              :to="page.hero?.links?.[0]?.to"
               class="flex items-center gap-2"
             >
               <UIcon name="i-lucide-folder-open" class="w-4 h-4" />
-              {{ page.hero.links[0].label }}
+              {{ page.hero?.links?.[0]?.label }}
             </NuxtLink>
           </ShimmerButton>
           <UButton
@@ -198,6 +198,20 @@ defineProps<{
       :transition="{ duration: 0.6, delay: 0.7 }"
       class="py-6 px-4 sm:px-8 w-full max-w-2xl mx-auto"
     >
+      <h2 class="text-xl sm:text-2xl font-bold text-center mb-2">
+        <GradientText>Open Source Impact</GradientText>
+      </h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400 text-center mb-4">
+        Live metrics from my npm packages, GitHub repos, and technical articles
+      </p>
+      <div class="text-center mb-6">
+        <UButton to="/stats" color="neutral" variant="ghost" class="gap-2">
+          Check Impact Dashboard
+          <template #trailing>
+            <UIcon name="i-lucide-arrow-right" class="w-4 h-4" />
+          </template>
+        </UButton>
+      </div>
       <LandingStatsWidget />
     </Motion>
   </UPageHero>

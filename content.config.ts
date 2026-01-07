@@ -47,16 +47,24 @@ export default defineContentConfig({
         about: createBaseSchema(),
         experience: createBaseSchema().extend({
           items: z.array(z.object({
-            date: z.date(),
+            date: z.string(),
             position: z.string(),
             company: z.object({
               name: z.string(),
               url: z.string(),
               logo: z.string().editor({ input: 'icon' }),
               color: z.string()
-            })
+            }),
+            highlights: z.array(z.string()).optional()
           }))
         }),
+        skills: z.object({
+          title: z.string(),
+          categories: z.array(z.object({
+            name: z.string(),
+            items: z.array(z.string())
+          }))
+        }).optional(),
         testimonials: z.array(createTestimonialSchema()),
         blog: createBaseSchema(),
         faq: createBaseSchema().extend({

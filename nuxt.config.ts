@@ -86,14 +86,6 @@ export default defineNuxtConfig({
     }
   },
 
-  // Site configuration
-  site: {
-    url: 'https://ofriperetz.dev',
-    name: 'Ofri Peretz',
-    description: 'Engineering Leader & Open Source Creator - Building AI-native developer tools',
-    defaultLocale: 'en'
-  },
-
   // Runtime config for API keys (server-side only for security)
   runtimeConfig: {
     devtoApiKey: process.env.DEVTO_API_KEY || '',

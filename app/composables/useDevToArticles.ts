@@ -3,6 +3,7 @@ export interface DevToArticle {
   title: string
   description: string
   url: string
+  slug?: string
   cover_image: string | null
   social_image: string
   published_at: string

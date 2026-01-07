@@ -589,7 +589,7 @@ useSeoMeta({
               </div>
 
               <!-- Recent Events -->
-              <div v-if="githubStats?.recentEvents?.length > 0">
+              <div v-if="(githubStats?.recentEvents?.length ?? 0) > 0">
                 <h4
                   class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2"
                 >
