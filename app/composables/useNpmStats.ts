@@ -1,7 +1,7 @@
 export interface PackageStats {
   name: string
   downloads: number
-  dailyData?: { downloads: number; day: string }[]
+  dailyData?: { downloads: number, day: string }[]
 }
 
 export interface NpmStatsResponse {
@@ -15,8 +15,8 @@ export const useNpmStats = () => {
   const loading = ref(false)
   const error = ref<string | null>(null)
   const packageCount = ref(0)
-  
-  const totalDownloads = computed(() => 
+
+  const totalDownloads = computed(() =>
     stats.value.reduce((sum, pkg) => sum + pkg.downloads, 0)
   )
 

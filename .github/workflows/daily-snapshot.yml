@@ -1,0 +1,106 @@
+name: Daily Metrics Snapshot
+
+on:
+  schedule:
+    # Run daily at 6:00 AM UTC
+    - cron: "0 6 * * *"
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install -g node-fetch
+
+      - name: Capture Metrics Snapshot
+        env:
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          mkdir -p .data/snapshots
+
+          # Fetch npm stats
+          NPM_RESULT=$(curl -s "https://registry.npmjs.org/-/v1/search?text=maintainer:ofriperetz&size=100")
+          PACKAGE_COUNT=$(echo $NPM_RESULT | jq '.objects | length')
+
+          # Fetch total downloads (simplified - sum of last month for all packages)
+          TOTAL_DOWNLOADS=0
+          for pkg in $(echo $NPM_RESULT | jq -r '.objects[].package.name'); do
+            DOWNLOADS=$(curl -s "https://api.npmjs.org/downloads/point/last-month/$pkg" | jq '.downloads // 0')
+            TOTAL_DOWNLOADS=$((TOTAL_DOWNLOADS + DOWNLOADS))
+          done
+
+          # Fetch GitHub stats (using REST API)
+          GH_USER=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/users/ofri-peretz")
+          GH_FOLLOWERS=$(echo $GH_USER | jq '.followers // 0')
+          GH_REPOS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/users/ofri-peretz/repos?per_page=100")
+          GH_STARS=$(echo $GH_REPOS | jq '[.[].stargazers_count] | add // 0')
+
+          # Fetch GitHub contributions via GraphQL
+          GH_CONTRIBUTIONS_RESPONSE=$(curl -s -X POST \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{"query": "query { user(login: \"ofri-peretz\") { contributionsCollection { totalCommitContributions contributionCalendar { totalContributions } } } }"}' \
+            https://api.github.com/graphql)
+          GH_CONTRIBUTIONS=$(echo $GH_CONTRIBUTIONS_RESPONSE | jq '.data.user.contributionsCollection.contributionCalendar.totalContributions // 0')
+          GH_COMMITS=$(echo $GH_CONTRIBUTIONS_RESPONSE | jq '.data.user.contributionsCollection.totalCommitContributions // 0')
+
+          # Fetch Dev.to stats
+          DEVTO_FOLLOWERS=$(curl -s -H "api-key: $DEVTO_API_KEY" "https://dev.to/api/followers/users?per_page=1000" | jq 'length')
+          DEVTO_ARTICLES=$(curl -s -H "api-key: $DEVTO_API_KEY" "https://dev.to/api/articles/me/all?per_page=1000")
+          DEVTO_ARTICLE_COUNT=$(echo $DEVTO_ARTICLES | jq 'length')
+          DEVTO_VIEWS=$(echo $DEVTO_ARTICLES | jq '[.[].page_views_count] | add // 0')
+          DEVTO_REACTIONS=$(echo $DEVTO_ARTICLES | jq '[.[].positive_reactions_count] | add // 0')
+          DEVTO_COMMENTS=$(echo $DEVTO_ARTICLES | jq '[.[].comments_count] | add // 0')
+
+          # Create snapshot JSON with extended schema
+          cat > .data/snapshots/$DATE.json << EOF
+          {
+            "date": "$DATE",
+            "npm": {
+              "totalDownloads": $TOTAL_DOWNLOADS,
+              "packageCount": $PACKAGE_COUNT
+            },
+            "github": {
+              "stars": $GH_STARS,
+              "followers": $GH_FOLLOWERS,
+              "contributions": $GH_CONTRIBUTIONS,
+              "commits": $GH_COMMITS
+            },
+            "devto": {
+              "views": $DEVTO_VIEWS,
+              "followers": $DEVTO_FOLLOWERS,
+              "reactions": $DEVTO_REACTIONS,
+              "comments": $DEVTO_COMMENTS,
+              "articles": $DEVTO_ARTICLE_COUNT
+            },
+            "ecosystem": {
+              "packages": $PACKAGE_COUNT,
+              "plugins": 11,
+              "rules": 216,
+              "owaspCoverage": 100,
+              "testCoverage": 90
+            }
+          }
+          EOF
+
+          echo "Snapshot created for $DATE"
+          cat .data/snapshots/$DATE.json
+
+      - name: Commit and push snapshot
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .data/snapshots/
+          git diff --staged --quiet || git commit -m "chore: daily metrics snapshot $(date +%Y-%m-%d)"
+          git push

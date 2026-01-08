@@ -1,18 +1,18 @@
 <script setup lang="ts">
 withDefaults(
   defineProps<{
-    duration?: number;
-    borderWidth?: number;
-    colorFrom?: string;
-    colorTo?: string;
+    duration?: number
+    borderWidth?: number
+    colorFrom?: string
+    colorTo?: string
   }>(),
   {
     duration: 6,
     borderWidth: 2,
-    colorFrom: "#ffaa40",
-    colorTo: "#9c40ff",
-  },
-);
+    colorFrom: '#ffaa40',
+    colorTo: '#9c40ff'
+  }
+)
 </script>
 
 <template>
@@ -21,10 +21,10 @@ withDefaults(
     <div
       class="absolute inset-0 rounded-xl"
       :style="{
-        padding: `${borderWidth}px`,
-        background: `linear-gradient(var(--angle), ${colorFrom}, ${colorTo}, ${colorFrom})`,
-        animation: `rotate ${duration}s linear infinite`,
-        '--angle': '0deg',
+        'padding': `${borderWidth}px`,
+        'background': `linear-gradient(var(--angle), ${colorFrom}, ${colorTo}, ${colorFrom})`,
+        'animation': `rotate ${duration}s linear infinite`,
+        '--angle': '0deg'
       }"
     >
       <div

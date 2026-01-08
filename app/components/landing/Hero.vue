@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { IndexCollectionItem } from "@nuxt/content";
+import type { IndexCollectionItem } from '@nuxt/content'
 
-const { footer, global } = useAppConfig();
+const { footer, global } = useAppConfig()
 
 defineProps<{
-  page: IndexCollectionItem;
-}>();
+  page: IndexCollectionItem
+}>()
 </script>
 
 <template>
@@ -13,7 +13,7 @@ defineProps<{
     :ui="{
       headline: 'flex items-center justify-center',
       title: 'text-shadow-md max-w-lg mx-auto',
-      links: 'mt-4 flex-col justify-center items-center',
+      links: 'mt-4 flex-col justify-center items-center'
     }"
   >
     <template #headline>
@@ -21,24 +21,25 @@ defineProps<{
         :initial="{
           scale: 1.1,
           opacity: 0,
-          filter: 'blur(20px)',
+          filter: 'blur(20px)'
         }"
         :animate="{
           scale: 1,
           opacity: 1,
-          filter: 'blur(0px)',
+          filter: 'blur(0px)'
         }"
         :transition="{
           duration: 0.6,
-          delay: 0.1,
+          delay: 0.1
         }"
       >
-        <UColorModeAvatar
-          class="size-28 sm:size-32 ring-4 ring-primary-500/30 ring-offset-4 ring-offset-(--ui-bg) shadow-xl"
-          :light="global.picture?.light!"
-          :dark="global.picture?.dark!"
+        <img
+          class="size-28 sm:size-32 rounded-full ring-4 ring-primary-500/30 ring-offset-4 ring-offset-(--ui-bg) shadow-xl object-cover"
+          :src="global.picture?.light!"
           :alt="global.picture?.alt!"
-        />
+          loading="eager"
+          fetchpriority="high"
+        >
       </Motion>
     </template>
 
@@ -47,19 +48,26 @@ defineProps<{
         :initial="{
           scale: 1.1,
           opacity: 0,
-          filter: 'blur(20px)',
+          filter: 'blur(20px)'
         }"
         :animate="{
           scale: 1,
           opacity: 1,
-          filter: 'blur(0px)',
+          filter: 'blur(0px)'
         }"
         :transition="{
           duration: 0.6,
-          delay: 0.1,
+          delay: 0.1
         }"
       >
-        <GradientText animate>{{ page.title }}</GradientText>
+        <SparklesText :sparkles-count="8">
+          <AuroraText
+            :colors="['#FF0080', '#7928CA', '#0070F3', '#38bdf8']"
+            :speed="0.8"
+          >
+            {{ page.title }}
+          </AuroraText>
+        </SparklesText>
       </Motion>
     </template>
 
@@ -68,16 +76,16 @@ defineProps<{
         :initial="{
           scale: 1.1,
           opacity: 0,
-          filter: 'blur(20px)',
+          filter: 'blur(20px)'
         }"
         :animate="{
           scale: 1,
           opacity: 1,
-          filter: 'blur(0px)',
+          filter: 'blur(0px)'
         }"
         :transition="{
           duration: 0.6,
-          delay: 0.3,
+          delay: 0.3
         }"
       >
         {{ page.description }}
@@ -89,32 +97,55 @@ defineProps<{
         :initial="{
           scale: 1.1,
           opacity: 0,
-          filter: 'blur(20px)',
+          filter: 'blur(20px)'
         }"
         :animate="{
           scale: 1,
           opacity: 1,
-          filter: 'blur(0px)',
+          filter: 'blur(0px)'
         }"
         :transition="{
           duration: 0.6,
-          delay: 0.5,
+          delay: 0.5
         }"
       >
         <div
           v-if="page.hero?.links"
-          class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto"
+          class="flex flex-wrap items-center justify-center gap-3 w-full"
         >
-          <!-- Primary CTA with Magic UI shimmer effect -->
-          <ShimmerButton>
-            <NuxtLink
-              :to="page.hero?.links?.[0]?.to"
-              class="flex items-center gap-2"
-            >
-              <UIcon name="i-lucide-folder-open" class="w-4 h-4" />
-              {{ page.hero?.links?.[0]?.label }}
-            </NuxtLink>
-          </ShimmerButton>
+          <!-- Elegant ghost CTAs for each section -->
+          <NuxtLink
+            to="/projects"
+            class="group inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-400 hover:text-primary-400 transition-all duration-300 rounded-full border border-transparent hover:border-primary-500/30 hover:bg-primary-500/5"
+          >
+            <UIcon
+              name="i-lucide-folder-open"
+              class="w-4 h-4 group-hover:scale-110 transition-transform"
+            />
+            Projects
+          </NuxtLink>
+          <NuxtLink
+            to="/articles"
+            class="group inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-400 hover:text-purple-400 transition-all duration-300 rounded-full border border-transparent hover:border-purple-500/30 hover:bg-purple-500/5"
+          >
+            <UIcon
+              name="i-simple-icons-devdotto"
+              class="w-4 h-4 group-hover:scale-110 transition-transform"
+            />
+            Articles
+          </NuxtLink>
+          <NuxtLink
+            to="/stats"
+            class="group inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-400 hover:text-yellow-400 transition-all duration-300 rounded-full border border-transparent hover:border-yellow-500/30 hover:bg-yellow-500/5"
+          >
+            <UIcon
+              name="i-lucide-bar-chart-2"
+              class="w-4 h-4 group-hover:scale-110 transition-transform"
+            />
+            Impact
+          </NuxtLink>
+
+          <!-- Availability status -->
           <UButton
             :color="global.available ? 'success' : 'error'"
             variant="ghost"
@@ -149,16 +180,16 @@ defineProps<{
         :initial="{
           scale: 1.1,
           opacity: 0,
-          filter: 'blur(20px)',
+          filter: 'blur(20px)'
         }"
         :animate="{
           scale: 1,
           opacity: 1,
-          filter: 'blur(0px)',
+          filter: 'blur(0px)'
         }"
         :transition="{
           duration: 0.6,
-          delay: 0.7,
+          delay: 0.7
         }"
         class="mt-4"
       >
@@ -172,16 +203,16 @@ defineProps<{
           :initial="{
             scale: 1.1,
             opacity: 0,
-            filter: 'blur(20px)',
+            filter: 'blur(20px)'
           }"
           :animate="{
             scale: 1,
             opacity: 1,
-            filter: 'blur(0px)',
+            filter: 'blur(0px)'
           }"
           :transition="{
             duration: 0.6,
-            delay: 0.5 + index * 0.1,
+            delay: 0.5 + index * 0.1
           }"
         >
           <UButton
@@ -191,28 +222,14 @@ defineProps<{
       </div>
     </template>
 
-    <!-- Stats Widget instead of image marquee -->
+    <!-- Impact Preview - in Hero section -->
     <Motion
       :initial="{ scale: 1.1, opacity: 0, filter: 'blur(20px)' }"
       :animate="{ scale: 1, opacity: 1, filter: 'blur(0px)' }"
       :transition="{ duration: 0.6, delay: 0.7 }"
-      class="py-6 px-4 sm:px-8 w-full max-w-2xl mx-auto"
+      class="py-6 px-2 sm:px-8 w-full max-w-6xl mx-auto"
     >
-      <h2 class="text-xl sm:text-2xl font-bold text-center mb-2">
-        <GradientText>Open Source Impact</GradientText>
-      </h2>
-      <p class="text-sm text-gray-500 dark:text-gray-400 text-center mb-4">
-        Live metrics from my npm packages, GitHub repos, and technical articles
-      </p>
-      <div class="text-center mb-6">
-        <UButton to="/stats" color="neutral" variant="ghost" class="gap-2">
-          Check Impact Dashboard
-          <template #trailing>
-            <UIcon name="i-lucide-arrow-right" class="w-4 h-4" />
-          </template>
-        </UButton>
-      </div>
-      <LandingStatsWidget />
+      <LandingImpactPreview />
     </Motion>
   </UPageHero>
 </template>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 defineProps<{
-  title?: string;
-  description?: string;
-  pageType?: "home" | "stats" | "articles" | "projects" | "about";
-}>();
+  title?: string
+  description?: string
+  pageType?: 'home' | 'stats' | 'articles' | 'projects' | 'about'
+}>()
 </script>
 
 <template>
@@ -36,7 +36,7 @@ defineProps<{
             position: relative;
             z-index: 10;
           "
-        />
+        >
       </div>
     </div>
 
@@ -64,61 +64,55 @@ defineProps<{
           <span
             class="px-4 py-2 bg-purple-500/30 border border-purple-500/50 rounded-full text-purple-300"
             style="font-size: 18px"
-            >📊 Live Stats</span
-          >
+          >📊 Live Stats</span>
           <span
             class="px-4 py-2 bg-green-500/30 border border-green-500/50 rounded-full text-green-300"
             style="font-size: 18px"
-            >9K+ Downloads</span
-          >
+          >9K+ Downloads</span>
         </template>
         <template v-else-if="pageType === 'articles'">
           <span
             class="px-4 py-2 bg-green-500/30 border border-green-500/50 rounded-full text-green-300"
             style="font-size: 18px"
-            >📝 Tech Articles</span
-          >
+          >📝 Tech Articles</span>
           <span
             class="px-4 py-2 bg-blue-500/30 border border-blue-500/50 rounded-full text-blue-300"
             style="font-size: 18px"
-            >Security & ESLint</span
-          >
+          >Security & ESLint</span>
         </template>
         <template v-else-if="pageType === 'projects'">
           <span
             class="px-4 py-2 bg-blue-500/30 border border-blue-500/50 rounded-full text-blue-300"
             style="font-size: 18px"
-            >🚀 Open Source</span
-          >
+          >🚀 Open Source</span>
           <span
             class="px-4 py-2 bg-orange-500/30 border border-orange-500/50 rounded-full text-orange-300"
             style="font-size: 18px"
-            >ESLint Ecosystem</span
-          >
+          >ESLint Ecosystem</span>
         </template>
         <template v-else>
           <span
             class="px-4 py-2 bg-indigo-500/30 border border-indigo-500/50 rounded-full text-indigo-300"
             style="font-size: 18px"
-            >🛡️ Security</span
-          >
+          >🛡️ Security</span>
           <span
             class="px-4 py-2 bg-purple-500/30 border border-purple-500/50 rounded-full text-purple-300"
             style="font-size: 18px"
-            >Open Source</span
-          >
+          >Open Source</span>
           <span
             class="px-4 py-2 bg-blue-500/30 border border-blue-500/50 rounded-full text-blue-300"
             style="font-size: 18px"
-            >AI</span
-          >
+          >AI</span>
         </template>
       </div>
     </div>
 
     <!-- Bottom branding -->
     <div class="absolute bottom-6 right-8 flex items-center gap-2">
-      <span class="text-gray-400" style="font-size: 18px">ofriperetz.dev</span>
+      <span
+        class="text-gray-400"
+        style="font-size: 18px"
+      >ofriperetz.dev</span>
     </div>
   </div>
 </template>

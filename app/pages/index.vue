@@ -1,49 +1,102 @@
 <script setup lang="ts">
-const { data: page } = await useAsyncData("index", () => {
-  return queryCollection("index").first();
-});
+const { data: page } = await useAsyncData('index', () => {
+  return queryCollection('index').first()
+})
 if (!page.value) {
   throw createError({
     statusCode: 404,
-    statusMessage: "Page not found",
-    fatal: true,
-  });
+    statusMessage: 'Page not found',
+    fatal: true
+  })
 }
 
 useSeoMeta({
-  title: "Ofri Peretz - Engineering Leader & Open Source Creator",
-  ogTitle: "Ofri Peretz - Engineering Leader & Open Source Creator",
+  title: 'Ofri Peretz - Engineering Leader & Open Source Creator',
+  ogTitle: 'Ofri Peretz - Engineering Leader & Open Source Creator',
   description:
-    "Building Products That Matter • Engineering Leadership • Open-Source Contributor. Creator of the Interlace ESLint Ecosystem with 9,000+ npm downloads.",
+    'Building Products That Matter • Engineering Leadership • Open-Source Contributor. Creator of the Interlace ESLint Ecosystem with 9,000+ npm downloads.',
   ogDescription:
-    "Engineering Leader & Open Source Creator. Building security-focused ESLint plugins with 9K+ downloads.",
-  ogImage: "https://ofriperetz.dev/og-home.png",
+    'Engineering Leader & Open Source Creator. Building security-focused ESLint plugins with 9K+ downloads.',
+  ogImage: 'https://ofriperetz.dev/og-home.png',
   ogImageWidth: 1200,
   ogImageHeight: 630,
-  ogType: "website",
-  ogUrl: "https://ofriperetz.dev",
-  twitterCard: "summary_large_image",
-  twitterImage: "https://ofriperetz.dev/og-home.png",
-  twitterTitle: "Ofri Peretz - Engineering Leader & Open Source Creator",
+  ogType: 'website',
+  ogUrl: 'https://ofriperetz.dev',
+  twitterCard: 'summary_large_image',
+  twitterImage: 'https://ofriperetz.dev/og-home.png',
+  twitterTitle: 'Ofri Peretz - Engineering Leader & Open Source Creator',
   twitterDescription:
-    "Building security-focused ESLint plugins with 9K+ downloads.",
-});
+    'Building security-focused ESLint plugins with 9K+ downloads.'
+})
+
+// TOC items for home page sections
+const tocItems = [
+  { id: 'hero', label: 'Hello' },
+  { id: 'about', label: 'About' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'philosophy', label: 'Philosophy' },
+  { id: 'articles', label: 'Articles' },
+  { id: 'faq', label: 'FAQ' }
+]
 </script>
 
 <template>
   <UPage v-if="page">
-    <LandingHero :page />
+    <!-- Floating TOC -->
+    <FloatingToc :items="tocItems" />
+
+    <div
+      id="hero"
+      data-toc-section
+      class="scroll-mt-20"
+    >
+      <LandingHero :page />
+    </div>
+
+    <!-- About Section with consistent spacing -->
     <UPageSection
+      id="about"
+      data-toc-section
       :ui="{
-        container: '!pt-0 lg:grid lg:grid-cols-2 lg:gap-8',
+        container:
+          'py-12 sm:py-16 lg:grid lg:grid-cols-2 lg:gap-8 scroll-mt-20'
       }"
     >
       <LandingAbout :page />
       <LandingWorkExperience :page />
     </UPageSection>
 
-    <LandingSkills :page />
-    <LandingDevToArticles :page />
-    <LandingFAQ :page />
+    <!-- Below-the-fold sections - lazy loaded for performance -->
+    <div
+      id="skills"
+      data-toc-section
+      class="scroll-mt-20 py-6 sm:py-8"
+    >
+      <LazyLandingSkills :page />
+    </div>
+
+    <div
+      id="philosophy"
+      data-toc-section
+      class="scroll-mt-20 py-6 sm:py-8"
+    >
+      <LazyLandingPhilosophy />
+    </div>
+
+    <div
+      id="articles"
+      data-toc-section
+      class="scroll-mt-20 py-6 sm:py-8"
+    >
+      <LazyLandingDevToArticles :page />
+    </div>
+
+    <div
+      id="faq"
+      data-toc-section
+      class="scroll-mt-20 py-6 sm:py-8"
+    >
+      <LazyLandingFAQ :page />
+    </div>
   </UPage>
 </template>

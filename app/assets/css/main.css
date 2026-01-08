@@ -4,8 +4,8 @@
 @source "../../../content/**/*";
 
 @theme static {
-  --font-sans: 'Public Sans', sans-serif;
-  --font-serif: 'Instrument Serif', serif;
+  --font-sans: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
 }
 
 :root {
@@ -22,4 +22,10 @@
     color: #ffffff;
     background-color: #474747;
   }
+}
+
+/* Performance: Skip rendering off-screen content until needed */
+.lazy-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
 }

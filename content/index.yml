@@ -103,9 +103,29 @@ skills:
     - name: "AI & Agentic"
       items: ["Antigravity", "Cursor", "MCP", "LLM APIs", "AI Workflows"]
     - name: "DevOps & Observability"
-      items: ["GitHub Actions", "Grafana", "Datadog", "Codecov", "Nx Monorepos"]
+      items:
+        [
+          "AWS",
+          "Terraform",
+          "Jenkins",
+          "Kubernetes",
+          "Packages",
+          "GitHub Actions",
+          "Grafana",
+          "Coralogix",
+          "Wiz",
+          "Snyk",
+          "Atlassian Compass",
+          "Nx Monorepos",
+        ]
     - name: "Leadership"
-      items: ["Team Building", "Technical Strategy", "Distributed Teams", "API Architecture"]
+      items:
+        [
+          "Team Building",
+          "Technical Strategy",
+          "Distributed Teams",
+          "API Architecture",
+        ]
 blog:
   title: "Latest Articles"
   description: "Technical deep-dives published on dev.to"

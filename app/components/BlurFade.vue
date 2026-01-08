@@ -1,51 +1,51 @@
 <script setup lang="ts">
 const props = withDefaults(
   defineProps<{
-    delay?: number;
-    duration?: number;
-    yOffset?: number;
-    inView?: boolean;
+    delay?: number
+    duration?: number
+    yOffset?: number
+    inView?: boolean
   }>(),
   {
     delay: 0,
     duration: 500,
     yOffset: 8,
-    inView: true,
-  },
-);
+    inView: true
+  }
+)
 
-const isVisible = ref(false);
-const targetRef = ref<HTMLElement | null>(null);
+const isVisible = ref(false)
+const targetRef = ref<HTMLElement | null>(null)
 
 onMounted(() => {
   if (!props.inView) {
     // If not using inView detection, just trigger after delay
     setTimeout(() => {
-      isVisible.value = true;
-    }, props.delay);
-    return;
+      isVisible.value = true
+    }, props.delay)
+    return
   }
 
-  if (!targetRef.value) return;
+  if (!targetRef.value) return
 
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           setTimeout(() => {
-            isVisible.value = true;
-          }, props.delay);
-          observer.disconnect();
+            isVisible.value = true
+          }, props.delay)
+          observer.disconnect()
         }
-      });
+      })
     },
-    { threshold: 0.1 },
-  );
+    { threshold: 0.1 }
+  )
 
-  observer.observe(targetRef.value);
+  observer.observe(targetRef.value)
 
-  onUnmounted(() => observer.disconnect());
-});
+  onUnmounted(() => observer.disconnect())
+})
 </script>
 
 <template>
@@ -56,7 +56,7 @@ onMounted(() => {
       transitionDuration: `${duration}ms`,
       opacity: isVisible ? 1 : 0,
       filter: isVisible ? 'blur(0)' : 'blur(8px)',
-      transform: isVisible ? 'translateY(0)' : `translateY(${yOffset}px)`,
+      transform: isVisible ? 'translateY(0)' : `translateY(${yOffset}px)`
     }"
   >
     <slot />

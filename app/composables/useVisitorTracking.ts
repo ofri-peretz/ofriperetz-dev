@@ -10,39 +10,39 @@ export function useVisitorTracking() {
           event: eventType,
           page: window.location.pathname,
           referrer: document.referrer,
-          ...metadata,
-        },
-      });
+          ...metadata
+        }
+      })
     } catch (e) {
       // Silently fail - don't break UX for tracking
-      console.debug('[tracking]', e);
+      console.debug('[tracking]', e)
     }
-  };
+  }
 
   // Track page view on mount
   const trackPageView = () => {
-    track('pageview');
-  };
+    track('pageview')
+  }
 
   // Track LinkedIn profile click - this will show in LinkedIn's "Who viewed your profile"
   const trackLinkedInClick = () => {
-    track('linkedin_click');
-  };
+    track('linkedin_click')
+  }
 
   // Track GitHub click
   const trackGitHubClick = () => {
-    track('github_click');
-  };
+    track('github_click')
+  }
 
   // Track resume/CV download intent
   const trackResumeClick = () => {
-    track('resume_click');
-  };
+    track('resume_click')
+  }
 
   // Track contact/meeting intent
   const trackContactClick = () => {
-    track('contact_click');
-  };
+    track('contact_click')
+  }
 
   return {
     track,
@@ -50,6 +50,6 @@ export function useVisitorTracking() {
     trackLinkedInClick,
     trackGitHubClick,
     trackResumeClick,
-    trackContactClick,
-  };
+    trackContactClick
+  }
 }

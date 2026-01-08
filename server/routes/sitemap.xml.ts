@@ -1,7 +1,7 @@
 import { defineEventHandler } from 'h3'
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig()
+  const _config = useRuntimeConfig()
   const siteUrl = 'https://ofriperetz.dev'
 
   // Static pages

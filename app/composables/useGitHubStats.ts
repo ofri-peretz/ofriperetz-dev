@@ -8,22 +8,25 @@ export interface GitHubStats {
   following: number
   publicRepos: number
   accountAgeYears: number
-  
+
+  // Stars breakdown by repo
+  starsBreakdown: { name: string, stars: number, url: string }[]
+
   // Contribution stats (from GraphQL - this year)
   totalContributions: number
   recentCommits: number
   recentPRs: number
   recentIssues: number
   recentRepos: number
-  
+
   // Contribution calendar (last 30 days)
-  contributionCalendar: { date: string; count: number }[]
-  
+  contributionCalendar: { date: string, count: number }[]
+
   // Enriched data
-  topRepos: { name: string; stars: number; forks: number; url: string; description: string | null }[]
-  languages: { name: string; count: number }[]
-  recentEvents?: { type: string; repo: string; date: string }[]
-  
+  topRepos: { name: string, stars: number, forks: number, url: string, description: string | null }[]
+  languages: { name: string, count: number }[]
+  recentEvents?: { type: string, repo: string, date: string }[]
+
   authenticated?: boolean
 }
 
@@ -44,7 +47,8 @@ export const useGitHubStats = () => {
     recentRepos: 0,
     contributionCalendar: [],
     topRepos: [],
-    languages: []
+    languages: [],
+    starsBreakdown: []
   })
   const loading = ref(false)
   const error = ref<string | null>(null)

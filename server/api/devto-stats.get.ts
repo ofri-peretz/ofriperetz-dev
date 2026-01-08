@@ -1,19 +1,16 @@
-// Cache to avoid rate limiting and ensure fresh data
-const cachedDevToStats = {
-  lastFetched: 0,
-  data: null as { followers: number; source: 'api' | 'cache' | 'fallback' } | null
-}
+import { getCache, setCache, CACHE_TTL } from '../utils/cache'
 
 // Fallback value - update manually from dashboard if API fails persistently
 const FALLBACK_FOLLOWERS = 45
 
 export default defineEventHandler(async () => {
   const config = useRuntimeConfig()
-  const CACHE_TTL = 5 * 60 * 1000 // 5 minutes cache
 
-  // Return cached data if fresh
-  if (cachedDevToStats.data && (Date.now() - cachedDevToStats.lastFetched) < CACHE_TTL) {
-    return { ...cachedDevToStats.data, source: 'cache' as const }
+  // Check cache first - use FRESH TTL (1 min)
+  const cacheKey = 'devto:stats'
+  const cached = getCache<{ followers: number, totalViews?: number, source: 'api' | 'cache' | 'fallback' }>(cacheKey)
+  if (cached) {
+    return { ...cached, source: 'cache' as const }
   }
 
   // If no API key configured, return fallback values
@@ -26,46 +23,51 @@ export default defineEventHandler(async () => {
   }
 
   try {
-    // Fetch followers list from dev.to API (requires authentication)
-    // Note: /api/users/me does NOT return followers_count
-    // We must use /api/followers/users and count the results
-    const followers = await $fetch<Array<{
-      id: number
-      user_id: number
-      name: string
-      path: string
-      username: string
-      profile_image: string
-    }>>('https://dev.to/api/followers/users', {
-      headers: {
-        'api-key': config.devtoApiKey
-      },
-      query: {
-        per_page: 1000 // Max per page to get all followers in one request
-      },
+    // 1. Fetch followers list
+    const followersPromise = $fetch<Array<any>>('https://dev.to/api/followers/users', {
+      headers: { 'api-key': config.devtoApiKey },
+      query: { per_page: 1000 },
       timeout: 10000
     })
 
+    // 2. Fetch authenticated articles (includes page_views_count)
+    const articlesPromise = $fetch<Array<{
+      id: number
+      page_views_count: number
+      positive_reactions_count: number
+      comments_count: number
+    }>>('https://dev.to/api/articles/me/all', {
+      headers: { 'api-key': config.devtoApiKey },
+      query: { per_page: 1000 },
+      timeout: 10000
+    })
+
+    const [followers, articles] = await Promise.all([followersPromise, articlesPromise])
+
     const followersCount = followers?.length ?? FALLBACK_FOLLOWERS
 
-    console.log('[devto-stats] API response: followers count =', followersCount)
+    // Sum up views from all articles
+    const totalViews = articles?.reduce((sum, article) => sum + (article.page_views_count || 0), 0) || 0
+
+    console.log('[devto-stats] API response: followers=', followersCount, 'views=', totalViews)
 
     const result = {
       followers: followersCount,
+      totalViews,
       source: 'api' as const
     }
 
-    // Cache the result
-    cachedDevToStats.data = result
-    cachedDevToStats.lastFetched = Date.now()
+    // Cache the result for 1 minute
+    setCache(cacheKey, result, CACHE_TTL.FRESH)
 
     return result
   } catch (error) {
     console.error('[devto-stats] Failed to fetch from API:', error)
-    
-    // Return cached data if available, otherwise fallback
-    if (cachedDevToStats.data) {
-      return { ...cachedDevToStats.data, source: 'cache' as const }
+
+    // Check for any cached data
+    const cached = getCache<{ followers: number, totalViews?: number }>(cacheKey)
+    if (cached) {
+      return { ...cached, source: 'cache' as const }
     }
 
     return {

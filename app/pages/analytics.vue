@@ -3,50 +3,50 @@
 // Shows custom tracking data + links to Vercel dashboards
 
 definePageMeta({
-  layout: "default",
-});
+  layout: 'default'
+})
 
 useSeoMeta({
-  title: "Analytics Dashboard",
-  robots: "noindex, nofollow", // Don't index this private page
-});
+  title: 'Analytics Dashboard',
+  robots: 'noindex, nofollow' // Don't index this private page
+})
 
 // Vercel dashboard links
 const vercelLinks = [
   {
-    label: "Web Analytics",
-    url: "https://vercel.com/ofri-peretz/ofriperetz-dev/analytics",
-    icon: "i-lucide-bar-chart-2",
-    description: "Visitors, page views, referrers, geography",
+    label: 'Web Analytics',
+    url: 'https://vercel.com/ofri-peretz/ofriperetz-dev/analytics',
+    icon: 'i-lucide-bar-chart-2',
+    description: 'Visitors, page views, referrers, geography'
   },
   {
-    label: "Speed Insights",
-    url: "https://vercel.com/ofri-peretz/ofriperetz-dev/speed-insights",
-    icon: "i-lucide-gauge",
-    description: "Core Web Vitals, RES scores, performance",
+    label: 'Speed Insights',
+    url: 'https://vercel.com/ofri-peretz/ofriperetz-dev/speed-insights',
+    icon: 'i-lucide-gauge',
+    description: 'Core Web Vitals, RES scores, performance'
   },
   {
-    label: "Logs",
-    url: "https://vercel.com/ofri-peretz/ofriperetz-dev/logs",
-    icon: "i-lucide-scroll-text",
-    description: "Runtime logs, errors, function invocations",
+    label: 'Logs',
+    url: 'https://vercel.com/ofri-peretz/ofriperetz-dev/logs',
+    icon: 'i-lucide-scroll-text',
+    description: 'Runtime logs, errors, function invocations'
   },
   {
-    label: "Deployments",
-    url: "https://vercel.com/ofri-peretz/ofriperetz-dev/deployments",
-    icon: "i-lucide-rocket",
-    description: "Deploy history, build logs, previews",
-  },
-];
+    label: 'Deployments',
+    url: 'https://vercel.com/ofri-peretz/ofriperetz-dev/deployments',
+    icon: 'i-lucide-rocket',
+    description: 'Deploy history, build logs, previews'
+  }
+]
 
 // Tracking events we collect
 const trackingEvents = [
-  { event: "pageview", description: "Every page visit" },
-  { event: "contact_intent_click", description: 'Clicked "Let\'s Talk" CTA' },
-  { event: "linkedin_click", description: "Clicked LinkedIn link" },
-  { event: "github_click", description: "Clicked GitHub link" },
-  { event: "resume_click", description: "Clicked resume/CV" },
-];
+  { event: 'pageview', description: 'Every page visit' },
+  { event: 'contact_intent_click', description: 'Clicked "Let\'s Talk" CTA' },
+  { event: 'linkedin_click', description: 'Clicked LinkedIn link' },
+  { event: 'github_click', description: 'Clicked GitHub link' },
+  { event: 'resume_click', description: 'Clicked resume/CV' }
+]
 </script>
 
 <template>
@@ -58,7 +58,9 @@ const trackingEvents = [
           <h1
             class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4"
           >
-            <GradientText animate>Analytics Dashboard</GradientText>
+            <GradientText animate>
+              Analytics Dashboard
+            </GradientText>
           </h1>
           <p
             class="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
@@ -69,7 +71,10 @@ const trackingEvents = [
           <p
             class="text-sm text-red-500 dark:text-red-400 mt-2 flex items-center justify-center gap-2"
           >
-            <UIcon name="i-lucide-lock" class="w-4 h-4" />
+            <UIcon
+              name="i-lucide-lock"
+              class="w-4 h-4"
+            />
             This page is not indexed by search engines
           </p>
         </div>
@@ -80,7 +85,10 @@ const trackingEvents = [
         <UCard class="mb-8">
           <template #header>
             <div class="flex items-center gap-2">
-              <UIcon name="i-simple-icons-vercel" class="w-5 h-5" />
+              <UIcon
+                name="i-simple-icons-vercel"
+                class="w-5 h-5"
+              />
               <h2 class="font-semibold text-gray-900 dark:text-white">
                 Vercel Dashboard
               </h2>
@@ -129,7 +137,10 @@ const trackingEvents = [
         <UCard class="mb-8">
           <template #header>
             <div class="flex items-center gap-2">
-              <UIcon name="i-lucide-activity" class="w-5 h-5 text-green-500" />
+              <UIcon
+                name="i-lucide-activity"
+                class="w-5 h-5 text-green-500"
+              />
               <h2 class="font-semibold text-gray-900 dark:text-white">
                 Custom Visitor Tracking
               </h2>
@@ -138,9 +149,7 @@ const trackingEvents = [
 
           <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
             Events collected via
-            <code class="px-1 py-0.5 bg-gray-100 dark:bg-gray-800 rounded"
-              >/api/track</code
-            >
+            <code class="px-1 py-0.5 bg-gray-100 dark:bg-gray-800 rounded">/api/track</code>
             endpoint. View logs in Vercel Runtime Logs.
           </p>
 
@@ -170,7 +179,10 @@ const trackingEvents = [
               class="text-sm text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1"
             >
               View visitor logs in Vercel
-              <UIcon name="i-lucide-external-link" class="w-3 h-3" />
+              <UIcon
+                name="i-lucide-external-link"
+                class="w-3 h-3"
+              />
             </NuxtLink>
           </div>
         </UCard>
@@ -181,7 +193,10 @@ const trackingEvents = [
         <UCard>
           <template #header>
             <div class="flex items-center gap-2">
-              <UIcon name="i-lucide-database" class="w-5 h-5 text-blue-500" />
+              <UIcon
+                name="i-lucide-database"
+                class="w-5 h-5 text-blue-500"
+              />
               <h2 class="font-semibold text-gray-900 dark:text-white">
                 Data Sources
               </h2>

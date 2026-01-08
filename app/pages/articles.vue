@@ -1,54 +1,54 @@
 <script setup lang="ts">
-const { articles, loading, error, fetchArticles } = useDevToArticles();
-const { stats: githubStats, fetchStats: fetchGitHubStats } = useGitHubStats();
+const { articles, loading, error, fetchArticles } = useDevToArticles()
+const { stats: githubStats, fetchStats: fetchGitHubStats } = useGitHubStats()
 
 // Medium stats - MUST EXACTLY MATCH stats.vue
 // Updated: Jan 4, 2026 - from medium.com/me/stats
 const mediumStats = {
   articles: 3, // Number of Medium articles
   claps: 12, // Total claps
-  followers: 0, // Medium followers
-};
+  followers: 0 // Medium followers
+}
 
 // Fetch GitHub stats on mount for reactions calculation
 onMounted(() => {
-  fetchGitHubStats();
-});
+  fetchGitHubStats()
+})
 
 // Computed combined stats - EXACTLY matching stats page formulas
 const devtoReactions = computed(
   () =>
     articles.value?.reduce(
       (sum, a) => sum + (a.positive_reactions_count || 0),
-      0,
-    ) || 0,
-);
+      0
+    ) || 0
+)
 
 // Combined articles (dev.to + Medium) - matches stats.vue combinedArticles
-const totalArticles = computed(
-  () => (articles.value?.length || 0) + mediumStats.articles,
-);
+const _totalArticles = computed(
+  () => (articles.value?.length || 0) + mediumStats.articles
+)
 
 // Combined reactions: GitHub stars + dev.to reactions + Medium claps - matches stats.vue totalReactions
-const totalReactions = computed(
+const _totalReactions = computed(
   () =>
-    (githubStats.value?.totalStars || 0) +
-    devtoReactions.value +
-    mediumStats.claps,
-);
+    (githubStats.value?.totalStars || 0)
+    + devtoReactions.value
+    + mediumStats.claps
+)
 
-const totalComments = computed(
+const _totalComments = computed(
   () =>
-    articles.value?.reduce((sum, a) => sum + (a.comments_count || 0), 0) || 0,
-);
+    articles.value?.reduce((sum, a) => sum + (a.comments_count || 0), 0) || 0
+)
 
-const totalReadingTime = computed(
+const _totalReadingTime = computed(
   () =>
     articles.value?.reduce(
       (sum, a) => sum + (a.reading_time_minutes || 0),
-      0,
-    ) || 0,
-);
+      0
+    ) || 0
+)
 
 // ============================================
 // SORTING SYSTEM
@@ -56,261 +56,278 @@ const totalReadingTime = computed(
 
 // Pinned article slugs - shown first in default state
 const PINNED_SLUGS = [
-  "eslint-plugin-import-vs-eslint-plugin-import-next-up-to-100x-faster",
-  "why-eslint-plugin-import-takes-45-seconds-and-how-we-fixed-it",
-  "your-eslint-security-plugin-is-missing-80-of-vulnerabilities-i-have-proof",
-  "the-30-minute-security-audit-onboarding-a-new-codebase",
-  "the-security-engineer-interview-cheat-sheet-for-javascript-developers",
-];
+  'eslint-plugin-import-vs-eslint-plugin-import-next-up-to-100x-faster',
+  'why-eslint-plugin-import-takes-45-seconds-and-how-we-fixed-it',
+  'your-eslint-security-plugin-is-missing-80-of-vulnerabilities-i-have-proof',
+  'the-30-minute-security-audit-onboarding-a-new-codebase',
+  'the-security-engineer-interview-cheat-sheet-for-javascript-developers'
+]
 
 // Sort options
-type SortOption = "views" | "recent" | "reactions";
-type SortOrder = "desc" | "asc";
+type SortOption = 'views' | 'recent' | 'reactions'
+type SortOrder = 'desc' | 'asc'
 
-const sortBy = ref<SortOption>("views");
-const sortOrder = ref<SortOrder>("desc");
-const isDefaultState = ref(true);
+const sortBy = ref<SortOption>('views')
+const sortOrder = ref<SortOrder>('desc')
+const isDefaultState = ref(true)
 
 const sortOptions = [
-  { value: "views" as SortOption, label: "Views", icon: "i-lucide-eye" },
-  { value: "recent" as SortOption, label: "Recent", icon: "i-lucide-calendar" },
+  { value: 'views' as SortOption, label: 'Views', icon: 'i-lucide-eye' },
+  { value: 'recent' as SortOption, label: 'Recent', icon: 'i-lucide-calendar' },
   {
-    value: "reactions" as SortOption,
-    label: "Reactions",
-    icon: "i-lucide-heart",
-  },
-];
+    value: 'reactions' as SortOption,
+    label: 'Reactions',
+    icon: 'i-lucide-heart'
+  }
+]
 
 // Get current sort option index for sliding indicator
-const currentSortIndex = computed(() =>
-  sortOptions.findIndex((opt) => opt.value === sortBy.value),
-);
+const _currentSortIndex = computed(() =>
+  sortOptions.findIndex(opt => opt.value === sortBy.value)
+)
 
 // Handle sort option change
 const selectSort = (option: SortOption) => {
   if (sortBy.value === option) {
     // Same option clicked - toggle order
-    sortOrder.value = sortOrder.value === "desc" ? "asc" : "desc";
+    sortOrder.value = sortOrder.value === 'desc' ? 'asc' : 'desc'
   } else {
     // New option - set to desc and mark as non-default
-    sortBy.value = option;
-    sortOrder.value = "desc";
+    sortBy.value = option
+    sortOrder.value = 'desc'
   }
-  isDefaultState.value = false;
-};
+  isDefaultState.value = false
+}
 
 // Toggle sort order
 const toggleOrder = () => {
-  sortOrder.value = sortOrder.value === "desc" ? "asc" : "desc";
-  isDefaultState.value = false;
-};
+  sortOrder.value = sortOrder.value === 'desc' ? 'asc' : 'desc'
+  isDefaultState.value = false
+}
 
 // Reset to default
 const resetSort = () => {
-  sortBy.value = "views";
-  sortOrder.value = "desc";
-  isDefaultState.value = true;
-};
+  sortBy.value = 'views'
+  sortOrder.value = 'desc'
+  isDefaultState.value = true
+}
 
 // Sorted and filtered articles
 const sortedArticles = computed(() => {
-  if (!articles.value) return [];
+  if (!articles.value) return []
 
   const sorted = [...articles.value].sort((a, b) => {
-    let comparison = 0;
+    let comparison = 0
 
     switch (sortBy.value) {
-      case "views":
+      case 'views':
         // dev.to API doesn't expose views, use reactions as proxy
-        comparison =
-          (b.positive_reactions_count || 0) - (a.positive_reactions_count || 0);
-        break;
-      case "recent":
-        comparison =
-          new Date(b.published_at).getTime() -
-          new Date(a.published_at).getTime();
-        break;
-      case "reactions":
-        comparison =
-          (b.positive_reactions_count || 0) - (a.positive_reactions_count || 0);
-        break;
+        comparison
+          = (b.positive_reactions_count || 0) - (a.positive_reactions_count || 0)
+        break
+      case 'recent':
+        comparison
+          = new Date(b.published_at).getTime()
+            - new Date(a.published_at).getTime()
+        break
+      case 'reactions':
+        comparison
+          = (b.positive_reactions_count || 0) - (a.positive_reactions_count || 0)
+        break
     }
 
-    return sortOrder.value === "desc" ? comparison : -comparison;
-  });
+    return sortOrder.value === 'desc' ? comparison : -comparison
+  })
 
   // If default state, put pinned articles first
   if (isDefaultState.value) {
-    const pinned = sorted.filter((a) =>
-      PINNED_SLUGS.some((slug) => a.slug?.includes(slug)),
-    );
+    const pinned = sorted.filter(a =>
+      PINNED_SLUGS.some(slug => a.slug?.includes(slug))
+    )
     const notPinned = sorted.filter(
-      (a) => !PINNED_SLUGS.some((slug) => a.slug?.includes(slug)),
-    );
-    return [...pinned, ...notPinned];
+      a => !PINNED_SLUGS.some(slug => a.slug?.includes(slug))
+    )
+    return [...pinned, ...notPinned]
   }
 
-  return sorted;
-});
+  return sorted
+})
 
 // Check if article is pinned (for badge display)
 const isPinned = (article: any) =>
-  isDefaultState.value &&
-  PINNED_SLUGS.some((slug) => article.slug?.includes(slug));
+  isDefaultState.value
+  && PINNED_SLUGS.some(slug => article.slug?.includes(slug))
 
 // ============================================
 // WINDOW SIZE (used by pagination and view mode)
 // ============================================
-const { width } = useWindowSize();
+const { width } = useWindowSize()
 
 // ============================================
 // PAGINATION (URL-synced for deep linking)
 // ============================================
 
-const route = useRoute();
-const router = useRouter();
+const route = useRoute()
+const router = useRouter()
 
 // Read initial page from URL query param
 const initialPage = computed(() => {
-  const pageParam = route.query.page;
-  const parsed = parseInt(pageParam as string, 10);
-  return !isNaN(parsed) && parsed >= 1 ? parsed : 1;
-});
+  const pageParam = route.query.page
+  const parsed = parseInt(pageParam as string, 10)
+  return !isNaN(parsed) && parsed >= 1 ? parsed : 1
+})
 
-const currentArticlePage = ref(initialPage.value);
+const currentArticlePage = ref(initialPage.value)
 
 // Sync URL when page changes
 watch(currentArticlePage, (newPage) => {
-  const query = { ...route.query };
+  const query = { ...route.query }
   if (newPage === 1) {
-    delete query.page;
+    delete query.page
   } else {
-    query.page = String(newPage);
+    query.page = String(newPage)
   }
-  router.replace({ query });
-});
+  router.replace({ query })
+})
 
 // Read page from URL on route change (back/forward buttons)
 watch(
   () => route.query.page,
   (newPage) => {
-    const parsed = parseInt(newPage as string, 10);
+    const parsed = parseInt(newPage as string, 10)
     if (!isNaN(parsed) && parsed >= 1) {
-      currentArticlePage.value = parsed;
+      currentArticlePage.value = parsed
     } else if (!newPage) {
-      currentArticlePage.value = 1;
+      currentArticlePage.value = 1
     }
-  },
-);
+  }
+)
 
 // Responsive items per page
 const itemsPerPage = computed(() => {
-  if (width.value >= 1024) return 12; // lg: 12 items
-  if (width.value >= 768) return 9; // md: 9 items
-  return 6; // sm: 6 items
-});
+  if (width.value >= 1024) return 12 // lg: 12 items
+  if (width.value >= 768) return 9 // md: 9 items
+  return 6 // sm: 6 items
+})
 
 // Reset to page 1 when items per page changes
 watch(itemsPerPage, () => {
-  currentArticlePage.value = 1;
-});
+  currentArticlePage.value = 1
+})
 
 // Reset to page 1 when sort changes
 watch([sortBy, sortOrder, isDefaultState], () => {
-  currentArticlePage.value = 1;
-});
+  currentArticlePage.value = 1
+})
 
 const totalArticlePages = computed(() =>
-  Math.ceil(sortedArticles.value.length / itemsPerPage.value),
-);
+  Math.ceil(sortedArticles.value.length / itemsPerPage.value)
+)
 
 const paginatedArticles = computed(() => {
-  const start = (currentArticlePage.value - 1) * itemsPerPage.value;
-  const end = start + itemsPerPage.value;
-  return sortedArticles.value.slice(start, end);
-});
+  const start = (currentArticlePage.value - 1) * itemsPerPage.value
+  const end = start + itemsPerPage.value
+  return sortedArticles.value.slice(start, end)
+})
 
 const goToArticlePage = (page: number) => {
-  currentArticlePage.value = page;
+  currentArticlePage.value = page
   // Scroll to top of controls section
-  const section = document.getElementById("articles-controls");
+  const section = document.getElementById('articles-controls')
   if (section) {
-    section.scrollIntoView({ behavior: "smooth", block: "start" });
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
-};
+}
 
 // ============================================
 // VIEW MODE
 // ============================================
 
 // View mode: 1, 2, or 3 columns
-const viewMode = ref(3);
+const viewMode = ref(3)
 
 // Get available view modes based on screen size
 const availableViewModes = computed(() => {
-  if (width.value < 640) return [1]; // sm: only 1 column
-  if (width.value < 1024) return [1, 2]; // md: 1 or 2 columns
-  return [1, 2, 3]; // lg: all options
-});
+  if (width.value < 640) return [1] // sm: only 1 column
+  if (width.value < 1024) return [1, 2] // md: 1 or 2 columns
+  return [1, 2, 3] // lg: all options
+})
 
 // Ensure view mode is valid for current screen size
 watch(
   availableViewModes,
   (modes) => {
     if (!modes.includes(viewMode.value)) {
-      viewMode.value = Math.max(...modes);
+      viewMode.value = Math.max(...modes)
     }
   },
-  { immediate: true },
-);
+  { immediate: true }
+)
 
 // Grid class based on view mode
 const gridClass = computed(() => {
   switch (viewMode.value) {
     case 1:
-      return "grid-cols-1";
+      return 'grid-cols-1'
     case 2:
-      return "grid-cols-1 sm:grid-cols-2";
+      return 'grid-cols-1 sm:grid-cols-2'
     case 3:
-      return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
+      return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
     default:
-      return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
+      return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
   }
-});
+})
 
 // Fetch articles on mount
 onMounted(() => {
-  fetchArticles("ofri-peretz", 100);
-});
+  fetchArticles('ofri-peretz', 100)
+})
 
 useSeoMeta({
-  title: "Technical Articles - Ofri Peretz | Security & ESLint",
+  title: 'Technical Articles - Ofri Peretz | Security & ESLint',
   description:
-    "30+ technical articles on application security, ESLint plugin development, and AI-native development. Published on dev.to and Medium.",
-  ogTitle: "Technical Articles - Ofri Peretz",
+    '30+ technical articles on application security, ESLint plugin development, and AI-native development. Published on dev.to and Medium.',
+  ogTitle: 'Technical Articles - Ofri Peretz',
   ogDescription:
-    "30+ deep-dive articles on security, ESLint plugins & AI-native development.",
-  ogImage: "https://ofriperetz.dev/og-articles.png",
+    '30+ deep-dive articles on security, ESLint plugins & AI-native development.',
+  ogImage: 'https://ofriperetz.dev/og-articles.png',
   ogImageWidth: 1200,
   ogImageHeight: 630,
-  ogType: "website",
-  ogUrl: "https://ofriperetz.dev/articles",
-  twitterCard: "summary_large_image",
-  twitterImage: "https://ofriperetz.dev/og-articles.png",
-  twitterTitle: "Technical Articles - Ofri Peretz",
+  ogType: 'website',
+  ogUrl: 'https://ofriperetz.dev/articles',
+  twitterCard: 'summary_large_image',
+  twitterImage: 'https://ofriperetz.dev/og-articles.png',
+  twitterTitle: 'Technical Articles - Ofri Peretz',
   twitterDescription:
-    "30+ deep-dive articles on security, ESLint plugins & AI-native development.",
-});
+    '30+ deep-dive articles on security, ESLint plugins & AI-native development.'
+})
+
+// TOC items for articles page
+const tocItems = [
+  { id: 'articles-header', label: 'Overview' },
+  { id: 'articles-stats', label: 'Stats' },
+  { id: 'devto-articles', label: 'dev.to Articles' },
+  { id: 'medium-articles', label: 'Medium' }
+]
 </script>
 
 <template>
   <div class="py-12 sm:py-16 lg:py-20">
+    <!-- Floating TOC -->
+    <FloatingToc :items="tocItems" />
+
     <UContainer>
       <!-- Header -->
-      <div class="text-center mb-12">
+      <div
+        id="articles-header"
+        data-toc-section
+        class="text-center mb-12 scroll-mt-20"
+      >
         <BlurFade :delay="0">
           <h1 class="text-4xl font-bold mb-4">
-            <GradientText animate>Articles</GradientText>
+            <GradientText animate>
+              Articles
+            </GradientText>
           </h1>
         </BlurFade>
         <BlurFade :delay="50">
@@ -327,7 +344,10 @@ useSeoMeta({
                 target="_blank"
                 class="flex items-center gap-2 text-sm"
               >
-                <UIcon name="i-simple-icons-devdotto" class="w-4 h-4" />
+                <UIcon
+                  name="i-simple-icons-devdotto"
+                  class="w-4 h-4"
+                />
                 Follow on dev.to
                 <UIcon
                   name="i-lucide-external-link"
@@ -341,7 +361,10 @@ useSeoMeta({
                 target="_blank"
                 class="flex items-center gap-2 text-sm"
               >
-                <UIcon name="i-simple-icons-medium" class="w-4 h-4" />
+                <UIcon
+                  name="i-simple-icons-medium"
+                  class="w-4 h-4"
+                />
                 Follow on Medium
                 <UIcon
                   name="i-lucide-external-link"
@@ -353,113 +376,31 @@ useSeoMeta({
         </BlurFade>
       </div>
 
-      <!-- Article Stats Widgets - larger layout for multi-digit numbers -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
-        <!-- Total Articles -->
-        <div
-          class="text-center p-5 sm:p-6 lg:p-8 bg-gradient-to-br from-green-500/10 to-green-600/20 dark:from-green-900/40 dark:to-green-800/30 rounded-2xl border-2 border-green-500/30"
-        >
-          <div
-            class="text-3xl sm:text-4xl lg:text-5xl font-black text-green-500 tabular-nums mb-2"
-          >
-            <NumberTicker
-              v-if="!loading"
-              :value="totalArticles"
-              :duration="1500"
-            />
-            <span v-else class="animate-pulse">...</span>
-          </div>
-          <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
-            Articles
-          </div>
-          <div class="flex items-center justify-center gap-1.5">
-            <UIcon
-              name="i-simple-icons-devdotto"
-              class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500"
-            />
-            <UIcon
-              name="i-simple-icons-medium"
-              class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500"
-            />
-          </div>
-        </div>
-
-        <!-- Total Reactions -->
-        <div
-          class="text-center p-5 sm:p-6 lg:p-8 bg-gradient-to-br from-red-500/10 to-red-600/20 dark:from-red-900/40 dark:to-red-800/30 rounded-2xl border-2 border-red-500/30"
-        >
-          <div
-            class="text-3xl sm:text-4xl lg:text-5xl font-black text-red-500 tabular-nums mb-2"
-          >
-            <NumberTicker
-              v-if="!loading"
-              :value="totalReactions"
-              :duration="1500"
-            />
-            <span v-else class="animate-pulse">...</span>
-          </div>
-          <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
-            Reactions
-          </div>
-          <UIcon
-            name="i-lucide-heart"
-            class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-500"
-          />
-        </div>
-
-        <!-- Total Comments -->
-        <div
-          class="text-center p-5 sm:p-6 lg:p-8 bg-gradient-to-br from-blue-500/10 to-blue-600/20 dark:from-blue-900/40 dark:to-blue-800/30 rounded-2xl border-2 border-blue-500/30"
-        >
-          <div
-            class="text-3xl sm:text-4xl lg:text-5xl font-black text-blue-500 tabular-nums mb-2"
-          >
-            <NumberTicker
-              v-if="!loading"
-              :value="totalComments"
-              :duration="1500"
-            />
-            <span v-else class="animate-pulse">...</span>
-          </div>
-          <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
-            Comments
-          </div>
-          <UIcon
-            name="i-lucide-message-circle"
-            class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500"
-          />
-        </div>
-
-        <!-- Reading Time -->
-        <div
-          class="text-center p-5 sm:p-6 lg:p-8 bg-gradient-to-br from-purple-500/10 to-purple-600/20 dark:from-purple-900/40 dark:to-purple-800/30 rounded-2xl border-2 border-purple-500/30"
-        >
-          <div
-            class="text-3xl sm:text-4xl lg:text-5xl font-black text-purple-500 tabular-nums mb-2"
-          >
-            <NumberTicker
-              v-if="!loading"
-              :value="totalReadingTime"
-              :duration="1500"
-            />
-            <span v-else class="animate-pulse">...</span>
-          </div>
-          <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">
-            Minutes
-          </div>
-          <UIcon name="i-lucide-clock" class="w-3 h-3 text-purple-500 mt-1" />
-        </div>
+      <!-- Content Engagement Preview -->
+      <div
+        id="articles-stats"
+        data-toc-section
+        class="mb-12 scroll-mt-20 max-w-md mx-auto"
+      >
+        <LandingStatsPreviewContent />
       </div>
 
       <!-- dev.to Section -->
-      <div id="devto-articles" class="mb-16 scroll-mt-20">
+      <div
+        id="devto-articles"
+        data-toc-section
+        class="mb-16 scroll-mt-20"
+      >
         <!-- Title Row with anchor link -->
         <div class="group flex items-center gap-3 mb-6">
           <UIcon
             name="i-simple-icons-devdotto"
             class="w-6 h-6 text-gray-900 dark:text-white"
           />
-          <a href="#devto-articles" class="flex items-center gap-2">
+          <a
+            href="#devto-articles"
+            class="flex items-center gap-2"
+          >
             <h2
               class="text-2xl font-bold text-gray-900 dark:text-white hover:text-primary-500 transition-colors"
             >
@@ -470,7 +411,12 @@ useSeoMeta({
               class="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
             />
           </a>
-          <UBadge color="primary" variant="subtle">Auto-synced</UBadge>
+          <UBadge
+            color="primary"
+            variant="subtle"
+          >
+            Auto-synced
+          </UBadge>
         </div>
 
         <!-- Controls Row: Sort + View -->
@@ -487,24 +433,27 @@ useSeoMeta({
               <button
                 v-for="option in sortOptions"
                 :key="option.value"
-                @click="selectSort(option.value)"
                 class="flex items-center gap-1.5 px-3 h-8 rounded-lg transition-all duration-200 text-sm font-medium"
                 :class="
                   sortBy === option.value
                     ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700'
                 "
+                @click="selectSort(option.value)"
               >
-                <UIcon :name="option.icon" class="w-4 h-4" />
+                <UIcon
+                  :name="option.icon"
+                  class="w-4 h-4"
+                />
                 {{ option.label }}
               </button>
             </div>
 
             <!-- Order Toggle -->
             <button
-              @click="toggleOrder"
               class="flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
               :title="sortOrder === 'desc' ? 'Descending' : 'Ascending'"
+              @click="toggleOrder"
             >
               <UIcon
                 :name="
@@ -519,10 +468,13 @@ useSeoMeta({
             <!-- Reset Button -->
             <button
               v-if="!isDefaultState"
-              @click="resetSort"
               class="flex items-center gap-1.5 px-3 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-sm text-gray-600 dark:text-gray-400"
+              @click="resetSort"
             >
-              <UIcon name="i-lucide-rotate-ccw" class="w-3.5 h-3.5" />
+              <UIcon
+                name="i-lucide-rotate-ccw"
+                class="w-3.5 h-3.5"
+              />
               Reset
             </button>
 
@@ -531,7 +483,10 @@ useSeoMeta({
               v-if="isDefaultState"
               class="flex items-center gap-1.5 text-sm text-amber-600 dark:text-amber-400"
             >
-              <UIcon name="i-lucide-pin" class="w-4 h-4" />
+              <UIcon
+                name="i-lucide-pin"
+                class="w-4 h-4"
+              />
               <span class="hidden sm:inline">Featured first</span>
             </div>
           </div>
@@ -540,21 +495,20 @@ useSeoMeta({
           <div class="flex items-center gap-2">
             <span
               class="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline"
-              >View:</span
-            >
+            >View:</span>
             <div
               class="flex items-center gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-xl"
             >
               <button
                 v-for="mode in availableViewModes"
                 :key="mode"
-                @click="viewMode = mode"
                 class="flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-200"
                 :class="
                   viewMode === mode
                     ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
                     : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                 "
+                @click="viewMode = mode"
               >
                 <UIcon
                   :name="
@@ -577,40 +531,49 @@ useSeoMeta({
           class="flex justify-center items-center gap-2 mb-6"
         >
           <button
-            @click="goToArticlePage(currentArticlePage - 1)"
             :disabled="currentArticlePage === 1"
             class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            @click="goToArticlePage(currentArticlePage - 1)"
           >
-            <UIcon name="i-lucide-chevron-left" class="w-4 h-4" />
+            <UIcon
+              name="i-lucide-chevron-left"
+              class="w-4 h-4"
+            />
           </button>
 
           <div class="flex gap-1">
             <button
               v-for="page in totalArticlePages"
               :key="page"
-              @click="goToArticlePage(page)"
               class="w-9 h-9 rounded-lg font-medium text-sm transition-all"
               :class="
                 page === currentArticlePage
                   ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
                   : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
               "
+              @click="goToArticlePage(page)"
             >
               {{ page }}
             </button>
           </div>
 
           <button
-            @click="goToArticlePage(currentArticlePage + 1)"
             :disabled="currentArticlePage === totalArticlePages"
             class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            @click="goToArticlePage(currentArticlePage + 1)"
           >
-            <UIcon name="i-lucide-chevron-right" class="w-4 h-4" />
+            <UIcon
+              name="i-lucide-chevron-right"
+              class="w-4 h-4"
+            />
           </button>
         </div>
 
         <!-- Loading State -->
-        <div v-if="loading" class="flex justify-center py-12">
+        <div
+          v-if="loading"
+          class="flex justify-center py-12"
+        >
           <UIcon
             name="i-lucide-loader-2"
             class="w-8 h-8 animate-spin text-primary-500"
@@ -628,7 +591,10 @@ useSeoMeta({
         />
 
         <!-- Articles Grid with smooth transition on view change -->
-        <Transition name="fade" mode="out-in">
+        <Transition
+          name="fade"
+          mode="out-in"
+        >
           <div
             v-if="!loading && !error"
             :key="`${viewMode}-${sortBy}-${sortOrder}-${isDefaultState}`"
@@ -646,7 +612,10 @@ useSeoMeta({
                   v-if="isPinned(article)"
                   class="absolute -top-2 -right-2 z-10 flex items-center gap-1 px-2 py-1 bg-amber-500 text-white text-xs font-medium rounded-full shadow-lg"
                 >
-                  <UIcon name="i-lucide-pin" class="w-3 h-3" />
+                  <UIcon
+                    name="i-lucide-pin"
+                    class="w-3 h-3"
+                  />
                   Featured
                 </div>
                 <DevToArticleCard :article="article" />
@@ -661,35 +630,41 @@ useSeoMeta({
           class="flex justify-center items-center gap-2 mt-8"
         >
           <button
-            @click="goToArticlePage(currentArticlePage - 1)"
             :disabled="currentArticlePage === 1"
             class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            @click="goToArticlePage(currentArticlePage - 1)"
           >
-            <UIcon name="i-lucide-chevron-left" class="w-4 h-4" />
+            <UIcon
+              name="i-lucide-chevron-left"
+              class="w-4 h-4"
+            />
           </button>
 
           <div class="flex gap-1">
             <button
               v-for="page in totalArticlePages"
               :key="page"
-              @click="goToArticlePage(page)"
               class="w-9 h-9 rounded-lg font-medium text-sm transition-all"
               :class="
                 page === currentArticlePage
                   ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
                   : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
               "
+              @click="goToArticlePage(page)"
             >
               {{ page }}
             </button>
           </div>
 
           <button
-            @click="goToArticlePage(currentArticlePage + 1)"
             :disabled="currentArticlePage === totalArticlePages"
             class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            @click="goToArticlePage(currentArticlePage + 1)"
           >
-            <UIcon name="i-lucide-chevron-right" class="w-4 h-4" />
+            <UIcon
+              name="i-lucide-chevron-right"
+              class="w-4 h-4"
+            />
           </button>
         </div>
 
@@ -702,27 +677,42 @@ useSeoMeta({
             name="i-lucide-file-text"
             class="w-12 h-12 text-gray-400 mx-auto mb-4"
           />
-          <p class="text-gray-500 dark:text-gray-400">No articles found.</p>
+          <p class="text-gray-500 dark:text-gray-400">
+            No articles found.
+          </p>
         </div>
 
         <!-- View All on dev.to -->
-        <div v-if="articles.length > 0" class="text-center mt-8">
+        <div
+          v-if="articles.length > 0"
+          class="text-center mt-8"
+        >
           <ShimmerButton>
             <NuxtLink
               to="https://dev.to/ofri-peretz"
               target="_blank"
               class="flex items-center gap-2"
             >
-              <UIcon name="i-simple-icons-devdotto" class="w-4 h-4" />
+              <UIcon
+                name="i-simple-icons-devdotto"
+                class="w-4 h-4"
+              />
               View All on dev.to
-              <UIcon name="i-lucide-external-link" class="w-3 h-3 opacity-60" />
+              <UIcon
+                name="i-lucide-external-link"
+                class="w-3 h-3 opacity-60"
+              />
             </NuxtLink>
           </ShimmerButton>
         </div>
       </div>
 
       <!-- Medium Section -->
-      <div>
+      <div
+        id="medium-articles"
+        data-toc-section
+        class="scroll-mt-20"
+      >
         <div class="flex items-center gap-3 mb-6">
           <UIcon
             name="i-simple-icons-medium"

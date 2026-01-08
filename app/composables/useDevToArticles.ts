@@ -21,6 +21,7 @@ export interface DevToArticle {
 export const useDevToArticles = () => {
   const articles = ref<DevToArticle[]>([])
   const followers = ref(0)
+  const totalViews = ref(0)
   const loading = ref(false)
   const error = ref<string | null>(null)
 
@@ -40,13 +41,15 @@ export const useDevToArticles = () => {
       articles.value = []
     }
 
-    // Fetch followers separately - don't let it break articles
+    // Fetch private stats (followers + views)
     try {
-      const statsResponse = await $fetch<{ followers: number }>('/api/devto-stats')
+      const statsResponse = await $fetch<{ followers: number, totalViews: number }>('/api/devto-stats')
       followers.value = statsResponse?.followers || 45
+      totalViews.value = statsResponse?.totalViews || 0
     } catch (e) {
       console.error('dev.to stats API error:', e)
       followers.value = 45 // Fallback
+      totalViews.value = 0
     }
 
     loading.value = false
@@ -55,6 +58,7 @@ export const useDevToArticles = () => {
   return {
     articles,
     followers,
+    totalViews,
     loading,
     error,
     fetchArticles

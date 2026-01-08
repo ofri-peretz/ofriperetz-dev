@@ -1,10 +1,10 @@
 <script setup lang="ts">
 defineProps<{
-  from?: string;
-  via?: string;
-  to?: string;
-  animate?: boolean;
-}>();
+  from?: string
+  via?: string
+  to?: string
+  animate?: boolean
+}>()
 </script>
 
 <template>
@@ -14,7 +14,7 @@ defineProps<{
       from || 'from-primary-500',
       via || 'via-purple-500',
       to || 'to-pink-500',
-      animate ? 'animate-gradient bg-[length:200%_auto]' : '',
+      animate ? 'animate-gradient bg-[length:200%_auto]' : ''
     ]"
   >
     <slot />

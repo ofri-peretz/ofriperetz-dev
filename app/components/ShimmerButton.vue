@@ -1,8 +1,8 @@
 <script setup lang="ts">
 defineProps<{
-  shimmerColor?: string;
-  shimmerSize?: string;
-}>();
+  shimmerColor?: string
+  shimmerSize?: string
+}>()
 </script>
 
 <template>

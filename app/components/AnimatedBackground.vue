@@ -51,6 +51,8 @@
 
 .animate-blob {
   animation: blob 20s ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .animation-delay-2000 {
@@ -59,5 +61,12 @@
 
 .animation-delay-4000 {
   animation-delay: 4s;
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .animate-blob {
+    animation: none;
+  }
 }
 </style>
