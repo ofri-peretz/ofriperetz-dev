@@ -127,7 +127,6 @@ export default defineNuxtConfig({
     prerender: {
       routes: [
         '/',
-        '/about',
         '/projects',
         '/articles'
       ],
