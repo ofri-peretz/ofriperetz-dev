@@ -36,7 +36,9 @@ jobs:
 
           # Read yesterday's snapshot for delta calculation
           YESTERDAY_FILE=".data/snapshots/$YESTERDAY.json"
+          HAS_PREVIOUS=false
           if [ -f "$YESTERDAY_FILE" ]; then
+            HAS_PREVIOUS=true
             PREV_DOWNLOADS=$(jq '.npm.totalDownloads // 0' "$YESTERDAY_FILE")
             PREV_VIEWS=$(jq '.devto.views // 0' "$YESTERDAY_FILE")
             PREV_REACTIONS=$(jq '.devto.reactions // 0' "$YESTERDAY_FILE")
@@ -45,6 +47,7 @@ jobs:
             PREV_COMMITS=$(jq '.github.commits // 0' "$YESTERDAY_FILE")
             PREV_FOLLOWERS=$(jq '(.github.followers // 0) + (.devto.followers // 0)' "$YESTERDAY_FILE")
           else
+            # No previous day - can't calculate real deltas
             PREV_DOWNLOADS=0
             PREV_VIEWS=0
             PREV_REACTIONS=0
@@ -54,15 +57,35 @@ jobs:
             PREV_FOLLOWERS=0
           fi
 
-          # Fetch npm stats
+          # Fetch npm stats (filtered by excluded packages list from metrics-config.ts)
           NPM_RESULT=$(curl -s "https://registry.npmjs.org/-/v1/search?text=maintainer:ofriperetz&size=100")
-          PACKAGE_COUNT=$(echo $NPM_RESULT | jq '.objects | length')
 
-          # Fetch total downloads (sum of last month for all packages)
+          # Excluded packages (matches NPM_CONFIG.excludedPackages and excludedPrefixes)
+          EXCLUDED_PACKAGES="eslint-plugin-mcp eslint-plugin-llm-optimized eslint-plugin-llm eslint-plugin-mcp-optimized"
+          EXCLUDED_PREFIX="@forge-js/"
+
+          # Filter and count packages
+          PACKAGE_COUNT=0
           TOTAL_DOWNLOADS=0
           for pkg in $(echo $NPM_RESULT | jq -r '.objects[].package.name'); do
-            DOWNLOADS=$(curl -s "https://api.npmjs.org/downloads/point/last-month/$pkg" | jq '.downloads // 0')
-            TOTAL_DOWNLOADS=$((TOTAL_DOWNLOADS + DOWNLOADS))
+            # Check if package should be excluded
+            is_excluded=false
+            for excluded in $EXCLUDED_PACKAGES; do
+              if [ "$pkg" = "$excluded" ]; then
+                is_excluded=true
+                break
+              fi
+            done
+            # Check prefix exclusion
+            if [[ "$pkg" == $EXCLUDED_PREFIX* ]]; then
+              is_excluded=true
+            fi
+            
+            if [ "$is_excluded" = "false" ]; then
+              PACKAGE_COUNT=$((PACKAGE_COUNT + 1))
+              DOWNLOADS=$(curl -s "https://api.npmjs.org/downloads/point/last-month/$pkg" | jq '.downloads // 0')
+              TOTAL_DOWNLOADS=$((TOTAL_DOWNLOADS + DOWNLOADS))
+            fi
           done
 
           # Fetch GitHub stats ONLY for target repos (ofriperetz-dev and eslint)
@@ -95,22 +118,36 @@ jobs:
 
           # Calculate daily deltas (change since yesterday)
           TOTAL_FOLLOWERS=$((GH_FOLLOWERS + DEVTO_FOLLOWERS))
-          DAILY_DOWNLOADS=$((TOTAL_DOWNLOADS - PREV_DOWNLOADS))
-          DAILY_VIEWS=$((DEVTO_VIEWS - PREV_VIEWS))
-          DAILY_REACTIONS=$((DEVTO_REACTIONS - PREV_REACTIONS))
-          DAILY_COMMENTS=$((DEVTO_COMMENTS - PREV_COMMENTS))
-          DAILY_CONTRIBUTIONS=$((GH_CONTRIBUTIONS - PREV_CONTRIBUTIONS))
-          DAILY_COMMITS=$((GH_COMMITS - PREV_COMMITS))
-          DAILY_FOLLOWERS=$((TOTAL_FOLLOWERS - PREV_FOLLOWERS))
 
-          # Ensure deltas are not negative (in case of API inconsistency)
-          [ $DAILY_DOWNLOADS -lt 0 ] && DAILY_DOWNLOADS=0
-          [ $DAILY_VIEWS -lt 0 ] && DAILY_VIEWS=0
-          [ $DAILY_REACTIONS -lt 0 ] && DAILY_REACTIONS=0
-          [ $DAILY_COMMENTS -lt 0 ] && DAILY_COMMENTS=0
-          [ $DAILY_CONTRIBUTIONS -lt 0 ] && DAILY_CONTRIBUTIONS=0
-          [ $DAILY_COMMITS -lt 0 ] && DAILY_COMMITS=0
-          [ $DAILY_FOLLOWERS -lt 0 ] && DAILY_FOLLOWERS=0
+          if [ "$HAS_PREVIOUS" = "true" ]; then
+            # Calculate actual deltas from previous day
+            DAILY_DOWNLOADS=$((TOTAL_DOWNLOADS - PREV_DOWNLOADS))
+            DAILY_VIEWS=$((DEVTO_VIEWS - PREV_VIEWS))
+            DAILY_REACTIONS=$((DEVTO_REACTIONS - PREV_REACTIONS))
+            DAILY_COMMENTS=$((DEVTO_COMMENTS - PREV_COMMENTS))
+            DAILY_CONTRIBUTIONS=$((GH_CONTRIBUTIONS - PREV_CONTRIBUTIONS))
+            DAILY_COMMITS=$((GH_COMMITS - PREV_COMMITS))
+            DAILY_FOLLOWERS=$((TOTAL_FOLLOWERS - PREV_FOLLOWERS))
+            
+            # Ensure deltas are not negative (in case of API inconsistency)
+            [ $DAILY_DOWNLOADS -lt 0 ] && DAILY_DOWNLOADS=0
+            [ $DAILY_VIEWS -lt 0 ] && DAILY_VIEWS=0
+            [ $DAILY_REACTIONS -lt 0 ] && DAILY_REACTIONS=0
+            [ $DAILY_COMMENTS -lt 0 ] && DAILY_COMMENTS=0
+            [ $DAILY_CONTRIBUTIONS -lt 0 ] && DAILY_CONTRIBUTIONS=0
+            [ $DAILY_COMMITS -lt 0 ] && DAILY_COMMITS=0
+            [ $DAILY_FOLLOWERS -lt 0 ] && DAILY_FOLLOWERS=0
+          else
+            # First day - no previous data to compare, set deltas to 0
+            DAILY_DOWNLOADS=0
+            DAILY_VIEWS=0
+            DAILY_REACTIONS=0
+            DAILY_COMMENTS=0
+            DAILY_CONTRIBUTIONS=0
+            DAILY_COMMITS=0
+            DAILY_FOLLOWERS=0
+            echo "First data point - setting daily deltas to 0"
+          fi
 
           # Clone eslint repo to count plugins and rules dynamically
           git clone --depth 1 https://github.com/ofri-peretz/eslint.git /tmp/eslint 2>/dev/null || true
