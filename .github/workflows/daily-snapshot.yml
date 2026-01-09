@@ -14,7 +14,7 @@ name: Daily Metrics Snapshot
 #
 # RESILIENCE:
 # - Runs 3 times daily (6 AM, 12 PM, 6 PM UTC) as retry attempts
-# - If today's snapshot already exists, workflow skips (no duplicate)
+# - If today's snapshot already exists, it gets overwritten (upsert behavior)
 # - Uses most recent previous snapshot for delta (handles missed days)
 # - API calls have retry logic with exponential backoff
 #
@@ -66,15 +66,6 @@ jobs:
           echo "=========================================="
           echo "📊 Capturing metrics for $DATE"
           echo "=========================================="
-
-          # ============================================================
-          # STEP 0: Check if today's snapshot already exists (skip if retry)
-          # ============================================================
-          TODAY_FILE=".data/snapshots/$DATE.json"
-          if [ -f "$TODAY_FILE" ]; then
-            echo "⏭️ Today's snapshot already exists, skipping (this is a retry run)"
-            exit 0
-          fi
 
           # ============================================================
           # STEP 1: Find MOST RECENT previous snapshot for delta calculation
