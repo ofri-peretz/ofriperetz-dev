@@ -255,6 +255,17 @@ export default defineNuxtConfig({
     }
   },
 
+  // Content module configuration - disable syntax highlighting to reduce bundle by ~600KB
+  // Since we use YAML content without code blocks, Shiki highlighting is not needed
+  content: {
+    build: {
+      markdown: {
+        // Disable Shiki syntax highlighting entirely - saves ~622KB
+        highlight: false
+      }
+    }
+  },
+
   vite: {
     build: {
       cssMinify: true,
@@ -270,18 +281,45 @@ export default defineNuxtConfig({
       },
       rollupOptions: {
         output: {
-          manualChunks: {
-            // Heavy chart/visualization components
-            charts: [
-              './app/components/landing/MetricsOverTimeChart.vue',
-              './app/components/landing/EffortStarsCorrelation.vue',
-              './app/components/landing/DownloadsByPackage.vue'
-            ],
-            // Heavy north star visualizations
-            visualizations: [
-              './app/components/landing/NorthStarFunnel.vue',
-              './app/components/landing/NorthStarWeb.vue'
-            ]
+          // Improved chunking strategy for better code-splitting
+          manualChunks(id) {
+            // Vendor chunks for large dependencies
+            if (id.includes('node_modules')) {
+              // Reka UI components (from @nuxt/ui)
+              if (id.includes('@reka-ui') || id.includes('reka-ui')) {
+                return 'vendor-reka'
+              }
+              // Motion library
+              if (id.includes('motion-v') || id.includes('@vueuse/motion')) {
+                return 'vendor-motion'
+              }
+              // Radix Vue primitives
+              if (id.includes('radix-vue')) {
+                return 'vendor-radix'
+              }
+              // Tailwind variants
+              if (id.includes('tailwind-variants')) {
+                return 'vendor-tv'
+              }
+            }
+
+            // App-level component chunks (lazy-loaded)
+            // Stats page components
+            if (id.includes('/landing/MetricsOverTimeChart') ||
+                id.includes('/landing/EffortStarsCorrelation') ||
+                id.includes('/landing/DownloadsByPackage')) {
+              return 'stats-charts'
+            }
+            // North Star visualizations
+            if (id.includes('/landing/NorthStarFunnel') ||
+                id.includes('/landing/NorthStarWeb') ||
+                id.includes('/landing/NorthStarHero')) {
+              return 'stats-northstar'
+            }
+            // Early stage view
+            if (id.includes('/landing/EarlyStageImpactView')) {
+              return 'stats-early'
+            }
           }
         }
       }
