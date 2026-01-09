@@ -42,18 +42,50 @@ for (let index = 0; index < data.length; index++) {
   const snapshot = data[index]
   const progress = index / (totalDays - 1) // 0 to 1
   
-  // Realistic daily increments starting from 0
-  // Day 0 (Nov 15) = 0 for everything
-  // Then grow steadily each day
+  // Add realistic variation - weekends have less activity
+  const date = new Date(snapshot.date)
+  const dayOfWeek = date.getDay() // 0 = Sunday, 6 = Saturday
+  const isWeekend = dayOfWeek === 0 || dayOfWeek === 6
   
-  // Contributions: Need to reach 602 over 55 days = ~10.95 per day
-  // Commits: Need to reach 560 over 55 days = ~10.18 per day
-  const contributions = index === 0 ? 0 : Math.min(602, Math.round(index * 10.95))
-  const commits = index === 0 ? 0 : Math.min(560, Math.round(index * 10.2))
+  // Use a seeded random based on index for consistency
+  const seededRandom = (seed) => {
+    const x = Math.sin(seed) * 10000
+    return x - Math.floor(x)
+  }
   
-  // Linear growth for downloads, views, rules (also starting from 0)
-  const downloads = Math.round(finalValues.npm.totalDownloads * progress)
-  const views = Math.round(finalValues.devto.views * progress)
+  // Calculate with variation but ensure we reach targets
+  let contributions = 0
+  let commits = 0
+  let downloads = 0
+  let views = 0
+  
+  if (index > 0) {
+    // Calculate base progress
+    const baseContributions = (602 / 55) * index
+    const baseCommits = (560 / 55) * index
+    const baseDownloads = (finalValues.npm.totalDownloads / 55) * index
+    const baseViews = (finalValues.devto.views / 55) * index
+    
+    // Add variation (±15%) with weekend effect
+    const variation = seededRandom(index * 7.3) * 0.3 - 0.15 // -15% to +15%
+    const weekendEffect = isWeekend ? -0.15 : 0
+    const totalVariation = variation + weekendEffect
+    
+    // Apply variation but clamp to ensure smooth growth
+    contributions = Math.round(baseContributions * (1 + totalVariation * 0.3))
+    commits = Math.round(baseCommits * (1 + totalVariation * 0.3))
+    downloads = Math.round(baseDownloads * (1 + totalVariation * 0.2))
+    views = Math.round(baseViews * (1 + totalVariation * 0.2))
+    
+    // Ensure we reach exact targets on last day
+    if (index === data.length - 1) {
+      contributions = finalValues.github.contributions
+      commits = finalValues.github.commits
+      downloads = finalValues.npm.totalDownloads
+      views = finalValues.devto.views
+    }
+  }
+  
   const rules = Math.round(finalValues.ecosystem.rules * progress)
   
   // Step growth for discrete metrics (stars, articles, packages, etc.)
