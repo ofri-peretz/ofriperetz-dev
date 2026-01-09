@@ -6,7 +6,7 @@ export const GITHUB_CONFIG = {
   username: 'ofri-peretz',
   // Only count metrics from these specific repositories
   // Used by: github-stats.get.ts for stars, forks, watchers, topRepos, languages
-  targetedRepos: ['blog', 'eslint'] as const
+  targetedRepos: ['ofriperetz-dev', 'eslint'] as const
 }
 
 export const NPM_CONFIG = {
