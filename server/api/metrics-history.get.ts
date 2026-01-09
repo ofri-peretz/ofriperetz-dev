@@ -1,9 +1,9 @@
 interface Snapshot {
   date: string
-  npm: { 
+  npm: {
     totalDownloads: number
     dailyDownloads?: number
-    packageCount: number 
+    packageCount: number
   }
   github: {
     stars: number
@@ -44,12 +44,12 @@ const AGGREGATION_URL = 'https://raw.githubusercontent.com/ofri-peretz/ofriperet
 
 export default defineEventHandler(async () => {
   // Cache for 1 hour in production, 1 minute in dev
-  const CACHE_TTL = process.dev ? 60 * 1000 : 60 * 60 * 1000
+  const CACHE_TTL = import.meta.dev ? 60 * 1000 : 60 * 60 * 1000
 
-  const useCache = cachedHistory.data 
-    && cachedHistory.data.length > 0 
+  const useCache = cachedHistory.data
+    && cachedHistory.data.length > 0
     && (Date.now() - cachedHistory.lastFetched) < CACHE_TTL
-  
+
   if (useCache) {
     return cachedHistory.data
   }

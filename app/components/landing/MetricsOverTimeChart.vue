@@ -281,7 +281,6 @@ const aggregatedData = computed(() => {
   }
 })
 
-
 // Get max value for scaling
 const maxValue = computed(() =>
   Math.max(...aggregatedData.value.map(d => d.value), 1)

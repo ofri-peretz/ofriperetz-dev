@@ -2,7 +2,7 @@
 /**
  * Capture a metrics snapshot to .data/snapshots/
  * This fetches live data from the APIs and saves it as a JSON file
- * 
+ *
  * Usage: node scripts/capture-snapshot.mjs
  */
 
@@ -45,7 +45,7 @@ async function captureSnapshot() {
   }
 
   const today = new Date().toISOString().split('T')[0]
-  
+
   // Calculate devto stats from articles
   const articles = devtoArticles?.articles || []
   const devtoViews = articles.reduce((sum, a) => sum + (a.page_views_count || 0), 0)

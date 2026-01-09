@@ -199,6 +199,16 @@ export default defineNuxtConfig({
     }
   },
 
+  typescript: {
+    tsConfig: {
+      compilerOptions: {
+        // Allow top-level await in Vue <script setup> blocks
+        module: 'ESNext',
+        target: 'ES2022'
+      }
+    }
+  },
+
   eslint: {
     config: {
       stylistic: {
