@@ -271,14 +271,9 @@ export default defineNuxtConfig({
       cssMinify: true,
       // Disable sourcemaps in production for smaller bundles
       sourcemap: false,
-      // Tree-shaking for smaller bundles
-      minify: 'terser',
-      terserOptions: {
-        compress: {
-          drop_console: process.env.NODE_ENV === 'production',
-          drop_debugger: true
-        }
-      },
+      // Use esbuild (default) for minification - more reliable than Terser
+      // Terser was causing "Cannot access 'y' before initialization" errors
+      minify: 'esbuild',
       rollupOptions: {
         output: {
           // Improved chunking strategy for better code-splitting
