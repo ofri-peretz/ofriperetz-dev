@@ -26,7 +26,7 @@ defineProps<{
           style="width: 220px; height: 220px; margin: -10px"
         />
         <img
-          src="https://ofriperetz.dev/profile.png"
+          src="https://ofriperetz.dev/ofri-profile.webp"
           alt="Ofri Peretz"
           width="200"
           height="200"

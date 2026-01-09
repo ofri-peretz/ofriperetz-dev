@@ -189,7 +189,7 @@ const colorClasses = COLOR_CLASSES
 <template>
   <div
     ref="containerRef"
-    class="relative w-full aspect-[16/9] min-h-[520px] rounded-2xl overflow-hidden select-none touch-none bg-slate-50 dark:bg-slate-900"
+    class="relative w-full aspect-[16/9] min-h-[380px] sm:min-h-[480px] md:min-h-[520px] rounded-xl sm:rounded-2xl overflow-hidden select-none touch-none bg-slate-50 dark:bg-slate-900"
     :class="isPanning || draggingNodeId ? 'cursor-grabbing' : 'cursor-grab'"
     @wheel.prevent="handleWheel"
     @mousedown="startCanvasPan"
@@ -202,75 +202,76 @@ const colorClasses = COLOR_CLASSES
 
     <!-- Zoom Controls -->
     <div
-      class="absolute top-3 right-3 z-50 flex items-center gap-1 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-1"
+      class="absolute top-2 sm:top-3 right-2 sm:right-3 z-50 flex items-center gap-0.5 sm:gap-1 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-0.5 sm:p-1"
     >
       <button
-        class="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+        class="p-1 sm:p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
         title="Zoom out"
         @click.stop="zoomOut"
       >
         <UIcon
           name="i-lucide-minus"
-          class="w-4 h-4"
+          class="w-3 h-3 sm:w-4 sm:h-4"
         />
       </button>
       <span
-        class="px-2 text-xs font-medium text-gray-600 dark:text-gray-300 min-w-[3rem] text-center tabular-nums"
+        class="px-1.5 sm:px-2 text-[10px] sm:text-xs font-medium text-gray-600 dark:text-gray-300 min-w-[2.5rem] sm:min-w-[3rem] text-center tabular-nums"
       >
         {{ Math.round(scale * 100) }}%
       </span>
       <button
-        class="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+        class="p-1 sm:p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
         title="Zoom in"
         @click.stop="zoomIn"
       >
         <UIcon
           name="i-lucide-plus"
-          class="w-4 h-4"
+          class="w-3 h-3 sm:w-4 sm:h-4"
         />
       </button>
-      <div class="w-px h-4 bg-gray-200 dark:bg-gray-700 mx-1" />
+      <div class="w-px h-3 sm:h-4 bg-gray-200 dark:bg-gray-700 mx-0.5 sm:mx-1" />
       <button
-        class="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+        class="p-1 sm:p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
         title="Reset view"
         @click.stop="resetView"
       >
         <UIcon
           name="i-lucide-rotate-ccw"
-          class="w-4 h-4"
+          class="w-3 h-3 sm:w-4 sm:h-4"
         />
       </button>
     </div>
 
     <!-- Hint -->
     <div
-      class="absolute bottom-3 left-3 z-30 text-[10px] text-gray-500 dark:text-gray-400"
+      class="absolute bottom-2 sm:bottom-3 left-2 sm:left-3 z-30 text-[8px] sm:text-[10px] text-gray-500 dark:text-gray-400 max-w-[45%] sm:max-w-none"
     >
-      Drag nodes to reposition • Click to expand • Pinch/Ctrl+scroll to zoom
+      <span class="hidden sm:inline">Drag nodes to reposition • Click to expand • Pinch/Ctrl+scroll to zoom</span>
+      <span class="sm:hidden">Tap to expand • Pinch to zoom</span>
     </div>
 
     <!-- Legend -->
     <div
-      class="absolute bottom-3 right-3 z-30 flex flex-wrap gap-2 text-[10px]"
+      class="absolute bottom-2 sm:bottom-3 right-2 sm:right-3 z-30 flex flex-wrap gap-1.5 sm:gap-2 text-[8px] sm:text-[10px] justify-end max-w-[45%] sm:max-w-none"
     >
-      <div class="flex items-center gap-1 text-orange-500">
-        <div class="w-2 h-2 rounded-full bg-orange-500" />
+      <div class="flex items-center gap-0.5 sm:gap-1 text-orange-500">
+        <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-orange-500" />
         <span>Effort</span>
       </div>
-      <div class="flex items-center gap-1 text-blue-500">
-        <div class="w-2 h-2 rounded-full bg-blue-500" />
+      <div class="flex items-center gap-0.5 sm:gap-1 text-blue-500">
+        <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-blue-500" />
         <span>Exposure</span>
       </div>
-      <div class="flex items-center gap-1 text-purple-500">
-        <div class="w-2 h-2 rounded-full bg-purple-500" />
+      <div class="flex items-center gap-0.5 sm:gap-1 text-purple-500">
+        <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-purple-500" />
         <span>Network</span>
       </div>
-      <div class="flex items-center gap-1 text-pink-500">
-        <div class="w-2 h-2 rounded-full bg-pink-500" />
+      <div class="flex items-center gap-0.5 sm:gap-1 text-pink-500 hidden sm:flex">
+        <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-pink-500" />
         <span>Engagement</span>
       </div>
-      <div class="flex items-center gap-1 text-green-500">
-        <div class="w-2 h-2 rounded-full bg-green-500" />
+      <div class="flex items-center gap-0.5 sm:gap-1 text-green-500 hidden sm:flex">
+        <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-500" />
         <span>Content</span>
       </div>
     </div>

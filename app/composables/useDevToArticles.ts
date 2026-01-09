@@ -1,3 +1,10 @@
+/**
+ * Dev.to Articles Composable
+ *
+ * PERFORMANCE: Uses combined /api/devto-combined endpoint instead of making
+ * separate calls to /api/devto-articles and /api/devto-stats
+ */
+
 export interface DevToArticle {
   id: number
   title: string
@@ -10,12 +17,22 @@ export interface DevToArticle {
   reading_time_minutes: number
   positive_reactions_count: number
   comments_count: number
+  page_views_count?: number
   tag_list: string[]
   user: {
     name: string
     username: string
     profile_image: string
   }
+}
+
+interface CombinedResponse {
+  articles: DevToArticle[]
+  stats: {
+    followers: number
+    totalViews: number
+  }
+  source: 'api' | 'cache' | 'fallback'
 }
 
 export const useDevToArticles = () => {
@@ -25,34 +42,26 @@ export const useDevToArticles = () => {
   const loading = ref(false)
   const error = ref<string | null>(null)
 
-  const fetchArticles = async (username: string = 'ofri-peretz', perPage: number = 10) => {
+  const fetchArticles = async (_username: string = 'ofri-peretz', _perPage: number = 10) => {
     loading.value = true
     error.value = null
 
     try {
-      // Fetch articles from public API (no auth needed)
-      const articlesResponse = await $fetch<DevToArticle[]>(
-        `https://dev.to/api/articles?username=${username}&per_page=${perPage}`
-      )
-      articles.value = articlesResponse || []
+      // Use combined endpoint for single API call
+      const response = await $fetch<CombinedResponse>('/api/devto-combined')
+
+      articles.value = response?.articles || []
+      followers.value = response?.stats?.followers || 45
+      totalViews.value = response?.stats?.totalViews || 0
     } catch (e) {
       error.value = 'Failed to fetch articles from dev.to'
-      console.error('dev.to articles API error:', e)
+      console.error('dev.to combined API error:', e)
       articles.value = []
-    }
-
-    // Fetch private stats (followers + views)
-    try {
-      const statsResponse = await $fetch<{ followers: number, totalViews: number }>('/api/devto-stats')
-      followers.value = statsResponse?.followers || 45
-      totalViews.value = statsResponse?.totalViews || 0
-    } catch (e) {
-      console.error('dev.to stats API error:', e)
       followers.value = 45 // Fallback
       totalViews.value = 0
+    } finally {
+      loading.value = false
     }
-
-    loading.value = false
   }
 
   return {

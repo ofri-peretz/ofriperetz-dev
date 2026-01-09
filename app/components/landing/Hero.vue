@@ -33,13 +33,17 @@ defineProps<{
           delay: 0.1
         }"
       >
-        <img
+        <NuxtImg
           class="size-28 sm:size-32 rounded-full ring-4 ring-primary-500/30 ring-offset-4 ring-offset-(--ui-bg) shadow-xl object-cover"
           :src="global.picture?.light!"
           :alt="global.picture?.alt!"
           loading="eager"
           fetchpriority="high"
-        >
+          format="webp"
+          quality="80"
+          width="128"
+          height="128"
+        />
       </Motion>
     </template>
 

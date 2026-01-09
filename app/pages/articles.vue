@@ -1,19 +1,39 @@
 <script setup lang="ts">
-const { articles, loading, error, fetchArticles } = useDevToArticles()
-const { stats: githubStats, fetchStats: fetchGitHubStats } = useGitHubStats()
+import type { DevToArticle } from '~/composables/useDevToArticles'
+
+// SSR-compatible data fetching - fetch on server for faster initial render
+const { data: articlesData, status: articlesStatus, error } = await useAsyncData(
+  'devto-articles',
+  () => $fetch<{ articles: DevToArticle[], source: string }>('/api/devto-articles'),
+  {
+    default: () => ({ articles: [], source: 'loading' }),
+    server: true,
+    lazy: false
+  }
+)
+
+const { data: githubData } = await useAsyncData(
+  'github-stats-articles',
+  () => $fetch<{ totalStars: number, followers: number }>('/api/github-stats'),
+  {
+    default: () => ({ totalStars: 0, followers: 0 }),
+    server: true,
+    lazy: true // GitHub stats can load lazily since not critical for initial render
+  }
+)
+
+// Computed refs for template compatibility
+const articles = computed(() => articlesData.value?.articles || [])
+const loading = computed(() => articlesStatus.value === 'pending')
+const githubStats = computed(() => githubData.value)
 
 // Medium stats - MUST EXACTLY MATCH stats.vue
 // Updated: Jan 4, 2026 - from medium.com/me/stats
 const mediumStats = {
-  articles: 3, // Number of Medium articles
-  claps: 12, // Total claps
+  articles: 0, // Number of Medium articles
+  claps: 0, // Total claps
   followers: 0 // Medium followers
 }
-
-// Fetch GitHub stats on mount for reactions calculation
-onMounted(() => {
-  fetchGitHubStats()
-})
 
 // Computed combined stats - EXACTLY matching stats page formulas
 const devtoReactions = computed(
@@ -121,9 +141,9 @@ const sortedArticles = computed(() => {
 
     switch (sortBy.value) {
       case 'views':
-        // dev.to API doesn't expose views, use reactions as proxy
+        // Sort by actual page views (falls back to 0 if not available)
         comparison
-          = (b.positive_reactions_count || 0) - (a.positive_reactions_count || 0)
+          = (b.page_views_count || 0) - (a.page_views_count || 0)
         break
       case 'recent':
         comparison
@@ -278,10 +298,7 @@ const gridClass = computed(() => {
   }
 })
 
-// Fetch articles on mount
-onMounted(() => {
-  fetchArticles('ofri-peretz', 100)
-})
+// Note: Data is now fetched server-side via useAsyncData at the top of this file
 
 useSeoMeta({
   title: 'Technical Articles - Ofri Peretz | Security & ESLint',
@@ -330,13 +347,13 @@ const tocItems = [
             </GradientText>
           </h1>
         </BlurFade>
-        <BlurFade :delay="50">
+        <BlurFade :delay="25">
           <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Technical deep-dives on security, ESLint plugins, and AI-native
             development. Published across multiple platforms.
           </p>
         </BlurFade>
-        <BlurFade :delay="100">
+        <BlurFade :delay="50">
           <div class="mt-6 flex flex-wrap justify-center gap-3">
             <ShimmerButton>
               <NuxtLink
@@ -586,7 +603,7 @@ const tocItems = [
           color="error"
           icon="i-lucide-alert-circle"
           title="Failed to load articles"
-          :description="error"
+          :description="error?.message || 'Unknown error'"
           class="mb-8"
         />
 

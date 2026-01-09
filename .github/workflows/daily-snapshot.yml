@@ -25,15 +25,37 @@ jobs:
         env:
           DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
           DATE=$(date +%Y-%m-%d)
+          YESTERDAY=$(date -d "yesterday" +%Y-%m-%d 2>/dev/null || date -v-1d +%Y-%m-%d)
           mkdir -p .data/snapshots
+
+          # Read yesterday's snapshot for delta calculation
+          YESTERDAY_FILE=".data/snapshots/$YESTERDAY.json"
+          if [ -f "$YESTERDAY_FILE" ]; then
+            PREV_DOWNLOADS=$(jq '.npm.totalDownloads // 0' "$YESTERDAY_FILE")
+            PREV_VIEWS=$(jq '.devto.views // 0' "$YESTERDAY_FILE")
+            PREV_REACTIONS=$(jq '.devto.reactions // 0' "$YESTERDAY_FILE")
+            PREV_COMMENTS=$(jq '.devto.comments // 0' "$YESTERDAY_FILE")
+            PREV_CONTRIBUTIONS=$(jq '.github.contributions // 0' "$YESTERDAY_FILE")
+            PREV_COMMITS=$(jq '.github.commits // 0' "$YESTERDAY_FILE")
+            PREV_FOLLOWERS=$(jq '(.github.followers // 0) + (.devto.followers // 0)' "$YESTERDAY_FILE")
+          else
+            PREV_DOWNLOADS=0
+            PREV_VIEWS=0
+            PREV_REACTIONS=0
+            PREV_COMMENTS=0
+            PREV_CONTRIBUTIONS=0
+            PREV_COMMITS=0
+            PREV_FOLLOWERS=0
+          fi
 
           # Fetch npm stats
           NPM_RESULT=$(curl -s "https://registry.npmjs.org/-/v1/search?text=maintainer:ofriperetz&size=100")
           PACKAGE_COUNT=$(echo $NPM_RESULT | jq '.objects | length')
 
-          # Fetch total downloads (simplified - sum of last month for all packages)
+          # Fetch total downloads (sum of last month for all packages)
           TOTAL_DOWNLOADS=0
           for pkg in $(echo $NPM_RESULT | jq -r '.objects[].package.name'); do
             DOWNLOADS=$(curl -s "https://api.npmjs.org/downloads/point/last-month/$pkg" | jq '.downloads // 0')
@@ -63,33 +85,107 @@ jobs:
           DEVTO_REACTIONS=$(echo $DEVTO_ARTICLES | jq '[.[].positive_reactions_count] | add // 0')
           DEVTO_COMMENTS=$(echo $DEVTO_ARTICLES | jq '[.[].comments_count] | add // 0')
 
-          # Create snapshot JSON with extended schema
+          # Calculate daily deltas (change since yesterday)
+          TOTAL_FOLLOWERS=$((GH_FOLLOWERS + DEVTO_FOLLOWERS))
+          DAILY_DOWNLOADS=$((TOTAL_DOWNLOADS - PREV_DOWNLOADS))
+          DAILY_VIEWS=$((DEVTO_VIEWS - PREV_VIEWS))
+          DAILY_REACTIONS=$((DEVTO_REACTIONS - PREV_REACTIONS))
+          DAILY_COMMENTS=$((DEVTO_COMMENTS - PREV_COMMENTS))
+          DAILY_CONTRIBUTIONS=$((GH_CONTRIBUTIONS - PREV_CONTRIBUTIONS))
+          DAILY_COMMITS=$((GH_COMMITS - PREV_COMMITS))
+          DAILY_FOLLOWERS=$((TOTAL_FOLLOWERS - PREV_FOLLOWERS))
+
+          # Ensure deltas are not negative (in case of API inconsistency)
+          [ $DAILY_DOWNLOADS -lt 0 ] && DAILY_DOWNLOADS=0
+          [ $DAILY_VIEWS -lt 0 ] && DAILY_VIEWS=0
+          [ $DAILY_REACTIONS -lt 0 ] && DAILY_REACTIONS=0
+          [ $DAILY_COMMENTS -lt 0 ] && DAILY_COMMENTS=0
+          [ $DAILY_CONTRIBUTIONS -lt 0 ] && DAILY_CONTRIBUTIONS=0
+          [ $DAILY_COMMITS -lt 0 ] && DAILY_COMMITS=0
+          [ $DAILY_FOLLOWERS -lt 0 ] && DAILY_FOLLOWERS=0
+
+          # Clone eslint repo to count plugins and rules dynamically
+          git clone --depth 1 https://github.com/ofri-peretz/eslint.git /tmp/eslint 2>/dev/null || true
+
+          # Excluded plugins (matches NPM_CONFIG.excludedPackages)
+          EXCLUDED_PLUGINS="eslint-plugin-mcp eslint-plugin-llm-optimized eslint-plugin-llm eslint-plugin-mcp-optimized cli eslint-devkit"
+
+          # Count plugins (directories starting with eslint-plugin-*)
+          PLUGIN_COUNT=0
+          RULES_COUNT=0
+          for dir in /tmp/eslint/packages/eslint-plugin-*/; do
+            if [ -d "$dir" ]; then
+              plugin_name=$(basename "$dir")
+              # Check if plugin is excluded
+              is_excluded=false
+              for excluded in $EXCLUDED_PLUGINS; do
+                if [ "$plugin_name" = "$excluded" ]; then
+                  is_excluded=true
+                  break
+                fi
+              done
+              if [ "$is_excluded" = "false" ]; then
+                PLUGIN_COUNT=$((PLUGIN_COUNT + 1))
+                # Count rules in this plugin (directories in src/rules/, excluding __tests__)
+                if [ -d "$dir/src/rules" ]; then
+                  rule_count=$(find "$dir/src/rules" -maxdepth 1 -type d ! -name "__tests__" ! -name "rules" | wc -l)
+                  RULES_COUNT=$((RULES_COUNT + rule_count))
+                fi
+              fi
+            fi
+          done
+
+          # Fallback if git clone failed
+          [ $PLUGIN_COUNT -eq 0 ] && PLUGIN_COUNT=11
+          [ $RULES_COUNT -eq 0 ] && RULES_COUNT=216
+
+          echo "Counted $PLUGIN_COUNT plugins and $RULES_COUNT rules"
+
+          # Fetch test coverage from Codecov API for eslint repo
+          if [ -n "$CODECOV_TOKEN" ]; then
+            CODECOV_RESPONSE=$(curl -s -H "Authorization: Bearer $CODECOV_TOKEN" \
+              "https://codecov.io/api/v2/github/ofri-peretz/repos/eslint/coverage" 2>/dev/null || echo "{}")
+            TEST_COVERAGE=$(echo $CODECOV_RESPONSE | jq '.coverage // 90' | cut -d'.' -f1)
+          else
+            TEST_COVERAGE=90
+          fi
+          [ -z "$TEST_COVERAGE" ] && TEST_COVERAGE=90
+          echo "Test coverage: $TEST_COVERAGE%"
+
+          # Create snapshot JSON with both cumulative totals and daily deltas
           cat > .data/snapshots/$DATE.json << EOF
           {
             "date": "$DATE",
             "npm": {
               "totalDownloads": $TOTAL_DOWNLOADS,
+              "dailyDownloads": $DAILY_DOWNLOADS,
               "packageCount": $PACKAGE_COUNT
             },
             "github": {
               "stars": $GH_STARS,
               "followers": $GH_FOLLOWERS,
               "contributions": $GH_CONTRIBUTIONS,
-              "commits": $GH_COMMITS
+              "dailyContributions": $DAILY_CONTRIBUTIONS,
+              "commits": $GH_COMMITS,
+              "dailyCommits": $DAILY_COMMITS
             },
             "devto": {
               "views": $DEVTO_VIEWS,
+              "dailyViews": $DAILY_VIEWS,
               "followers": $DEVTO_FOLLOWERS,
+              "dailyFollowers": $DAILY_FOLLOWERS,
               "reactions": $DEVTO_REACTIONS,
+              "dailyReactions": $DAILY_REACTIONS,
               "comments": $DEVTO_COMMENTS,
+              "dailyComments": $DAILY_COMMENTS,
               "articles": $DEVTO_ARTICLE_COUNT
             },
             "ecosystem": {
               "packages": $PACKAGE_COUNT,
-              "plugins": 11,
-              "rules": 216,
+              "plugins": $PLUGIN_COUNT,
+              "rules": $RULES_COUNT,
               "owaspCoverage": 100,
-              "testCoverage": 90
+              "testCoverage": $TEST_COVERAGE
             }
           }
           EOF

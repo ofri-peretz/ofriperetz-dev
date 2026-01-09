@@ -233,66 +233,54 @@ const aggregatedData = computed(() => {
 
   switch (timeAggregation.value) {
     case 'daily':
+      // Show the actual value recorded each day
       return rawData
 
     case 'weekly': {
-      const weekMap: Record<string, { sum: number, count: number }> = {}
+      // Group by week, show the last (most recent) value of each week
+      const weekMap: Record<string, { date: string, value: number }> = {}
       rawData.forEach((d) => {
         const weekKey = getWeekNumber(new Date(d.date))
-        if (!weekMap[weekKey]) weekMap[weekKey] = { sum: 0, count: 0 }
-        weekMap[weekKey].sum += d.value
-        weekMap[weekKey].count++
+        // Keep the latest value for each week
+        if (!weekMap[weekKey] || d.date > weekMap[weekKey].date) {
+          weekMap[weekKey] = { date: d.date, value: d.value }
+        }
       })
       return Object.entries(weekMap)
         .sort(([a], [b]) => a.localeCompare(b))
-        .map(([date, { sum, count }]) => ({
-          date,
-          value: Math.round(sum / count) // Average for the week
+        .map(([weekLabel, data]) => ({
+          date: weekLabel,
+          value: data.value
         }))
     }
 
     case 'monthly': {
-      const monthMap: Record<string, { sum: number, count: number }> = {}
+      // Group by month, show the last (most recent) value of each month
+      const monthMap: Record<string, { date: string, value: number }> = {}
       rawData.forEach((d) => {
         const monthKey = getMonthKey(new Date(d.date))
-        if (!monthMap[monthKey]) monthMap[monthKey] = { sum: 0, count: 0 }
-        monthMap[monthKey].sum += d.value
-        monthMap[monthKey].count++
+        // Keep the latest value for each month
+        if (!monthMap[monthKey] || d.date > monthMap[monthKey].date) {
+          monthMap[monthKey] = { date: d.date, value: d.value }
+        }
       })
       return Object.entries(monthMap)
         .sort(([a], [b]) => a.localeCompare(b))
-        .map(([date, { sum, count }]) => ({
-          date,
-          value: Math.round(sum / count) // Average for the month
+        .map(([monthLabel, data]) => ({
+          date: monthLabel,
+          value: data.value
         }))
     }
 
-    case 'cumulative': {
-      let running = 0
-      // For cumulative, we use the last value of each day (not sum)
-      // Stars/followers should show latest value, downloads should accumulate
-      const isAccumulatingMetric = [
-        'downloads',
-        'views',
-        'reactions',
-        'comments'
-      ].includes(selectedMetric.value)
-
-      if (isAccumulatingMetric) {
-        return rawData.map((d) => {
-          running += d.value
-          return { date: d.date, value: running }
-        })
-      } else {
-        // For non-accumulating metrics (stars, followers), just show the value
-        return rawData
-      }
-    }
+    case 'cumulative':
+      // Show the absolute values over time (same as daily, but semantically "total so far")
+      return rawData
 
     default:
       return rawData
   }
 })
+
 
 // Get max value for scaling
 const maxValue = computed(() =>
@@ -343,9 +331,9 @@ const groupedMetrics = computed(() => {
             </h3>
           </div>
 
-          <!-- Time Aggregation Toggle -->
+          <!-- Time Aggregation Toggle - scrollable on mobile -->
           <div
-            class="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden text-xs"
+            class="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-x-auto text-xs scrollbar-hide"
           >
             <button
               v-for="agg in aggregationOptions"
@@ -432,9 +420,9 @@ const groupedMetrics = computed(() => {
           <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{
             currentMetric.label
           }}</span>
-          <span class="text-xs text-gray-400 dark:text-gray-500">{{
-            currentMetric.description
-          }}</span>
+          <span
+            class="text-xs text-gray-400 dark:text-gray-500 hidden sm:inline"
+          >{{ currentMetric.description }}</span>
         </div>
         <div
           v-if="growth"

@@ -8,6 +8,22 @@ const color = computed(() =>
   colorMode.value === 'dark' ? '#020618' : 'white'
 )
 
+// Remove the inline loader after hydration is complete
+onMounted(() => {
+  // Wait for next tick to ensure full hydration
+  nextTick(() => {
+    // Small delay to ensure CSS is applied
+    setTimeout(() => {
+      // Remove the inline loader injected by nuxt.config.ts
+      const loader = document.getElementById('app-loader')
+      if (loader) {
+        loader.style.opacity = '0'
+        setTimeout(() => loader.remove(), 300)
+      }
+    }, 100)
+  })
+})
+
 // Track page views
 const { trackPageView } = useVisitorTracking()
 onMounted(() => {
@@ -20,7 +36,6 @@ useHead({
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },
     { key: 'theme-color', name: 'theme-color', content: color }
   ],
-  link: [{ rel: 'icon', href: '/favicon.ico' }],
   htmlAttrs: {
     lang: 'en'
   }
@@ -28,8 +43,8 @@ useHead({
 
 useSeoMeta({
   titleTemplate: '%s - Ofri Peretz',
-  ogImage: '/profile.png',
-  twitterImage: '/profile.png',
+  ogImage: '/ofri-profile.webp',
+  twitterImage: '/ofri-profile.webp',
   twitterCard: 'summary_large_image'
 })
 

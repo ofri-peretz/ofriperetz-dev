@@ -297,17 +297,17 @@ const formatNumber = (num: number) => {
 <template>
   <UCard class="w-full overflow-hidden">
     <template #header>
-      <div class="flex items-center justify-between flex-wrap gap-2">
-        <div class="flex items-center gap-2">
+      <div class="flex items-start sm:items-center justify-between flex-wrap gap-2">
+        <div class="flex items-start sm:items-center gap-2">
           <UIcon
             name="i-lucide-compass"
-            class="w-5 h-5 text-primary-500 animate-pulse"
+            class="w-4 h-4 sm:w-5 sm:h-5 text-primary-500 animate-pulse shrink-0 mt-0.5 sm:mt-0"
           />
           <div>
-            <h3 class="font-semibold text-gray-900 dark:text-white">
+            <h3 class="font-semibold text-sm sm:text-base text-gray-900 dark:text-white">
               North Star Impact Funnel
             </h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+            <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5">
               Following
               <a
                 href="https://articles.sequoiacap.com/frameworks-for-product-success"
@@ -322,17 +322,18 @@ const formatNumber = (num: number) => {
           color="primary"
           variant="soft"
           size="xs"
+          class="shrink-0"
         >
           <UIcon
             name="i-lucide-info"
-            class="w-3 h-3 mr-1"
+            class="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1"
           />
-          Click to expand
+          <span class="text-[10px] sm:text-xs">Click to expand</span>
         </UBadge>
       </div>
     </template>
 
-    <div class="space-y-4 relative">
+    <div class="space-y-3 sm:space-y-4 relative">
       <!-- Connection Line -->
       <div
         class="absolute left-6 top-8 bottom-8 w-0.5 bg-linear-to-b from-orange-300 via-purple-300 to-yellow-300 dark:from-orange-700 dark:via-purple-700 dark:to-yellow-700 -z-10 hidden sm:block"
@@ -343,7 +344,7 @@ const formatNumber = (num: number) => {
         :key="step.id"
         class="relative"
       >
-        <div class="flex flex-col sm:flex-row gap-4 sm:items-start group">
+        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:items-start group">
           <!-- Icon Circle -->
           <div class="flex-shrink-0 relative z-10 hidden sm:flex">
             <div
@@ -367,24 +368,24 @@ const formatNumber = (num: number) => {
           </div>
 
           <!-- Content Card -->
-          <div class="flex-1">
+          <div class="flex-1 min-w-0">
             <div
-              class="p-4 rounded-xl border bg-linear-to-br cursor-pointer transition-all duration-300 hover:shadow-md relative overflow-hidden"
+              class="p-3 sm:p-4 rounded-lg sm:rounded-xl border bg-linear-to-br cursor-pointer transition-all duration-300 hover:shadow-md relative overflow-hidden"
               :class="[step.bgColor, step.borderColor]"
               @click="toggleTier(step.id)"
             >
               <!-- Header Row -->
               <div
-                class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-3"
+                class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1.5 sm:gap-2 mb-2 sm:mb-3"
               >
                 <div class="flex-1 min-w-0">
-                  <div class="flex flex-wrap items-center gap-2">
+                  <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
                     <span
-                      class="font-bold text-gray-900 dark:text-white text-lg"
+                      class="font-bold text-gray-900 dark:text-white text-base sm:text-lg"
                     >
                       {{ step.label }}
                     </span>
-                    <div class="flex items-center gap-1.5 flex-shrink-0">
+                    <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
                       <UBadge
                         v-if="step.id === 'northstar'"
                         color="warning"
@@ -409,22 +410,22 @@ const formatNumber = (num: number) => {
                       >
                         <UIcon
                           name="i-lucide-info"
-                          class="w-4 h-4 text-gray-400 hover:text-primary-500 cursor-help transition-colors"
+                          class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400 hover:text-primary-500 cursor-help transition-colors"
                         />
                       </UTooltip>
                     </div>
                   </div>
-                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5 sm:mt-1 line-clamp-2 sm:line-clamp-none">
                     {{ step.subtext }}
                   </p>
                   <!-- Visible Impact Explanation -->
                   <p
                     v-if="step.impactExplanation && step.id !== 'northstar'"
-                    class="text-[11px] text-gray-400 dark:text-gray-500 mt-2 flex items-start gap-1.5 leading-relaxed"
+                    class="text-[10px] sm:text-[11px] text-gray-400 dark:text-gray-500 mt-1.5 sm:mt-2 flex items-start gap-1 sm:gap-1.5 leading-relaxed line-clamp-2 sm:line-clamp-none"
                   >
                     <UIcon
                       name="i-lucide-zap"
-                      class="w-3 h-3 text-amber-500 flex-shrink-0 mt-0.5"
+                      class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-500 shrink-0 mt-0.5"
                     />
                     <span class="italic">{{ step.impactExplanation }}</span>
                   </p>
@@ -432,10 +433,10 @@ const formatNumber = (num: number) => {
 
                 <!-- Value Display - always aligned right -->
                 <div
-                  class="flex items-center gap-2 sm:flex-col sm:items-end sm:gap-0 flex-shrink-0"
+                  class="flex items-center gap-2 sm:flex-col sm:items-end sm:gap-0 shrink-0"
                 >
                   <div
-                    class="text-2xl sm:text-3xl font-bold tabular-nums bg-clip-text text-transparent bg-gradient-to-r"
+                    class="text-xl sm:text-2xl md:text-3xl font-bold tabular-nums bg-clip-text text-transparent bg-linear-to-r"
                     :class="step.color"
                   >
                     <NumberTicker
@@ -449,7 +450,7 @@ const formatNumber = (num: number) => {
                         ? 'i-lucide-chevron-up'
                         : 'i-lucide-chevron-down'
                     "
-                    class="w-4 h-4 text-gray-400 sm:mt-1"
+                    class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400 sm:mt-1"
                   />
                 </div>
               </div>

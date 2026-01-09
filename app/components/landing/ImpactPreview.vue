@@ -2,90 +2,115 @@
 /**
  * ImpactPreview - Impressive metrics showcase for home page
  * Shows key metrics in a wide horizontal layout with theme-aware accessibility
+ *
+ * PERFORMANCE: Uses unified /api/homepage-stats endpoint instead of 4 separate calls
+ *
+ * CONDITIONAL DISPLAY: When GitHub stars < STARS_VISIBILITY_THRESHOLD:
+ * - Downloads metric is shown first (lead with strongest number)
+ * - Once stars >= threshold, original order is restored
  */
 
-const {
-  stats: githubStats,
-  loading: ghLoading,
-  fetchStats: fetchGitHub,
-} = useGitHubStats();
-const {
-  totalDownloads,
-  packageCount,
-  loading: npmLoading,
-  fetchStats: fetchNpm,
-} = useNpmStats();
-const {
-  totalViews,
-  followers: devtoFollowers,
-  loading: devtoLoading,
-  fetchArticles,
-} = useDevToArticles();
+import { STARS_VISIBILITY_THRESHOLD } from '~/utils/constants'
+
+const { stats, loading, fetchStats } = useHomepageStats()
 
 onMounted(() => {
-  fetchGitHub();
-  fetchNpm();
-  fetchArticles("ofri-peretz", 100);
-});
+  fetchStats()
+})
 
-const loading = computed(
-  () => ghLoading.value || npmLoading.value || devtoLoading.value,
-);
+// Early stage mode: reorder metrics when stars are below threshold
+const isEarlyStage = computed(() =>
+  (stats.value.github.totalStars || 0) < STARS_VISIBILITY_THRESHOLD
+)
 
-// Computed metrics for display - 6 key metrics with theme-aware colors
-// Using the "High-Contrast Colored Boxes" strategy:
-// Light Mode: Text 600-700 for labels, 600 for values
-// Dark Mode: Bright text (400) for values
-const metrics = computed(() => [
-  {
-    label: "Views",
-    value: totalViews.value,
-    icon: "i-lucide-eye",
-    color: "text-cyan-600 dark:text-cyan-400",
-    bgColor: "bg-cyan-50 dark:bg-cyan-500/10",
-    borderColor: "border-cyan-200 dark:border-cyan-500/30",
-  },
-  {
-    label: "Downloads",
-    value: totalDownloads.value,
-    icon: "i-simple-icons-npm",
-    color: "text-red-600 dark:text-red-400",
-    bgColor: "bg-red-50 dark:bg-red-500/10",
-    borderColor: "border-red-200 dark:border-red-500/30",
-  },
-  {
-    label: "Followers",
-    value: (githubStats.value?.followers || 0) + (devtoFollowers.value || 0),
-    icon: "i-lucide-users",
-    color: "text-blue-600 dark:text-blue-400",
-    bgColor: "bg-blue-50 dark:bg-blue-500/10",
-    borderColor: "border-blue-200 dark:border-blue-500/30",
-  },
-  {
-    label: "Plugins",
-    value: packageCount.value,
-    icon: "i-lucide-shield-check",
-    color: "text-green-600 dark:text-green-400",
-    bgColor: "bg-green-50 dark:bg-green-500/10",
-    borderColor: "border-green-200 dark:border-green-500/30",
-  },
-  {
-    label: "Commits",
-    value: githubStats.value?.recentCommits || 0,
-    icon: "i-lucide-git-commit",
-    color: "text-purple-600 dark:text-purple-400",
-    bgColor: "bg-purple-50 dark:bg-purple-500/10",
-    borderColor: "border-purple-200 dark:border-purple-500/30",
-  },
-  {
-    label: "Repos",
-    value: githubStats.value?.totalRepos || 0,
-    icon: "i-lucide-folder-git-2",
-    color: "text-orange-600 dark:text-orange-400",
-    bgColor: "bg-orange-50 dark:bg-orange-500/10",
-    borderColor: "border-orange-200 dark:border-orange-500/30",
-  },
-]);
+// Format large numbers compactly to prevent overflow
+const formatCompact = (value: number): string => {
+  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`
+  if (value >= 100_000) return `${Math.round(value / 1_000)}K`
+  if (value >= 10_000) return `${(value / 1_000).toFixed(1)}K`
+  return value.toLocaleString()
+}
+
+// Base metrics definitions with theme-aware colors
+const viewsMetric = computed(() => ({
+  label: 'Views',
+  value: stats.value.devto.totalViews,
+  icon: 'i-lucide-eye',
+  color: 'text-cyan-600 dark:text-cyan-400',
+  bgColor: 'bg-cyan-50 dark:bg-cyan-500/10',
+  borderColor: 'border-cyan-200 dark:border-cyan-500/30'
+}))
+
+const downloadsMetric = computed(() => ({
+  label: 'Downloads',
+  value: stats.value.npm.totalDownloads,
+  icon: 'i-simple-icons-npm',
+  color: 'text-orange-600 dark:text-orange-400',
+  bgColor: 'bg-orange-50 dark:bg-orange-500/10',
+  borderColor: 'border-orange-200 dark:border-orange-500/30'
+}))
+
+const followersMetric = computed(() => ({
+  label: 'Followers',
+  value: stats.value.github.followers + stats.value.devto.followers,
+  icon: 'i-lucide-users',
+  color: 'text-blue-600 dark:text-blue-400',
+  bgColor: 'bg-blue-50 dark:bg-blue-500/10',
+  borderColor: 'border-blue-200 dark:border-blue-500/30'
+}))
+
+const packagesMetric = computed(() => ({
+  label: 'Packages',
+  value: stats.value.npm.packageCount,
+  icon: 'i-lucide-package',
+  color: 'text-green-600 dark:text-green-400',
+  bgColor: 'bg-green-50 dark:bg-green-500/10',
+  borderColor: 'border-green-200 dark:border-green-500/30'
+}))
+
+const contributionsMetric = computed(() => ({
+  label: 'Contributions',
+  value: stats.value.github.totalContributions || stats.value.github.recentCommits || 0,
+  icon: 'i-lucide-git-commit',
+  color: 'text-purple-600 dark:text-purple-400',
+  bgColor: 'bg-purple-50 dark:bg-purple-500/10',
+  borderColor: 'border-purple-200 dark:border-purple-500/30'
+}))
+
+const reposMetric = computed(() => ({
+  label: 'Repos',
+  value: stats.value.github.totalRepos,
+  icon: 'i-lucide-folder-git-2',
+  color: 'text-rose-600 dark:text-rose-400',
+  bgColor: 'bg-rose-50 dark:bg-rose-500/10',
+  borderColor: 'border-rose-200 dark:border-rose-500/30'
+}))
+
+// Computed metrics for display
+// Early Stage: Downloads first (lead with strongest number)
+// Post-Threshold: Original order (Views first)
+const metrics = computed(() => {
+  if (isEarlyStage.value) {
+    // Lead with downloads (strongest metric) in early stage
+    return [
+      downloadsMetric.value,
+      viewsMetric.value,
+      followersMetric.value,
+      packagesMetric.value,
+      contributionsMetric.value,
+      reposMetric.value
+    ]
+  }
+  // Original order once we have meaningful star count
+  return [
+    viewsMetric.value,
+    downloadsMetric.value,
+    followersMetric.value,
+    packagesMetric.value,
+    contributionsMetric.value,
+    reposMetric.value
+  ]
+})
 </script>
 
 <template>
@@ -121,21 +146,21 @@ const metrics = computed(() => [
 
       <!-- Metrics Grid - 2 cols on mobile, 3 on tablet+ -->
       <div
-        class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-5 mb-6 sm:mb-8"
+        class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8"
         role="list"
         aria-label="Impact metrics"
       >
         <div
           v-for="metric in metrics"
           :key="metric.label"
-          class="relative p-4 sm:p-5 rounded-2xl border backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg focus-within:ring-2 focus-within:ring-primary-500/50 outline-none"
+          class="relative p-4 sm:p-5 rounded-2xl border backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg focus-within:ring-2 focus-within:ring-primary-500/50 outline-none flex flex-col items-center justify-center text-center min-h-[110px] sm:min-h-[130px]"
           :class="[metric.bgColor, metric.borderColor]"
           role="listitem"
         >
-          <!-- Icon and Label -->
-          <div class="flex items-center gap-2 mb-3">
+          <!-- Icon and Label - Centered -->
+          <div class="flex items-center justify-center gap-2 mb-2">
             <div
-              class="p-1.5 rounded-lg transition-colors"
+              class="p-1 rounded-lg transition-colors"
               :class="metric.bgColor"
             >
               <UIcon
@@ -147,20 +172,30 @@ const metrics = computed(() => [
             </div>
             <span
               class="text-sm font-semibold text-gray-700 dark:text-gray-300"
-              >{{ metric.label }}</span
-            >
+            >{{ metric.label }}</span>
           </div>
-          <!-- Value -->
+          <!-- Value - Centered with responsive sizing -->
           <div
-            class="text-2xl sm:text-3xl font-bold tabular-nums tracking-tight"
-            :class="metric.color"
+            class="font-bold tabular-nums tracking-tight text-center w-full"
+            :class="[
+              metric.color,
+              // Responsive font size: scale down for larger numbers
+              metric.value >= 1000000 ? 'text-lg sm:text-xl'
+              : metric.value >= 100000 ? 'text-xl sm:text-2xl'
+                : metric.value >= 10000 ? 'text-2xl sm:text-3xl' : 'text-2xl sm:text-3xl'
+            ]"
           >
             <span
               v-if="loading"
               class="animate-pulse text-lg"
               aria-label="Loading"
-              >...</span
-            >
+            >...</span>
+            <!-- Use compact format for large numbers -->
+            <template v-else-if="metric.value >= 10000">
+              <span :aria-label="`${metric.value.toLocaleString()} ${metric.label}`">
+                {{ formatCompact(metric.value) }}
+              </span>
+            </template>
             <NumberTicker
               v-else
               :value="metric.value"

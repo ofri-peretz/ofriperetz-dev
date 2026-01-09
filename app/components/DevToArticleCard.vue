@@ -30,11 +30,15 @@ const formatDate = (dateString: string) => {
         #header
       >
         <div class="relative overflow-hidden h-48">
-          <img
+          <NuxtImg
             :src="article.cover_image || article.social_image"
             :alt="article.title"
+            loading="lazy"
+            decoding="async"
+            format="webp"
+            quality="80"
             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          >
+          />
           <!-- dev.to badge with guaranteed contrast -->
           <div class="absolute top-3 left-3">
             <span
@@ -94,6 +98,16 @@ const formatDate = (dateString: string) => {
               class="w-3.5 h-3.5 flex-shrink-0"
             />
             {{ article.comments_count }}
+          </span>
+          <span
+            v-if="article.page_views_count"
+            class="flex items-center gap-1"
+          >
+            <UIcon
+              name="i-lucide-eye"
+              class="w-3.5 h-3.5 flex-shrink-0"
+            />
+            {{ article.page_views_count.toLocaleString() }}
           </span>
           <span class="flex items-center gap-1">
             <UIcon

@@ -139,9 +139,9 @@ const periodLabel = computed(() => {
           </div>
         </div>
 
-        <!-- Time Period Toggle -->
+        <!-- Time Period Toggle - scrollable on mobile -->
         <div
-          class="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden text-xs"
+          class="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-x-auto text-xs scrollbar-hide"
         >
           <button
             v-for="period in periodOptions"

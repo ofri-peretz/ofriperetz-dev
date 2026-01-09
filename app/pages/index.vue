@@ -53,13 +53,12 @@ const tocItems = [
       <LandingHero :page />
     </div>
 
-    <!-- About Section with consistent spacing -->
+    <!-- About Section with tighter, modern spacing -->
     <UPageSection
       id="about"
       data-toc-section
       :ui="{
-        container:
-          'py-12 sm:py-16 lg:grid lg:grid-cols-2 lg:gap-8 scroll-mt-20'
+        container: 'py-4 sm:py-6 lg:grid lg:grid-cols-2 lg:gap-6 scroll-mt-20'
       }"
     >
       <LandingAbout :page />
@@ -70,7 +69,7 @@ const tocItems = [
     <div
       id="skills"
       data-toc-section
-      class="scroll-mt-20 py-6 sm:py-8"
+      class="scroll-mt-20 py-4 sm:py-5"
     >
       <LazyLandingSkills :page />
     </div>
@@ -78,7 +77,7 @@ const tocItems = [
     <div
       id="philosophy"
       data-toc-section
-      class="scroll-mt-20 py-6 sm:py-8"
+      class="scroll-mt-20 py-4 sm:py-5"
     >
       <LazyLandingPhilosophy />
     </div>
@@ -86,7 +85,7 @@ const tocItems = [
     <div
       id="articles"
       data-toc-section
-      class="scroll-mt-20 py-6 sm:py-8"
+      class="scroll-mt-20 py-4 sm:py-5"
     >
       <LazyLandingDevToArticles :page />
     </div>
@@ -94,7 +93,7 @@ const tocItems = [
     <div
       id="faq"
       data-toc-section
-      class="scroll-mt-20 py-6 sm:py-8"
+      class="scroll-mt-20 py-4 sm:py-5"
     >
       <LazyLandingFAQ :page />
     </div>

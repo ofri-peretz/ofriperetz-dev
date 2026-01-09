@@ -51,16 +51,46 @@ export default defineNuxtConfig({
         { rel: 'dns-prefetch', href: 'https://api.github.com' },
         { rel: 'dns-prefetch', href: 'https://api.npmjs.org' },
         { rel: 'dns-prefetch', href: 'https://dev.to' },
-        // Canonical and favicons
+        // Canonical and favicons - keys prevent Nuxt default favicon race condition
         { rel: 'canonical', href: 'https://ofriperetz.dev' },
-        { rel: 'shortcut icon', href: '/favicon.ico' },
-        { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
-        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32.png' },
-        { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16.png' },
-        { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/logo-192.png' },
-        { rel: 'apple-touch-icon', sizes: '180x180', href: '/logo-apple-touch.png' }
+        { key: 'favicon-shortcut', rel: 'shortcut icon', href: '/favicon.ico' },
+        { key: 'favicon-ico', rel: 'icon', href: '/favicon.ico', sizes: 'any' },
+        { key: 'favicon-32', rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32.png' },
+        { key: 'favicon-16', rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16.png' },
+        { key: 'favicon-192', rel: 'icon', type: 'image/png', sizes: '192x192', href: '/logo-192.png' },
+        { key: 'apple-touch-icon', rel: 'apple-touch-icon', sizes: '180x180', href: '/logo-apple-touch.png' },
+        // Preload critical profile image to prevent initial blank state
+        { rel: 'preload', href: '/ofri-profile.webp', as: 'image', type: 'image/webp' }
       ],
       script: [
+        // Anti-FOUC: Show loading overlay immediately (runs before any CSS/JS loads)
+        {
+          innerHTML: `
+(function() {
+  // Get color mode preference  
+  var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var stored = localStorage.getItem('nuxt-color-mode');
+  if (stored === 'dark') isDark = true;
+  if (stored === 'light') isDark = false;
+  
+  // Apply dark class immediately to prevent flash
+  if (isDark) document.documentElement.classList.add('dark');
+  
+  // Create and inject loading overlay
+  var loader = document.createElement('div');
+  loader.id = 'app-loader';
+  loader.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;gap:1rem;"><div style="width:3rem;height:3rem;border:2px solid rgba(99,102,241,0.3);border-top-color:#6366f1;border-radius:50%;animation:spin 1s linear infinite;"></div><span style="font-size:0.875rem;color:' + (isDark ? '#9ca3af' : '#6b7280') + ';animation:pulse 2s infinite;">Loading...</span></div>';
+  loader.style.cssText = 'position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:' + (isDark ? '#020617' : '#ffffff') + ';transition:opacity 0.3s ease-out;';
+  document.body.appendChild(loader);
+  
+  // Add keyframes for animations
+  var style = document.createElement('style');
+  style.textContent = '@keyframes spin{to{transform:rotate(360deg);}}@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.5;}}';
+  document.head.appendChild(style);
+})();
+          `,
+          tagPosition: 'bodyOpen'
+        },
         {
           type: 'application/ld+json',
           innerHTML: JSON.stringify({
@@ -139,6 +169,8 @@ export default defineNuxtConfig({
   vite: {
     build: {
       cssMinify: true,
+      // Disable sourcemaps in production for smaller bundles
+      sourcemap: false,
       // Tree-shaking for smaller bundles
       minify: 'terser',
       terserOptions: {
@@ -181,6 +213,10 @@ export default defineNuxtConfig({
     quality: 80,
     format: ['webp', 'avif', 'png'],
     screens: {
+      // Profile image sizes (fixes console warnings)
+      avatar: 128,
+      avatarLg: 256,
+      // Standard responsive breakpoints
       xs: 320,
       sm: 640,
       md: 768,
