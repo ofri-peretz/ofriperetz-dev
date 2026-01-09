@@ -186,6 +186,33 @@ useSeoMeta({
     'Live open source metrics: 9K+ npm downloads, 35+ repos, 30+ articles.'
 })
 
+// BreadcrumbList schema for rich snippets
+useHead({
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          {
+            '@type': 'ListItem',
+            'position': 1,
+            'name': 'Home',
+            'item': 'https://ofriperetz.dev'
+          },
+          {
+            '@type': 'ListItem',
+            'position': 2,
+            'name': 'Impact Dashboard',
+            'item': 'https://ofriperetz.dev/stats'
+          }
+        ]
+      })
+    }
+  ]
+})
+
 // TOC items for this page - conditionally include correlation analysis
 const tocItems = computed(() => {
   const baseItems = [

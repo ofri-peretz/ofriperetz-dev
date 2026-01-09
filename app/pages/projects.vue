@@ -129,6 +129,33 @@ useSeoMeta({
     '35+ repos including 16+ npm packages with 9K+ downloads.'
 })
 
+// BreadcrumbList schema for rich snippets
+useHead({
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          {
+            '@type': 'ListItem',
+            'position': 1,
+            'name': 'Home',
+            'item': 'https://ofriperetz.dev'
+          },
+          {
+            '@type': 'ListItem',
+            'position': 2,
+            'name': 'Projects',
+            'item': 'https://ofriperetz.dev/projects'
+          }
+        ]
+      })
+    }
+  ]
+})
+
 // TOC items for projects page
 const tocItems = [
   { id: 'projects-hero', label: 'Overview' },

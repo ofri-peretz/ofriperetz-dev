@@ -91,6 +91,7 @@ export default defineNuxtConfig({
           `,
           tagPosition: 'bodyOpen'
         },
+        // Person Schema
         {
           type: 'application/ld+json',
           innerHTML: JSON.stringify({
@@ -98,24 +99,112 @@ export default defineNuxtConfig({
             '@type': 'Person',
             'name': 'Ofri Peretz',
             'url': 'https://ofriperetz.dev',
+            'image': 'https://ofriperetz.dev/ofri-profile.webp',
             'jobTitle': 'Engineering Leader',
+            'description': 'Engineering Leader & Open Source Creator. Building security-focused ESLint plugins with 9K+ downloads.',
             'worksFor': {
               '@type': 'Organization',
-              'name': 'Snappy'
+              'name': 'Snappy',
+              'url': 'https://snappy.com'
             },
             'sameAs': [
               'https://github.com/ofri-peretz',
               'https://x.com/ofriperetzdev',
               'https://www.linkedin.com/in/ofri-peretz/',
-              'https://dev.to/ofri-peretz'
+              'https://dev.to/ofri-peretz',
+              'https://medium.com/@ofriperetzdev'
             ],
             'knowsAbout': [
               'TypeScript',
+              'JavaScript',
               'ESLint',
-              'Security',
+              'Application Security',
               'React',
               'Node.js',
-              'Engineering Leadership'
+              'Engineering Leadership',
+              'Open Source Software',
+              'AI-Native Development'
+            ]
+          })
+        },
+        // WebSite Schema with SearchAction for sitelinks
+        {
+          type: 'application/ld+json',
+          innerHTML: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            'name': 'Ofri Peretz',
+            'alternateName': 'ofriperetz.dev',
+            'url': 'https://ofriperetz.dev',
+            'description': 'Personal portfolio of Ofri Peretz - Engineering Leader & Open Source Creator',
+            'author': {
+              '@type': 'Person',
+              'name': 'Ofri Peretz'
+            }
+          })
+        },
+        // Organization Schema for Interlace ESLint Ecosystem
+        {
+          type: 'application/ld+json',
+          innerHTML: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'SoftwareApplication',
+            'name': 'Interlace ESLint Ecosystem',
+            'applicationCategory': 'DeveloperApplication',
+            'operatingSystem': 'Cross-platform',
+            'description': 'A collection of 16+ production-ready ESLint plugins with 272 security rules designed for the AI/Agentic era.',
+            'author': {
+              '@type': 'Person',
+              'name': 'Ofri Peretz',
+              'url': 'https://ofriperetz.dev'
+            },
+            'offers': {
+              '@type': 'Offer',
+              'price': '0',
+              'priceCurrency': 'USD'
+            },
+            'url': 'https://github.com/AriPeretz/eslint'
+          })
+        },
+        // FAQPage Schema for rich snippets
+        {
+          type: 'application/ld+json',
+          innerHTML: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            'mainEntity': [
+              {
+                '@type': 'Question',
+                'name': 'What is the Interlace ESLint Ecosystem?',
+                'acceptedAnswer': {
+                  '@type': 'Answer',
+                  'text': 'The Interlace ESLint Ecosystem is a collection of 16+ production-ready ESLint plugins designed for the AI/Agentic era. These plugins feature LLM-optimized error messages that empower both human developers and AI coding assistants to catch and fix security vulnerabilities automatically.'
+                }
+              },
+              {
+                '@type': 'Question',
+                'name': 'Why AI-native ESLint plugins?',
+                'acceptedAnswer': {
+                  '@type': 'Answer',
+                  'text': 'Traditional ESLint error messages are designed for human developers reading them in an IDE. As AI coding assistants become more prevalent, there\'s a need for error messages that are also machine-parseable and provide clear remediation guidance. Our plugins bridge this gap.'
+                }
+              },
+              {
+                '@type': 'Question',
+                'name': 'Which security standards do the plugins cover?',
+                'acceptedAnswer': {
+                  '@type': 'Answer',
+                  'text': 'The plugins provide comprehensive coverage for OWASP Top 10 2021, OWASP Mobile 2024, and framework-specific security patterns for Express, NestJS, Lambda, and more. Each plugin includes detailed documentation with Known False Negatives disclosure.'
+                }
+              },
+              {
+                '@type': 'Question',
+                'name': 'What technologies does Ofri Peretz work with?',
+                'acceptedAnswer': {
+                  '@type': 'Answer',
+                  'text': 'Languages: TypeScript, JavaScript, Node.js. Frameworks: React, Express, NestJS. Backend: Kafka, Redis, Serverless. Cloud: AWS, Docker, Kubernetes. DevEx: ESLint, Nx Monorepos, CLIs.'
+                }
+              }
             ]
           })
         }

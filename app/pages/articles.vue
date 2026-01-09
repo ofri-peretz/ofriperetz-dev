@@ -319,6 +319,33 @@ useSeoMeta({
     '30+ deep-dive articles on security, ESLint plugins & AI-native development.'
 })
 
+// BreadcrumbList schema for rich snippets
+useHead({
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          {
+            '@type': 'ListItem',
+            'position': 1,
+            'name': 'Home',
+            'item': 'https://ofriperetz.dev'
+          },
+          {
+            '@type': 'ListItem',
+            'position': 2,
+            'name': 'Articles',
+            'item': 'https://ofriperetz.dev/articles'
+          }
+        ]
+      })
+    }
+  ]
+})
+
 // TOC items for articles page
 const tocItems = [
   { id: 'articles-header', label: 'Overview' },

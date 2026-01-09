@@ -4,13 +4,12 @@ export default defineEventHandler(async (event) => {
   const _config = useRuntimeConfig()
   const siteUrl = 'https://ofriperetz.dev'
 
-  // Static pages
+  // Static pages (only include pages that actually exist)
   const staticPages = [
     { url: '/', changefreq: 'weekly', priority: 1.0 },
-    { url: '/about', changefreq: 'monthly', priority: 0.8 },
     { url: '/projects', changefreq: 'weekly', priority: 0.8 },
     { url: '/articles', changefreq: 'daily', priority: 0.9 },
-    { url: '/stats', changefreq: 'weekly', priority: 0.6 }
+    { url: '/stats', changefreq: 'weekly', priority: 0.7 }
   ]
 
   const lastmod = new Date().toISOString()
