@@ -28,6 +28,7 @@
   "devDependencies": {
     "@nuxt/eslint": "^1.12.1",
     "eslint": "^9.39.2",
+    "eslint-plugin-import-next": "^2.1.0",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.1"
   },
