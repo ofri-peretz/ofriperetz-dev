@@ -66,15 +66,13 @@ rm -rf .nuxt .output && pnpm nuxt prepare && pnpm build
 
 ## Prevention
 
-Consider updating your build script in `package.json`:
+A `build:clean` script is available in `package.json` for local development:
 
-```json
-{
-  "scripts": {
-    "build:clean": "rm -rf .nuxt .output && nuxt prepare && nuxt build"
-  }
-}
+```bash
+pnpm build:clean
 ```
+
+This script ensures the same build pattern as Vercel (prepare → build) for consistent local builds.
 
 ## Related GitHub Issues & Discussions
 
