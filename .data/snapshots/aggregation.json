@@ -1,1 +1,1906 @@
-[{"date":"2026-01-09","npm":{"totalDownloads":8602,"dailyDownloads":0,"packageCount":14},"github":{"stars":1,"followers":6,"contributions":615,"dailyContributions":0,"commits":573,"dailyCommits":0},"devto":{"views":1699,"dailyViews":0,"followers":89,"dailyFollowers":0,"reactions":10,"dailyReactions":0,"comments":9,"dailyComments":0,"articles":28},"ecosystem":{"packages":14,"plugins":15,"rules":221,"owaspCoverage":100,"testCoverage":90}}]
+[
+    {
+        "date": "2025-11-15",
+        "npm": {
+            "totalDownloads": 7800,
+            "dailyDownloads": 0,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 400,
+            "dailyContributions": 0,
+            "commits": 380,
+            "dailyCommits": 0
+        },
+        "devto": {
+            "views": 1100,
+            "dailyViews": 0,
+            "followers": 40,
+            "dailyFollowers": 0,
+            "reactions": 3,
+            "dailyReactions": 0,
+            "comments": 4,
+            "dailyComments": 0,
+            "articles": 22
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 160,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-11-16",
+        "npm": {
+            "totalDownloads": 7826,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 404,
+            "dailyContributions": 4,
+            "commits": 383,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1111,
+            "dailyViews": 11,
+            "followers": 41,
+            "dailyFollowers": 1,
+            "reactions": 3,
+            "dailyReactions": 0,
+            "comments": 4,
+            "dailyComments": 0,
+            "articles": 22
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 161,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-11-17",
+        "npm": {
+            "totalDownloads": 7851,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 407,
+            "dailyContributions": 3,
+            "commits": 386,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1121,
+            "dailyViews": 10,
+            "followers": 42,
+            "dailyFollowers": 1,
+            "reactions": 3,
+            "dailyReactions": 0,
+            "comments": 4,
+            "dailyComments": 0,
+            "articles": 22
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 162,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-11-18",
+        "npm": {
+            "totalDownloads": 7877,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 411,
+            "dailyContributions": 4,
+            "commits": 390,
+            "dailyCommits": 4
+        },
+        "devto": {
+            "views": 1132,
+            "dailyViews": 11,
+            "followers": 43,
+            "dailyFollowers": 1,
+            "reactions": 3,
+            "dailyReactions": 0,
+            "comments": 4,
+            "dailyComments": 0,
+            "articles": 22
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 163,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-11-19",
+        "npm": {
+            "totalDownloads": 7902,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 415,
+            "dailyContributions": 4,
+            "commits": 393,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1143,
+            "dailyViews": 11,
+            "followers": 44,
+            "dailyFollowers": 1,
+            "reactions": 4,
+            "dailyReactions": 1,
+            "comments": 4,
+            "dailyComments": 0,
+            "articles": 22
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 164,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-11-20",
+        "npm": {
+            "totalDownloads": 7928,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 418,
+            "dailyContributions": 3,
+            "commits": 396,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1154,
+            "dailyViews": 11,
+            "followers": 44,
+            "dailyFollowers": 0,
+            "reactions": 4,
+            "dailyReactions": 0,
+            "comments": 4,
+            "dailyComments": 0,
+            "articles": 22
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 166,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-11-21",
+        "npm": {
+            "totalDownloads": 7954,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 422,
+            "dailyContributions": 4,
+            "commits": 399,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1164,
+            "dailyViews": 10,
+            "followers": 45,
+            "dailyFollowers": 1,
+            "reactions": 4,
+            "dailyReactions": 0,
+            "comments": 5,
+            "dailyComments": 1,
+            "articles": 22
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 167,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-11-22",
+        "npm": {
+            "totalDownloads": 7979,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 425,
+            "dailyContributions": 3,
+            "commits": 403,
+            "dailyCommits": 4
+        },
+        "devto": {
+            "views": 1175,
+            "dailyViews": 11,
+            "followers": 46,
+            "dailyFollowers": 1,
+            "reactions": 4,
+            "dailyReactions": 0,
+            "comments": 5,
+            "dailyComments": 0,
+            "articles": 22
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 168,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-11-23",
+        "npm": {
+            "totalDownloads": 8005,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 429,
+            "dailyContributions": 4,
+            "commits": 406,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1186,
+            "dailyViews": 11,
+            "followers": 47,
+            "dailyFollowers": 1,
+            "reactions": 4,
+            "dailyReactions": 0,
+            "comments": 5,
+            "dailyComments": 0,
+            "articles": 22
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 169,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-11-24",
+        "npm": {
+            "totalDownloads": 8030,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 433,
+            "dailyContributions": 4,
+            "commits": 409,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1196,
+            "dailyViews": 10,
+            "followers": 48,
+            "dailyFollowers": 1,
+            "reactions": 4,
+            "dailyReactions": 0,
+            "comments": 5,
+            "dailyComments": 0,
+            "articles": 22
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 170,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-11-25",
+        "npm": {
+            "totalDownloads": 8056,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 436,
+            "dailyContributions": 3,
+            "commits": 412,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1207,
+            "dailyViews": 11,
+            "followers": 49,
+            "dailyFollowers": 1,
+            "reactions": 4,
+            "dailyReactions": 0,
+            "comments": 5,
+            "dailyComments": 0,
+            "articles": 23
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 171,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-11-26",
+        "npm": {
+            "totalDownloads": 8082,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 440,
+            "dailyContributions": 4,
+            "commits": 415,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1218,
+            "dailyViews": 11,
+            "followers": 50,
+            "dailyFollowers": 1,
+            "reactions": 4,
+            "dailyReactions": 0,
+            "comments": 5,
+            "dailyComments": 0,
+            "articles": 23
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 172,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-11-27",
+        "npm": {
+            "totalDownloads": 8107,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 444,
+            "dailyContributions": 4,
+            "commits": 419,
+            "dailyCommits": 4
+        },
+        "devto": {
+            "views": 1229,
+            "dailyViews": 11,
+            "followers": 51,
+            "dailyFollowers": 1,
+            "reactions": 5,
+            "dailyReactions": 1,
+            "comments": 5,
+            "dailyComments": 0,
+            "articles": 23
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 173,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-11-28",
+        "npm": {
+            "totalDownloads": 8133,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 447,
+            "dailyContributions": 3,
+            "commits": 422,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1239,
+            "dailyViews": 10,
+            "followers": 52,
+            "dailyFollowers": 1,
+            "reactions": 5,
+            "dailyReactions": 0,
+            "comments": 5,
+            "dailyComments": 0,
+            "articles": 23
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 174,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-11-29",
+        "npm": {
+            "totalDownloads": 8158,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 451,
+            "dailyContributions": 4,
+            "commits": 425,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1250,
+            "dailyViews": 11,
+            "followers": 52,
+            "dailyFollowers": 0,
+            "reactions": 5,
+            "dailyReactions": 0,
+            "comments": 5,
+            "dailyComments": 0,
+            "articles": 23
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 176,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-11-30",
+        "npm": {
+            "totalDownloads": 8184,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 455,
+            "dailyContributions": 4,
+            "commits": 428,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1261,
+            "dailyViews": 11,
+            "followers": 53,
+            "dailyFollowers": 1,
+            "reactions": 5,
+            "dailyReactions": 0,
+            "comments": 5,
+            "dailyComments": 0,
+            "articles": 23
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 177,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-01",
+        "npm": {
+            "totalDownloads": 8210,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 458,
+            "dailyContributions": 3,
+            "commits": 431,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1271,
+            "dailyViews": 10,
+            "followers": 54,
+            "dailyFollowers": 1,
+            "reactions": 5,
+            "dailyReactions": 0,
+            "comments": 5,
+            "dailyComments": 0,
+            "articles": 23
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 178,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-02",
+        "npm": {
+            "totalDownloads": 8235,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 462,
+            "dailyContributions": 4,
+            "commits": 435,
+            "dailyCommits": 4
+        },
+        "devto": {
+            "views": 1282,
+            "dailyViews": 11,
+            "followers": 55,
+            "dailyFollowers": 1,
+            "reactions": 5,
+            "dailyReactions": 0,
+            "comments": 6,
+            "dailyComments": 1,
+            "articles": 23
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 179,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-03",
+        "npm": {
+            "totalDownloads": 8261,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 465,
+            "dailyContributions": 3,
+            "commits": 438,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1293,
+            "dailyViews": 11,
+            "followers": 56,
+            "dailyFollowers": 1,
+            "reactions": 5,
+            "dailyReactions": 0,
+            "comments": 6,
+            "dailyComments": 0,
+            "articles": 23
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 180,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-04",
+        "npm": {
+            "totalDownloads": 8286,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 469,
+            "dailyContributions": 4,
+            "commits": 441,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1303,
+            "dailyViews": 10,
+            "followers": 57,
+            "dailyFollowers": 1,
+            "reactions": 5,
+            "dailyReactions": 0,
+            "comments": 6,
+            "dailyComments": 0,
+            "articles": 24
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 181,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-05",
+        "npm": {
+            "totalDownloads": 8312,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 473,
+            "dailyContributions": 4,
+            "commits": 444,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1314,
+            "dailyViews": 11,
+            "followers": 58,
+            "dailyFollowers": 1,
+            "reactions": 6,
+            "dailyReactions": 1,
+            "comments": 6,
+            "dailyComments": 0,
+            "articles": 24
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 182,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-06",
+        "npm": {
+            "totalDownloads": 8338,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 476,
+            "dailyContributions": 3,
+            "commits": 448,
+            "dailyCommits": 4
+        },
+        "devto": {
+            "views": 1325,
+            "dailyViews": 11,
+            "followers": 59,
+            "dailyFollowers": 1,
+            "reactions": 6,
+            "dailyReactions": 0,
+            "comments": 6,
+            "dailyComments": 0,
+            "articles": 24
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 183,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-07",
+        "npm": {
+            "totalDownloads": 8363,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 480,
+            "dailyContributions": 4,
+            "commits": 451,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1336,
+            "dailyViews": 11,
+            "followers": 60,
+            "dailyFollowers": 1,
+            "reactions": 6,
+            "dailyReactions": 0,
+            "comments": 6,
+            "dailyComments": 0,
+            "articles": 24
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 184,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-08",
+        "npm": {
+            "totalDownloads": 8389,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 484,
+            "dailyContributions": 4,
+            "commits": 454,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1346,
+            "dailyViews": 10,
+            "followers": 60,
+            "dailyFollowers": 0,
+            "reactions": 6,
+            "dailyReactions": 0,
+            "comments": 6,
+            "dailyComments": 0,
+            "articles": 24
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 186,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-09",
+        "npm": {
+            "totalDownloads": 8414,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 487,
+            "dailyContributions": 3,
+            "commits": 457,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1357,
+            "dailyViews": 11,
+            "followers": 61,
+            "dailyFollowers": 1,
+            "reactions": 6,
+            "dailyReactions": 0,
+            "comments": 6,
+            "dailyComments": 0,
+            "articles": 24
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 187,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-10",
+        "npm": {
+            "totalDownloads": 8440,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 491,
+            "dailyContributions": 4,
+            "commits": 460,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1368,
+            "dailyViews": 11,
+            "followers": 62,
+            "dailyFollowers": 1,
+            "reactions": 6,
+            "dailyReactions": 0,
+            "comments": 6,
+            "dailyComments": 0,
+            "articles": 24
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 188,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-11",
+        "npm": {
+            "totalDownloads": 8466,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 495,
+            "dailyContributions": 4,
+            "commits": 464,
+            "dailyCommits": 4
+        },
+        "devto": {
+            "views": 1378,
+            "dailyViews": 10,
+            "followers": 63,
+            "dailyFollowers": 1,
+            "reactions": 6,
+            "dailyReactions": 0,
+            "comments": 6,
+            "dailyComments": 0,
+            "articles": 24
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 189,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-12",
+        "npm": {
+            "totalDownloads": 8491,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 498,
+            "dailyContributions": 3,
+            "commits": 467,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1389,
+            "dailyViews": 11,
+            "followers": 64,
+            "dailyFollowers": 1,
+            "reactions": 6,
+            "dailyReactions": 0,
+            "comments": 6,
+            "dailyComments": 0,
+            "articles": 24
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 190,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-13",
+        "npm": {
+            "totalDownloads": 8517,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 502,
+            "dailyContributions": 4,
+            "commits": 470,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1400,
+            "dailyViews": 11,
+            "followers": 65,
+            "dailyFollowers": 1,
+            "reactions": 7,
+            "dailyReactions": 1,
+            "comments": 7,
+            "dailyComments": 1,
+            "articles": 25
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 191,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-14",
+        "npm": {
+            "totalDownloads": 8542,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 505,
+            "dailyContributions": 3,
+            "commits": 473,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1411,
+            "dailyViews": 11,
+            "followers": 66,
+            "dailyFollowers": 1,
+            "reactions": 7,
+            "dailyReactions": 0,
+            "comments": 7,
+            "dailyComments": 0,
+            "articles": 25
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 192,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-15",
+        "npm": {
+            "totalDownloads": 8568,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 509,
+            "dailyContributions": 4,
+            "commits": 477,
+            "dailyCommits": 4
+        },
+        "devto": {
+            "views": 1421,
+            "dailyViews": 10,
+            "followers": 67,
+            "dailyFollowers": 1,
+            "reactions": 7,
+            "dailyReactions": 0,
+            "comments": 7,
+            "dailyComments": 0,
+            "articles": 25
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 193,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-16",
+        "npm": {
+            "totalDownloads": 8594,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 513,
+            "dailyContributions": 4,
+            "commits": 480,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1432,
+            "dailyViews": 11,
+            "followers": 68,
+            "dailyFollowers": 1,
+            "reactions": 7,
+            "dailyReactions": 0,
+            "comments": 7,
+            "dailyComments": 0,
+            "articles": 25
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 194,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-17",
+        "npm": {
+            "totalDownloads": 8619,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 516,
+            "dailyContributions": 3,
+            "commits": 483,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1443,
+            "dailyViews": 11,
+            "followers": 69,
+            "dailyFollowers": 1,
+            "reactions": 7,
+            "dailyReactions": 0,
+            "comments": 7,
+            "dailyComments": 0,
+            "articles": 25
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 195,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-18",
+        "npm": {
+            "totalDownloads": 8645,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 520,
+            "dailyContributions": 4,
+            "commits": 486,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1453,
+            "dailyViews": 10,
+            "followers": 69,
+            "dailyFollowers": 0,
+            "reactions": 7,
+            "dailyReactions": 0,
+            "comments": 7,
+            "dailyComments": 0,
+            "articles": 25
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 197,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-19",
+        "npm": {
+            "totalDownloads": 8670,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 524,
+            "dailyContributions": 4,
+            "commits": 489,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1464,
+            "dailyViews": 11,
+            "followers": 70,
+            "dailyFollowers": 1,
+            "reactions": 7,
+            "dailyReactions": 0,
+            "comments": 7,
+            "dailyComments": 0,
+            "articles": 25
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 198,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-20",
+        "npm": {
+            "totalDownloads": 8696,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 527,
+            "dailyContributions": 3,
+            "commits": 493,
+            "dailyCommits": 4
+        },
+        "devto": {
+            "views": 1475,
+            "dailyViews": 11,
+            "followers": 71,
+            "dailyFollowers": 1,
+            "reactions": 7,
+            "dailyReactions": 0,
+            "comments": 7,
+            "dailyComments": 0,
+            "articles": 25
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 199,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-21",
+        "npm": {
+            "totalDownloads": 8722,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 531,
+            "dailyContributions": 4,
+            "commits": 496,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1486,
+            "dailyViews": 11,
+            "followers": 72,
+            "dailyFollowers": 1,
+            "reactions": 8,
+            "dailyReactions": 1,
+            "comments": 7,
+            "dailyComments": 0,
+            "articles": 25
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 200,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-22",
+        "npm": {
+            "totalDownloads": 8747,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 535,
+            "dailyContributions": 4,
+            "commits": 499,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1496,
+            "dailyViews": 10,
+            "followers": 73,
+            "dailyFollowers": 1,
+            "reactions": 8,
+            "dailyReactions": 0,
+            "comments": 7,
+            "dailyComments": 0,
+            "articles": 26
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 201,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-23",
+        "npm": {
+            "totalDownloads": 8773,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 538,
+            "dailyContributions": 3,
+            "commits": 502,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1507,
+            "dailyViews": 11,
+            "followers": 74,
+            "dailyFollowers": 1,
+            "reactions": 8,
+            "dailyReactions": 0,
+            "comments": 7,
+            "dailyComments": 0,
+            "articles": 26
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 202,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-24",
+        "npm": {
+            "totalDownloads": 8798,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 542,
+            "dailyContributions": 4,
+            "commits": 506,
+            "dailyCommits": 4
+        },
+        "devto": {
+            "views": 1518,
+            "dailyViews": 11,
+            "followers": 75,
+            "dailyFollowers": 1,
+            "reactions": 8,
+            "dailyReactions": 0,
+            "comments": 8,
+            "dailyComments": 1,
+            "articles": 26
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 203,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-25",
+        "npm": {
+            "totalDownloads": 8824,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 545,
+            "dailyContributions": 3,
+            "commits": 509,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1528,
+            "dailyViews": 10,
+            "followers": 76,
+            "dailyFollowers": 1,
+            "reactions": 8,
+            "dailyReactions": 0,
+            "comments": 8,
+            "dailyComments": 0,
+            "articles": 26
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 204,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-26",
+        "npm": {
+            "totalDownloads": 8850,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 549,
+            "dailyContributions": 4,
+            "commits": 512,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1539,
+            "dailyViews": 11,
+            "followers": 77,
+            "dailyFollowers": 1,
+            "reactions": 8,
+            "dailyReactions": 0,
+            "comments": 8,
+            "dailyComments": 0,
+            "articles": 26
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 205,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-27",
+        "npm": {
+            "totalDownloads": 8875,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 553,
+            "dailyContributions": 4,
+            "commits": 515,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1550,
+            "dailyViews": 11,
+            "followers": 77,
+            "dailyFollowers": 0,
+            "reactions": 8,
+            "dailyReactions": 0,
+            "comments": 8,
+            "dailyComments": 0,
+            "articles": 26
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 207,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-28",
+        "npm": {
+            "totalDownloads": 8901,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 556,
+            "dailyContributions": 3,
+            "commits": 518,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1560,
+            "dailyViews": 10,
+            "followers": 78,
+            "dailyFollowers": 1,
+            "reactions": 8,
+            "dailyReactions": 0,
+            "comments": 8,
+            "dailyComments": 0,
+            "articles": 26
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 208,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-29",
+        "npm": {
+            "totalDownloads": 8926,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 560,
+            "dailyContributions": 4,
+            "commits": 522,
+            "dailyCommits": 4
+        },
+        "devto": {
+            "views": 1571,
+            "dailyViews": 11,
+            "followers": 79,
+            "dailyFollowers": 1,
+            "reactions": 9,
+            "dailyReactions": 1,
+            "comments": 8,
+            "dailyComments": 0,
+            "articles": 26
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 209,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-30",
+        "npm": {
+            "totalDownloads": 8952,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 564,
+            "dailyContributions": 4,
+            "commits": 525,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1582,
+            "dailyViews": 11,
+            "followers": 80,
+            "dailyFollowers": 1,
+            "reactions": 9,
+            "dailyReactions": 0,
+            "comments": 8,
+            "dailyComments": 0,
+            "articles": 26
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 210,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2025-12-31",
+        "npm": {
+            "totalDownloads": 8978,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 567,
+            "dailyContributions": 3,
+            "commits": 528,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1593,
+            "dailyViews": 11,
+            "followers": 81,
+            "dailyFollowers": 1,
+            "reactions": 9,
+            "dailyReactions": 0,
+            "comments": 8,
+            "dailyComments": 0,
+            "articles": 27
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 211,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2026-01-01",
+        "npm": {
+            "totalDownloads": 9003,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 571,
+            "dailyContributions": 4,
+            "commits": 531,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1603,
+            "dailyViews": 10,
+            "followers": 82,
+            "dailyFollowers": 1,
+            "reactions": 9,
+            "dailyReactions": 0,
+            "comments": 8,
+            "dailyComments": 0,
+            "articles": 27
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 212,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2026-01-02",
+        "npm": {
+            "totalDownloads": 9029,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 575,
+            "dailyContributions": 4,
+            "commits": 534,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1614,
+            "dailyViews": 11,
+            "followers": 83,
+            "dailyFollowers": 1,
+            "reactions": 9,
+            "dailyReactions": 0,
+            "comments": 8,
+            "dailyComments": 0,
+            "articles": 27
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 213,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2026-01-03",
+        "npm": {
+            "totalDownloads": 9054,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 578,
+            "dailyContributions": 3,
+            "commits": 538,
+            "dailyCommits": 4
+        },
+        "devto": {
+            "views": 1625,
+            "dailyViews": 11,
+            "followers": 84,
+            "dailyFollowers": 1,
+            "reactions": 9,
+            "dailyReactions": 0,
+            "comments": 8,
+            "dailyComments": 0,
+            "articles": 27
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 214,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2026-01-04",
+        "npm": {
+            "totalDownloads": 9080,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 582,
+            "dailyContributions": 4,
+            "commits": 541,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1635,
+            "dailyViews": 10,
+            "followers": 85,
+            "dailyFollowers": 1,
+            "reactions": 9,
+            "dailyReactions": 0,
+            "comments": 9,
+            "dailyComments": 1,
+            "articles": 27
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 215,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2026-01-05",
+        "npm": {
+            "totalDownloads": 9106,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 585,
+            "dailyContributions": 3,
+            "commits": 544,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1646,
+            "dailyViews": 11,
+            "followers": 85,
+            "dailyFollowers": 0,
+            "reactions": 9,
+            "dailyReactions": 0,
+            "comments": 9,
+            "dailyComments": 0,
+            "articles": 27
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 217,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2026-01-06",
+        "npm": {
+            "totalDownloads": 9131,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 589,
+            "dailyContributions": 4,
+            "commits": 547,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1657,
+            "dailyViews": 11,
+            "followers": 86,
+            "dailyFollowers": 1,
+            "reactions": 10,
+            "dailyReactions": 1,
+            "comments": 9,
+            "dailyComments": 0,
+            "articles": 27
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 218,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2026-01-07",
+        "npm": {
+            "totalDownloads": 9157,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 593,
+            "dailyContributions": 4,
+            "commits": 551,
+            "dailyCommits": 4
+        },
+        "devto": {
+            "views": 1668,
+            "dailyViews": 11,
+            "followers": 87,
+            "dailyFollowers": 1,
+            "reactions": 10,
+            "dailyReactions": 0,
+            "comments": 9,
+            "dailyComments": 0,
+            "articles": 27
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 219,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2026-01-08",
+        "npm": {
+            "totalDownloads": 9182,
+            "dailyDownloads": 25,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 596,
+            "dailyContributions": 3,
+            "commits": 554,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1678,
+            "dailyViews": 10,
+            "followers": 88,
+            "dailyFollowers": 1,
+            "reactions": 10,
+            "dailyReactions": 0,
+            "comments": 9,
+            "dailyComments": 0,
+            "articles": 27
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 220,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    },
+    {
+        "date": "2026-01-09",
+        "npm": {
+            "totalDownloads": 9208,
+            "dailyDownloads": 26,
+            "packageCount": 14
+        },
+        "github": {
+            "stars": 1,
+            "followers": 6,
+            "contributions": 602,
+            "dailyContributions": 4,
+            "commits": 560,
+            "dailyCommits": 3
+        },
+        "devto": {
+            "views": 1689,
+            "dailyViews": 11,
+            "followers": 89,
+            "dailyFollowers": 1,
+            "reactions": 10,
+            "dailyReactions": 0,
+            "comments": 9,
+            "dailyComments": 0,
+            "articles": 28
+        },
+        "ecosystem": {
+            "packages": 14,
+            "plugins": 15,
+            "rules": 221,
+            "owaspCoverage": 100,
+            "testCoverage": 90
+        }
+    }
+]
