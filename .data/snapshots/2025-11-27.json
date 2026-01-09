@@ -1,33 +1,33 @@
 {
-  "date": "2026-01-09",
+  "date": "2025-11-27",
   "npm": {
-    "totalDownloads": 9208,
-    "dailyDownloads": 26,
+    "totalDownloads": 8107,
+    "dailyDownloads": 25,
     "packageCount": 14
   },
   "github": {
     "stars": 1,
     "followers": 6,
-    "contributions": 600,
+    "contributions": 444,
     "dailyContributions": 4,
-    "commits": 557,
-    "dailyCommits": 3
+    "commits": 419,
+    "dailyCommits": 4
   },
   "devto": {
-    "views": 1689,
+    "views": 1229,
     "dailyViews": 11,
-    "followers": 89,
+    "followers": 51,
     "dailyFollowers": 1,
-    "reactions": 10,
-    "dailyReactions": 0,
-    "comments": 9,
+    "reactions": 5,
+    "dailyReactions": 1,
+    "comments": 5,
     "dailyComments": 0,
-    "articles": 28
+    "articles": 23
   },
   "ecosystem": {
     "packages": 14,
     "plugins": 15,
-    "rules": 221,
+    "rules": 173,
     "owaspCoverage": 100,
     "testCoverage": 90
   }
