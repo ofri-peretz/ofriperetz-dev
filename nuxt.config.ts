@@ -271,10 +271,12 @@ export default defineNuxtConfig({
       cssMinify: true,
       // Disable sourcemaps in production for smaller bundles
       sourcemap: false,
-      // Using esbuild for minification (default in Vite)
-      // Note: If TDZ errors occur ("Cannot access 'X' before initialization"), 
-      // set minify: false as a fallback - Vercel's edge compression still provides good results
-      minify: 'esbuild',
+      // Minification disabled due to TDZ error: "Cannot access 'ne' before initialization"
+      // This is caused by variable shadowing between Vue runtime utilities and MDC parser
+      // when using aggressive manualChunks. Vercel's edge Brotli/Gzip compression still
+      // provides good optimization (~15% bundle size penalty but deterministic initialization)
+      // See: deployment_integrity.md Section 1.8 (Variable Shadowing/Collision)
+      minify: false,
       rollupOptions: {
         output: {
           // Improved chunking strategy for better code-splitting
