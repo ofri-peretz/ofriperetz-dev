@@ -242,7 +242,7 @@ const aggregatedData = computed(() => {
       rawData.forEach((d) => {
         const weekKey = getWeekNumber(new Date(d.date))
         // Keep the latest value for each week
-        if (!weekMap[weekKey] || d.date > weekMap[weekKey].date) {
+        if (!weekMap[weekKey] || d.date > weekMap[weekKey]!.date) {
           weekMap[weekKey] = { date: d.date, value: d.value }
         }
       })
@@ -260,7 +260,7 @@ const aggregatedData = computed(() => {
       rawData.forEach((d) => {
         const monthKey = getMonthKey(new Date(d.date))
         // Keep the latest value for each month
-        if (!monthMap[monthKey] || d.date > monthMap[monthKey || ''].date) {
+        if (!monthMap[monthKey] || d.date > monthMap[monthKey]!.date) {
           monthMap[monthKey] = { date: d.date, value: d.value }
         }
       })
@@ -309,7 +309,7 @@ const groupedMetrics = computed(() => {
   const groups: Record<string, typeof metricOptions> = {}
   metricOptions.forEach((m) => {
     if (!groups[m.category]) groups[m.category] = []
-    groups[m.category].push(m)
+    groups[m.category]!.push(m)
   })
   return groups
 })
