@@ -233,17 +233,16 @@ const aggregatedData = computed(() => {
 
   switch (timeAggregation.value) {
     case 'daily': {
-      // Show absolute value for each day (all data points)
+      // Show absolute value for each day (full granularity)
       return [...rawData].sort((a, b) => a.date.localeCompare(b.date))
     }
 
     case 'weekly': {
-      // Group by week, show the latest value of each week
+      // Group by week, show value at end of each week
       const weekMap: Record<string, { value: number, date: string }> = {}
 
       rawData.forEach((d) => {
         const weekKey = getWeekNumber(new Date(d.date))
-        // Keep the latest value for each week
         if (!weekMap[weekKey] || d.date > weekMap[weekKey]!.date) {
           weekMap[weekKey] = { value: d.value, date: d.date }
         }
@@ -258,12 +257,11 @@ const aggregatedData = computed(() => {
     }
 
     case 'monthly': {
-      // Group by month, show the latest value of each month
+      // Group by month, show value at end of each month
       const monthMap: Record<string, { value: number, date: string }> = {}
 
       rawData.forEach((d) => {
         const monthKey = getMonthKey(new Date(d.date))
-        // Keep the latest value for each month
         if (!monthMap[monthKey] || d.date > monthMap[monthKey]!.date) {
           monthMap[monthKey] = { value: d.value, date: d.date }
         }
@@ -278,7 +276,7 @@ const aggregatedData = computed(() => {
     }
 
     case 'cumulative': {
-      // Same as weekly - show progression over time
+      // Same as weekly - absolute value progression
       const weekMap: Record<string, { value: number, date: string }> = {}
 
       rawData.forEach((d) => {
