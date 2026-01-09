@@ -1,18 +1,24 @@
 <script setup lang="ts">
 interface Snapshot {
   date: string
-  npm: { totalDownloads: number, packageCount: number }
+  npm: { totalDownloads: number, dailyDownloads?: number, packageCount: number }
   github: {
     stars: number
     followers: number
     contributions?: number
+    dailyContributions?: number
     commits?: number
+    dailyCommits?: number
   }
   devto: {
     views: number
+    dailyViews?: number
     followers: number
+    dailyFollowers?: number
     reactions: number
+    dailyReactions?: number
     comments: number
+    dailyComments?: number
     articles?: number
   }
   ecosystem?: {
@@ -36,16 +42,18 @@ const history = ref<Snapshot[]>([])
 const historyLoading = ref(true)
 
 // Read initial values from URL or default
-const selectedMetric = ref<string>((route.query.metric as string) || 'stars')
-const timeAggregation = ref<'daily' | 'weekly' | 'monthly' | 'cumulative'>(
-  (route.query.agg as 'daily' | 'weekly' | 'monthly' | 'cumulative')
-  || 'weekly'
+const selectedMetric = ref<string>((route.query.metric as string) || 'downloads')
+const cumulativeGranularity = ref<'weekly' | 'monthly'>(
+  (route.query.cumulative as 'weekly' | 'monthly') || 'weekly'
+)
+const periodGranularity = ref<'daily' | 'weekly' | 'monthly'>(
+  (route.query.period as 'daily' | 'weekly' | 'monthly') || 'weekly'
 )
 
 // Sync changes to URL
-watch([selectedMetric, timeAggregation], ([metric, agg]) => {
+watch([selectedMetric, cumulativeGranularity, periodGranularity], ([metric, cumulative, period]) => {
   router.replace({
-    query: { ...route.query, metric, agg }
+    query: { ...route.query, metric, cumulative, period }
   })
 })
 
@@ -64,38 +72,13 @@ onMounted(async () => {
 
 // All available metrics with categories
 const metricOptions = [
-  // North Star
-  {
-    key: 'stars',
-    label: '⭐ GitHub Stars',
-    shortLabel: 'Stars',
-    color: 'from-yellow-500 to-orange-400',
-    category: 'North Star',
-    description: 'Peer-recognized technical value'
-  },
-  // Effort (Leading Indicators)
-  {
-    key: 'contributions',
-    label: '🔨 Contributions',
-    shortLabel: 'Contributions',
-    color: 'from-orange-500 to-orange-400',
-    category: 'Effort',
-    description: 'Total GitHub activity (commits, PRs, issues, reviews)'
-  },
-  {
-    key: 'commits',
-    label: '✅ Commits',
-    shortLabel: 'Commits',
-    color: 'from-teal-500 to-teal-400',
-    category: 'Effort',
-    description: 'Code commits this year'
-  },
-  // Exposure
+  // Exposure (most commonly growing metrics first)
   {
     key: 'downloads',
     label: '📦 NPM Downloads',
     shortLabel: 'Downloads',
     color: 'from-primary-500 to-primary-400',
+    bgColor: 'bg-primary-500',
     category: 'Exposure',
     description: 'Package adoption and usage'
   },
@@ -104,14 +87,46 @@ const metricOptions = [
     label: '👁️ Total Views',
     shortLabel: 'Views',
     color: 'from-cyan-500 to-cyan-400',
+    bgColor: 'bg-cyan-500',
     category: 'Exposure',
     description: 'Article page views on Dev.to'
   },
+  // Effort (Leading Indicators)
+  {
+    key: 'contributions',
+    label: '🔨 Contributions',
+    shortLabel: 'Contributions',
+    color: 'from-orange-500 to-orange-400',
+    bgColor: 'bg-orange-500',
+    category: 'Effort',
+    description: 'Total GitHub activity (commits, PRs, issues, reviews)'
+  },
+  {
+    key: 'commits',
+    label: '✅ Commits',
+    shortLabel: 'Commits',
+    color: 'from-teal-500 to-teal-400',
+    bgColor: 'bg-teal-500',
+    category: 'Effort',
+    description: 'Code commits this year'
+  },
+  // North Star
+  {
+    key: 'stars',
+    label: '⭐ GitHub Stars',
+    shortLabel: 'Stars',
+    color: 'from-yellow-500 to-orange-400',
+    bgColor: 'bg-yellow-500',
+    category: 'North Star',
+    description: 'Peer-recognized technical value'
+  },
+  // Followers
   {
     key: 'followers',
     label: '👥 Followers',
     shortLabel: 'Followers',
     color: 'from-purple-500 to-purple-400',
+    bgColor: 'bg-purple-500',
     category: 'Followers',
     description: 'Combined GitHub + Dev.to followers'
   },
@@ -121,6 +136,7 @@ const metricOptions = [
     label: '💬 Reactions',
     shortLabel: 'Reactions',
     color: 'from-red-500 to-red-400',
+    bgColor: 'bg-red-500',
     category: 'Engagement',
     description: 'Dev.to likes and reactions'
   },
@@ -129,6 +145,7 @@ const metricOptions = [
     label: '💭 Comments',
     shortLabel: 'Comments',
     color: 'from-blue-500 to-blue-400',
+    bgColor: 'bg-blue-500',
     category: 'Engagement',
     description: 'Community discussion'
   },
@@ -138,14 +155,17 @@ const metricOptions = [
     label: '📝 Articles',
     shortLabel: 'Articles',
     color: 'from-green-500 to-green-400',
+    bgColor: 'bg-green-500',
     category: 'Content',
     description: 'Technical articles published'
   },
+  // Ecosystem
   {
     key: 'packages',
     label: '🔧 Packages',
     shortLabel: 'Packages',
     color: 'from-indigo-500 to-indigo-400',
+    bgColor: 'bg-indigo-500',
     category: 'Ecosystem',
     description: 'npm packages published'
   },
@@ -154,17 +174,17 @@ const metricOptions = [
     label: '🛡️ Rules',
     shortLabel: 'Rules',
     color: 'from-emerald-500 to-emerald-400',
+    bgColor: 'bg-emerald-500',
     category: 'Ecosystem',
     description: 'ESLint security rules'
   }
 ]
 
-// Time aggregation options
-const aggregationOptions = [
+// Period granularity options
+const periodOptions = [
   { key: 'daily' as const, label: 'Daily' },
   { key: 'weekly' as const, label: 'Weekly' },
-  { key: 'monthly' as const, label: 'Monthly' },
-  { key: 'cumulative' as const, label: 'Cumulative' }
+  { key: 'monthly' as const, label: 'Monthly' }
 ]
 
 // Get current metric config - guaranteed to exist
@@ -203,7 +223,7 @@ const getMetricValue = (snapshot: Snapshot, metric: string): number => {
   }
 }
 
-// Get ISO week number
+// Get ISO week number and date range
 const getWeekNumber = (date: Date): string => {
   const d = new Date(
     Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
@@ -217,13 +237,46 @@ const getWeekNumber = (date: Date): string => {
   return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`
 }
 
+// Get week start date from week key
+const getWeekStartDate = (weekKey: string): Date => {
+  const [year, week] = weekKey.split('-W').map(Number)
+  const jan4 = new Date(Date.UTC(year!, 0, 4))
+  const weekStart = new Date(jan4)
+  weekStart.setUTCDate(jan4.getUTCDate() - (jan4.getUTCDay() || 7) + 1 + (week! - 1) * 7)
+  return weekStart
+}
+
+// Format week range for display
+const formatWeekRange = (weekKey: string): string => {
+  const start = getWeekStartDate(weekKey)
+  const end = new Date(start)
+  end.setUTCDate(start.getUTCDate() + 6)
+  
+  const formatDate = (d: Date) => {
+    const month = d.toLocaleDateString('en-US', { month: 'short' })
+    const day = d.getUTCDate()
+    return `${month} ${day}`
+  }
+  
+  return `${formatDate(start)} - ${formatDate(end)}`
+}
+
 // Get month key
 const getMonthKey = (date: Date): string => {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
 }
 
-// Aggregate data based on time selection
-const aggregatedData = computed(() => {
+// Format month for display
+const formatMonth = (monthKey: string): string => {
+  const [year, month] = monthKey.split('-')
+  const date = new Date(Number(year), Number(month) - 1, 1)
+  return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+}
+
+// ============================================
+// CUMULATIVE DATA (always growing over time)
+// ============================================
+const cumulativeData = computed(() => {
   const rawData = history.value.map(snapshot => ({
     date: snapshot.date,
     value: getMetricValue(snapshot, selectedMetric.value)
@@ -231,77 +284,104 @@ const aggregatedData = computed(() => {
 
   if (rawData.length === 0) return []
 
-  switch (timeAggregation.value) {
-    case 'daily': {
-      // Show absolute value for each day (full granularity)
-      return [...rawData].sort((a, b) => a.date.localeCompare(b.date))
-    }
+  // Group by granularity and show last value of each period
+  if (cumulativeGranularity.value === 'weekly') {
+    const weekMap: Record<string, { value: number, date: string }> = {}
 
-    case 'weekly': {
-      // Group by week, show value at end of each week
-      const weekMap: Record<string, { value: number, date: string }> = {}
+    rawData.forEach((d) => {
+      const weekKey = getWeekNumber(new Date(d.date))
+      if (!weekMap[weekKey] || d.date > weekMap[weekKey]!.date) {
+        weekMap[weekKey] = { value: d.value, date: d.date }
+      }
+    })
 
-      rawData.forEach((d) => {
-        const weekKey = getWeekNumber(new Date(d.date))
-        if (!weekMap[weekKey] || d.date > weekMap[weekKey]!.date) {
-          weekMap[weekKey] = { value: d.value, date: d.date }
-        }
-      })
+    return Object.entries(weekMap)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([weekLabel, data]) => ({
+        date: weekLabel,
+        value: data.value
+      }))
+  } else {
+    // Monthly
+    const monthMap: Record<string, { value: number, date: string }> = {}
 
-      return Object.entries(weekMap)
-        .sort(([a], [b]) => a.localeCompare(b))
-        .map(([weekLabel, data]) => ({
-          date: weekLabel,
-          value: data.value
-        }))
-    }
+    rawData.forEach((d) => {
+      const monthKey = getMonthKey(new Date(d.date))
+      if (!monthMap[monthKey] || d.date > monthMap[monthKey]!.date) {
+        monthMap[monthKey] = { value: d.value, date: d.date }
+      }
+    })
 
-    case 'monthly': {
-      // Group by month, show value at end of each month
-      const monthMap: Record<string, { value: number, date: string }> = {}
-
-      rawData.forEach((d) => {
-        const monthKey = getMonthKey(new Date(d.date))
-        if (!monthMap[monthKey] || d.date > monthMap[monthKey]!.date) {
-          monthMap[monthKey] = { value: d.value, date: d.date }
-        }
-      })
-
-      return Object.entries(monthMap)
-        .sort(([a], [b]) => a.localeCompare(b))
-        .map(([monthLabel, data]) => ({
-          date: monthLabel,
-          value: data.value
-        }))
-    }
-
-    case 'cumulative': {
-      // Same as weekly - absolute value progression
-      const weekMap: Record<string, { value: number, date: string }> = {}
-
-      rawData.forEach((d) => {
-        const weekKey = getWeekNumber(new Date(d.date))
-        if (!weekMap[weekKey] || d.date > weekMap[weekKey]!.date) {
-          weekMap[weekKey] = { value: d.value, date: d.date }
-        }
-      })
-
-      return Object.entries(weekMap)
-        .sort(([a], [b]) => a.localeCompare(b))
-        .map(([weekLabel, data]) => ({
-          date: weekLabel,
-          value: data.value
-        }))
-    }
-
-    default:
-      return rawData
+    return Object.entries(monthMap)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([monthLabel, data]) => ({
+        date: monthLabel,
+        value: data.value
+      }))
   }
 })
 
-// Get max value for scaling
-const maxValue = computed(() =>
-  Math.max(...aggregatedData.value.map(d => d.value), 1)
+// ============================================
+// DELTA DATA (varies over time periods)
+// ============================================
+const deltaData = computed(() => {
+  const rawData = history.value
+    .map(snapshot => ({
+      date: snapshot.date,
+      value: getMetricValue(snapshot, selectedMetric.value)
+    }))
+    .sort((a, b) => a.date.localeCompare(b.date))
+
+  if (rawData.length < 2) return []
+
+  // Calculate deltas between consecutive snapshots
+  const deltas: { date: string, value: number }[] = []
+
+  for (let i = 1; i < rawData.length; i++) {
+    const delta = Math.max(0, rawData[i]!.value - rawData[i - 1]!.value)
+    deltas.push({ date: rawData[i]!.date, value: delta })
+  }
+
+  // Group based on granularity
+  switch (periodGranularity.value) {
+    case 'daily': {
+      return deltas
+    }
+
+    case 'weekly': {
+      const weekMap: Record<string, number> = {}
+      deltas.forEach((d) => {
+        const weekKey = getWeekNumber(new Date(d.date))
+        weekMap[weekKey] = (weekMap[weekKey] || 0) + d.value
+      })
+      return Object.entries(weekMap)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([label, value]) => ({ date: label, value }))
+    }
+
+    case 'monthly': {
+      const monthMap: Record<string, number> = {}
+      deltas.forEach((d) => {
+        const monthKey = getMonthKey(new Date(d.date))
+        monthMap[monthKey] = (monthMap[monthKey] || 0) + d.value
+      })
+      return Object.entries(monthMap)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([label, value]) => ({ date: label, value }))
+    }
+
+    default:
+      return deltas
+  }
+})
+
+// Get max values for scaling
+const cumulativeMax = computed(() =>
+  Math.max(...cumulativeData.value.map(d => d.value), 1)
+)
+
+const deltaMax = computed(() =>
+  Math.max(...deltaData.value.map(d => d.value), 1)
 )
 
 // Format numbers
@@ -311,14 +391,18 @@ const formatNumber = (num: number) => {
   return num.toString()
 }
 
-// Calculate growth
-const growth = computed(() => {
-  if (aggregatedData.value.length < 2) return null
-  const first = aggregatedData.value[0]?.value ?? 0
-  const last
-    = aggregatedData.value[aggregatedData.value.length - 1]?.value ?? 0
-  if (first === 0) return null
-  return (((last - first) / first) * 100).toFixed(1)
+// Calculate total growth percentage
+const totalGrowth = computed(() => {
+  if (cumulativeData.value.length < 2) return null
+  const first = cumulativeData.value[0]?.value ?? 0
+  const last = cumulativeData.value[cumulativeData.value.length - 1]?.value ?? 0
+  if (first === 0) return last > 0 ? '+∞' : null
+  return ((last - first) / first * 100).toFixed(0)
+})
+
+// Calculate total delta sum for the period
+const totalDeltaSum = computed(() => {
+  return deltaData.value.reduce((sum, d) => sum + d.value, 0)
 })
 
 // Group metrics by category for the selector
@@ -346,25 +430,6 @@ const groupedMetrics = computed(() => {
             <h3 class="font-semibold text-gray-900 dark:text-white">
               Metrics Over Time
             </h3>
-          </div>
-
-          <!-- Time Aggregation Toggle - scrollable on mobile -->
-          <div
-            class="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-x-auto text-xs scrollbar-hide"
-          >
-            <button
-              v-for="agg in aggregationOptions"
-              :key="agg.key"
-              :class="[
-                'px-3 py-1.5 transition-colors',
-                timeAggregation === agg.key
-                  ? 'bg-primary-500 text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
-              ]"
-              @click="timeAggregation = agg.key"
-            >
-              {{ agg.label }}
-            </button>
           </div>
         </div>
 
@@ -404,7 +469,7 @@ const groupedMetrics = computed(() => {
     <!-- Loading State -->
     <div
       v-if="historyLoading"
-      class="h-48 flex items-center justify-center"
+      class="h-80 flex items-center justify-center"
     >
       <UIcon
         name="i-lucide-loader-2"
@@ -414,8 +479,8 @@ const groupedMetrics = computed(() => {
 
     <!-- No Data State -->
     <div
-      v-else-if="aggregatedData.length === 0"
-      class="h-48 flex flex-col items-center justify-center text-gray-500"
+      v-else-if="history.length === 0"
+      class="h-80 flex flex-col items-center justify-center text-gray-500"
     >
       <UIcon
         name="i-lucide-calendar-x"
@@ -429,84 +494,230 @@ const groupedMetrics = computed(() => {
       </p>
     </div>
 
-    <!-- Chart -->
-    <div v-else>
-      <!-- Metric Info & Growth Badge -->
-      <div class="mb-4 flex items-center justify-between flex-wrap gap-2">
-        <div class="flex items-center gap-2">
-          <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{
-            currentMetric.label
-          }}</span>
-          <span
-            class="text-xs text-gray-400 dark:text-gray-500 hidden sm:inline"
-          >{{ currentMetric.description }}</span>
-        </div>
-        <div
-          v-if="growth"
-          class="flex items-center gap-2"
-        >
-          <span class="text-xs text-gray-500 dark:text-gray-400">Growth:</span>
-          <span
-            :class="[
-              'px-2 py-0.5 rounded-full text-xs font-medium',
-              parseFloat(growth) >= 0
-                ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
-                : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400'
-            ]"
-          >
-            {{ parseFloat(growth) >= 0 ? "+" : "" }}{{ growth }}%
-          </span>
-        </div>
-      </div>
+    <!-- Two Charts: Cumulative + Delta -->
+    <div
+      v-else
+      class="space-y-8"
+    >
+      <!-- ===== CUMULATIVE GROWTH CHART ===== -->
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <UIcon
+              name="i-lucide-trending-up"
+              class="w-4 h-4 text-green-500"
+            />
+            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Cumulative Growth
+            </span>
+            <span class="text-xs text-gray-400 dark:text-gray-500 hidden sm:inline">
+              Total {{ currentMetric.shortLabel.toLowerCase() }} over time
+            </span>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <!-- Growth percentage -->
+            <div
+              v-if="totalGrowth !== null"
+              class="flex items-center gap-2"
+            >
+              <span
+                :class="[
+                  'px-2 py-0.5 rounded-full text-xs font-medium',
+                  'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
+                ]"
+              >
+                {{ totalGrowth === '+∞' ? '+∞' : `+${totalGrowth}%` }}
+              </span>
+            </div>
 
-      <!-- Bar Chart -->
-      <div class="h-40 flex items-end gap-1 px-2">
-        <div
-          v-for="(point, index) in aggregatedData"
-          :key="point.date"
-          class="relative flex-1 h-full group flex items-end"
-        >
+            <!-- Cumulative Granularity Toggle -->
+            <div class="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden text-xs">
+              <button
+                :class="[
+                  'px-2 py-1 transition-colors',
+                  cumulativeGranularity === 'weekly'
+                    ? 'bg-green-500 text-white'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                ]"
+                @click="cumulativeGranularity = 'weekly'"
+              >
+                Weekly
+              </button>
+              <button
+                :class="[
+                  'px-2 py-1 transition-colors',
+                  cumulativeGranularity === 'monthly'
+                    ? 'bg-green-500 text-white'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                ]"
+                @click="cumulativeGranularity = 'monthly'"
+              >
+                Monthly
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cumulative Bar Chart -->
+        <div class="h-32 flex items-end gap-1 px-2">
           <div
-            class="w-full rounded-t transition-all duration-500 bg-linear-to-t cursor-pointer"
-            :class="currentMetric.color"
-            :style="{
-              height: `${Math.max(8, (point.value / maxValue) * 100)}%`,
-              transitionDelay: `${index * 30}ms`
-            }"
-          />
-          <!-- Tooltip -->
-          <div
-            class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20 pointer-events-none"
+            v-for="(point, index) in cumulativeData"
+            :key="point.date"
+            class="relative flex-1 h-full group flex items-end"
           >
             <div
-              class="bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 px-3 py-2 rounded-lg shadow-lg text-xs whitespace-nowrap"
+              class="w-full rounded-t transition-all duration-300 bg-linear-to-t cursor-pointer shadow-sm hover:shadow-md group-hover:scale-105 origin-bottom"
+              :class="currentMetric.color"
+              :style="{
+                height: `${Math.max(8, (point.value / cumulativeMax) * 100)}%`,
+                transitionDelay: `${index * 30}ms`
+              }"
+            />
+            <!-- Enhanced Tooltip -->
+            <div
+              class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none"
             >
-              <div class="font-semibold">
-                {{ point.date }}
+              <div
+                class="bg-gray-900/95 dark:bg-gray-100/95 backdrop-blur-sm text-white dark:text-gray-900 px-3 py-2.5 rounded-lg shadow-xl border border-gray-700 dark:border-gray-300 text-xs whitespace-nowrap"
+              >
+                <div class="font-semibold text-gray-100 dark:text-gray-800 mb-1">
+                  {{ cumulativeGranularity === 'weekly' ? formatWeekRange(point.date) : formatMonth(point.date) }}
+                </div>
+                <div class="flex items-baseline gap-1.5">
+                  <span class="text-[10px] text-gray-400 dark:text-gray-600">Total:</span>
+                  <span class="font-bold text-sm" :class="currentMetric.color.replace('from-', 'text-').replace('to-primary-400', '').replace('to-cyan-400', '').replace('to-orange-400', '').replace('to-teal-400', '').replace('to-purple-400', '').replace('to-red-400', '').replace('to-blue-400', '').replace('to-green-400', '').replace('to-indigo-400', '').replace('to-emerald-400', '')">
+                    {{ formatNumber(point.value) }}
+                  </span>
+                </div>
               </div>
-              <div class="text-primary-400 dark:text-primary-600">
-                {{ formatNumber(point.value) }}
-                {{ currentMetric.shortLabel.toLowerCase() }}
-              </div>
-              <div class="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5">
-                {{ currentMetric.category }} metric
+              <!-- Tooltip arrow -->
+              <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-px">
+                <div class="w-2 h-2 bg-gray-900/95 dark:bg-gray-100/95 rotate-45 border-r border-b border-gray-700 dark:border-gray-300" />
               </div>
             </div>
           </div>
         </div>
+
+        <!-- X-Axis Labels -->
+        <div class="flex justify-between text-[10px] text-gray-400 mt-2 px-2">
+          <span>{{ cumulativeData[0]?.date }}</span>
+          <span>{{ cumulativeData[cumulativeData.length - 1]?.date }}</span>
+        </div>
       </div>
 
-      <!-- X-Axis Labels -->
-      <div class="flex justify-between text-[10px] text-gray-400 mt-2 px-2">
-        <span>{{ aggregatedData[0]?.date }}</span>
-        <span>{{ aggregatedData[aggregatedData.length - 1]?.date }}</span>
+      <!-- Divider -->
+      <div class="border-t border-gray-200 dark:border-gray-700" />
+
+      <!-- ===== PERIOD ACTIVITY CHART ===== -->
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <UIcon
+              name="i-lucide-bar-chart-3"
+              class="w-4 h-4 text-blue-500"
+            />
+            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Period Activity
+            </span>
+            <span class="text-xs text-gray-400 dark:text-gray-500 hidden sm:inline">
+              New {{ currentMetric.shortLabel.toLowerCase() }} per {{ periodGranularity }}
+            </span>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <!-- Period total -->
+            <span class="text-xs text-gray-500 dark:text-gray-400">
+              Total: <span class="font-medium text-gray-700 dark:text-gray-300">+{{ formatNumber(totalDeltaSum) }}</span>
+            </span>
+
+            <!-- Period Granularity Toggle -->
+            <div class="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden text-xs">
+              <button
+                v-for="opt in periodOptions"
+                :key="opt.key"
+                :class="[
+                  'px-2 py-1 transition-colors',
+                  periodGranularity === opt.key
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                ]"
+                @click="periodGranularity = opt.key"
+              >
+                {{ opt.label }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delta Bar Chart -->
+        <div
+          v-if="deltaData.length > 0"
+          class="h-28 flex items-end gap-1 px-2"
+        >
+          <div
+            v-for="(point, index) in deltaData"
+            :key="point.date"
+            class="relative flex-1 h-full group flex items-end"
+          >
+            <div
+              class="w-full rounded-t transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md group-hover:scale-105 origin-bottom"
+              :class="[
+                point.value > 0 ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
+              ]"
+              :style="{
+                height: `${Math.max(4, (point.value / deltaMax) * 100)}%`,
+                transitionDelay: `${index * 30}ms`
+              }"
+            />
+            <!-- Enhanced Tooltip -->
+            <div
+              class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none"
+            >
+              <div
+                class="bg-gray-900/95 dark:bg-gray-100/95 backdrop-blur-sm text-white dark:text-gray-900 px-3 py-2.5 rounded-lg shadow-xl border border-gray-700 dark:border-gray-300 text-xs whitespace-nowrap"
+              >
+                <div class="font-semibold text-gray-100 dark:text-gray-800 mb-1">
+                  {{ periodGranularity === 'daily' ? point.date : (periodGranularity === 'weekly' ? formatWeekRange(point.date) : formatMonth(point.date)) }}
+                </div>
+                <div class="flex items-baseline gap-1.5">
+                  <span class="text-[10px] text-gray-400 dark:text-gray-600">New:</span>
+                  <span class="font-bold text-sm text-blue-400 dark:text-blue-600">
+                    +{{ formatNumber(point.value) }}
+                  </span>
+                </div>
+              </div>
+              <!-- Tooltip arrow -->
+              <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-px">
+                <div class="w-2 h-2 bg-gray-900/95 dark:bg-gray-100/95 rotate-45 border-r border-b border-gray-700 dark:border-gray-300" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty state for deltas -->
+        <div
+          v-else
+          class="h-28 flex items-center justify-center text-gray-400 text-sm"
+        >
+          Need more data points to show activity
+        </div>
+
+        <!-- X-Axis Labels -->
+        <div
+          v-if="deltaData.length > 0"
+          class="flex justify-between text-[10px] text-gray-400 mt-2 px-2"
+        >
+          <span>{{ deltaData[0]?.date }}</span>
+          <span>{{ deltaData[deltaData.length - 1]?.date }}</span>
+        </div>
       </div>
     </div>
 
     <template #footer>
       <div class="text-xs text-gray-500 dark:text-gray-400 text-center">
         Snapshots captured daily via GitHub Actions •
-        <span class="font-medium">{{ aggregatedData.length }}</span> data points
+        <span class="font-medium">{{ history.length }}</span> data points
       </div>
     </template>
   </UCard>
