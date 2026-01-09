@@ -1,20 +1,30 @@
-import { readdir, readFile } from 'node:fs/promises'
+import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
 interface Snapshot {
   date: string
-  npm: { totalDownloads: number, packageCount: number }
+  npm: { 
+    totalDownloads: number
+    dailyDownloads?: number
+    packageCount: number 
+  }
   github: {
     stars: number
     followers: number
     contributions?: number
+    dailyContributions?: number
     commits?: number
+    dailyCommits?: number
   }
   devto: {
     views: number
+    dailyViews?: number
     followers: number
+    dailyFollowers?: number
     reactions: number
+    dailyReactions?: number
     comments: number
+    dailyComments?: number
     articles?: number
   }
   ecosystem?: {
@@ -47,47 +57,26 @@ export default defineEventHandler(async () => {
   }
 
   const snapshotsDir = join(process.cwd(), '.data', 'snapshots')
+  const aggregationFile = join(snapshotsDir, 'aggregation.json')
 
   try {
-    const files = await readdir(snapshotsDir)
-    const jsonFiles = files.filter(f => f.endsWith('.json')).sort()
+    // Read the single aggregation file for performance (1 file vs N files)
+    const content = await readFile(aggregationFile, 'utf-8')
+    const snapshots: Snapshot[] = JSON.parse(content)
 
-    if (jsonFiles.length === 0) {
-      // No snapshot files yet - return empty array
-      // The UI will show "No historical data yet" message
-      cachedHistory.data = []
-      cachedHistory.lastFetched = Date.now()
-      return []
-    }
-
-    const snapshots: Snapshot[] = await Promise.all(
-      jsonFiles.map(async (file) => {
-        const content = await readFile(join(snapshotsDir, file), 'utf-8')
-        return JSON.parse(content) as Snapshot
-      })
-    )
-
-    // Sort by date ascending
-    snapshots.sort((a, b) => a.date.localeCompare(b.date))
-
-    // Only return the last 365 days (keep all data in storage, limit for display)
-    const MAX_DAYS = 365
-    const filteredSnapshots = snapshots.slice(-MAX_DAYS)
-
-    cachedHistory.data = filteredSnapshots
+    // Snapshots are already sorted and limited to 365 days by the workflow
+    cachedHistory.data = snapshots
     cachedHistory.lastFetched = Date.now()
 
-    return filteredSnapshots
-  } catch (error) {
-    console.error('[metrics-history] Failed to read snapshots:', error)
-
-    // Return cached data if available
-    if (cachedHistory.data) {
-      return cachedHistory.data
-    }
-
-    // No snapshots directory or error - return empty array
-    // Snapshots will be captured by GitHub Actions daily
+    return snapshots
+  } catch {
+    // Aggregation file doesn't exist yet - return empty array
+    // The UI will show "No historical data yet" message
+    // Once GitHub Actions runs, it will create the aggregation file
+    console.log('[metrics-history] No aggregation.json found, returning empty array')
+    
+    cachedHistory.data = []
+    cachedHistory.lastFetched = Date.now()
     return []
   }
 })

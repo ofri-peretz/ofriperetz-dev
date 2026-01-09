@@ -196,6 +196,20 @@ jobs:
           echo "Snapshot created for $DATE"
           cat .data/snapshots/$DATE.json
 
+          # Update aggregation.json (single compact file containing all snapshots for fast loading)
+          AGGREGATION_FILE=".data/snapshots/aggregation.json"
+          if [ -f "$AGGREGATION_FILE" ]; then
+            # Read existing aggregation, remove entry for today if exists, add new one
+            # Use -c for compact output (minified JSON)
+            jq -c --slurpfile new .data/snapshots/$DATE.json \
+              '[.[] | select(.date != "'"$DATE"'")] + $new | sort_by(.date) | .[-365:]' \
+              "$AGGREGATION_FILE" > /tmp/aggregation.json && mv /tmp/aggregation.json "$AGGREGATION_FILE"
+          else
+            # Create new compact aggregation with just today's snapshot
+            jq -c '[.]' .data/snapshots/$DATE.json > "$AGGREGATION_FILE"
+          fi
+          echo "Aggregation updated: $(jq 'length' $AGGREGATION_FILE) snapshots, $(wc -c < $AGGREGATION_FILE) bytes"
+
       - name: Commit and push snapshot
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
