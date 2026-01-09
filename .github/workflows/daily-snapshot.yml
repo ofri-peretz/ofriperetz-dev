@@ -325,6 +325,14 @@ jobs:
 
           # Update aggregation.json (single compact file containing all snapshots for fast loading)
           AGGREGATION_FILE=".data/snapshots/aggregation.json"
+
+          # BACKUP: Create timestamped backup before modification (enables recovery from git history)
+          if [ -f "$AGGREGATION_FILE" ]; then
+            BACKUP_FILE=".data/snapshots/aggregation.backup.$(date +%Y%m%d).json"
+            cp "$AGGREGATION_FILE" "$BACKUP_FILE"
+            echo "📦 Backup created: $BACKUP_FILE"
+          fi
+
           if [ -f "$AGGREGATION_FILE" ]; then
             # Read existing aggregation, remove entry for today if exists, add new one
             # Use -c for compact output (minified JSON)
@@ -332,8 +340,10 @@ jobs:
               '[.[] | select(.date != "'"$DATE"'")] + $new | sort_by(.date) | .[-365:]' \
               "$AGGREGATION_FILE" > /tmp/aggregation.json && mv /tmp/aggregation.json "$AGGREGATION_FILE"
           else
-            # Create new compact aggregation with just today's snapshot
-            jq -c '[.]' .data/snapshots/$DATE.json > "$AGGREGATION_FILE"
+            # SAFEGUARD: If aggregation.json is missing, rebuild from ALL individual snapshots
+            # This prevents data loss - we never create a new file with only today's data
+            echo "⚠️  aggregation.json missing - rebuilding from all individual snapshots"
+            jq -c -s 'sort_by(.date) | .[-365:]' .data/snapshots/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].json > "$AGGREGATION_FILE"
           fi
           echo "Aggregation updated: $(jq 'length' $AGGREGATION_FILE) snapshots, $(wc -c < $AGGREGATION_FILE) bytes"
 

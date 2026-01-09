@@ -28,20 +28,22 @@ Each snapshot also calculates **daily deltas** (change from previous snapshot) f
 
 ## 🛡️ Resilience Mechanisms
 
-| Mechanism                     | Description                                                             |
-| ----------------------------- | ----------------------------------------------------------------------- |
-| **Upsert behavior**           | If today's snapshot exists, it gets overwritten with fresh data         |
-| **Lookback for previous**     | Searches up to 7 days back for last snapshot (handles missed days)      |
-| **API retry with backoff**    | Each API call retries 3x with exponential backoff (2s → 4s → 8s)        |
-| **Negative delta protection** | If API returns lower value than previous day, delta = 0                 |
-| **Fallback values**           | If eslint repo clone fails, uses known fallback (11 plugins, 216 rules) |
+| Mechanism                     | Description                                                                                 |
+| ----------------------------- | ------------------------------------------------------------------------------------------- |
+| **Upsert behavior**           | If today's snapshot exists, it gets overwritten with fresh data                             |
+| **Lookback for previous**     | Searches up to 7 days back for last snapshot (handles missed days)                          |
+| **API retry with backoff**    | Each API call retries 3x with exponential backoff (2s → 4s → 8s)                            |
+| **Negative delta protection** | If API returns lower value than previous day, delta = 0                                     |
+| **Fallback values**           | If eslint repo clone fails, uses known fallback (11 plugins, 216 rules)                     |
+| **Aggregation rebuild**       | If aggregation.json is missing, rebuilds from all individual snapshots (prevents data loss) |
 
 ## 📁 Output Files
 
-| File                               | Purpose                                                             |
-| ---------------------------------- | ------------------------------------------------------------------- |
-| `.data/snapshots/YYYY-MM-DD.json`  | Individual daily backup                                             |
-| `.data/snapshots/aggregation.json` | Combined compact JSON for fast API loading (max 365 days, minified) |
+| File                                        | Purpose                                                             |
+| ------------------------------------------- | ------------------------------------------------------------------- |
+| `.data/snapshots/YYYY-MM-DD.json`           | Individual daily backup                                             |
+| `.data/snapshots/aggregation.json`          | Combined compact JSON for fast API loading (max 365 days, minified) |
+| `.data/snapshots/aggregation.backup.*.json` | Daily timestamped backups (enables recovery from git history)       |
 
 The `aggregation.json` file is the source of truth for the `/api/metrics-history` endpoint, fetched directly from GitHub's raw content API.
 
