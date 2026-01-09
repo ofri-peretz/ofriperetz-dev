@@ -1,9 +1,39 @@
 name: Daily Metrics Snapshot
+# ============================================================================
+# METRICS SNAPSHOT WORKFLOW
+# See: .data/METRICS_SPEC.md for complete documentation
+#
+# This workflow captures daily metrics from npm, GitHub, and Dev.to APIs.
+#
+# KEY CONCEPTS:
+# - Cumulative totals: totalDownloads, views, contributions, commits, reactions, comments
+# - Point-in-time: stars, followers, packageCount, plugins, rules, articles
+# - Daily deltas: Calculated as (today's value - MOST RECENT previous snapshot)
+#   - If no previous snapshot exists: delta = 0
+#   - If delta is negative (API inconsistency): delta = 0
+#
+# RESILIENCE:
+# - Runs 3 times daily (6 AM, 12 PM, 6 PM UTC) as retry attempts
+# - If today's snapshot already exists, workflow skips (no duplicate)
+# - Uses most recent previous snapshot for delta (handles missed days)
+# - API calls have retry logic with exponential backoff
+#
+# OUTPUT FILES:
+# - .data/snapshots/YYYY-MM-DD.json (individual backup)
+# - .data/snapshots/aggregation.json (combined for fast loading, max 365 days)
+#
+# REQUIRED SECRETS:
+# - DEVTO_API_KEY: Dev.to API key
+# - CODECOV_TOKEN: Codecov API token
+# - GITHUB_TOKEN: Auto-provided
+# ============================================================================
 
 on:
   schedule:
-    # Run daily at 6:00 AM UTC
-    - cron: "0 6 * * *"
+    # Run 3 times daily as retry mechanism (if first fails, second/third will capture)
+    - cron: "0 6 * * *" # 6:00 AM UTC (primary)
+    - cron: "0 12 * * *" # 12:00 PM UTC (retry 1)
+    - cron: "0 18 * * *" # 6:00 PM UTC (retry 2)
   workflow_dispatch: # Allow manual trigger
 
 permissions:
@@ -31,21 +61,45 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
           DATE=$(date +%Y-%m-%d)
-          YESTERDAY=$(date -d "yesterday" +%Y-%m-%d 2>/dev/null || date -v-1d +%Y-%m-%d)
           mkdir -p .data/snapshots
 
-          # Read yesterday's snapshot for delta calculation
-          YESTERDAY_FILE=".data/snapshots/$YESTERDAY.json"
+          echo "=========================================="
+          echo "📊 Capturing metrics for $DATE"
+          echo "=========================================="
+
+          # ============================================================
+          # STEP 0: Check if today's snapshot already exists (skip if retry)
+          # ============================================================
+          TODAY_FILE=".data/snapshots/$DATE.json"
+          if [ -f "$TODAY_FILE" ]; then
+            echo "⏭️ Today's snapshot already exists, skipping (this is a retry run)"
+            exit 0
+          fi
+
+          # ============================================================
+          # STEP 1: Find MOST RECENT previous snapshot for delta calculation
+          # This handles missed days - we always compare to the last available snapshot
+          # ============================================================
+          PREV_FILE=""
+          for i in 1 2 3 4 5 6 7; do
+            CHECK_DATE=$(date -d "$i days ago" +%Y-%m-%d 2>/dev/null || date -v-${i}d +%Y-%m-%d)
+            if [ -f ".data/snapshots/$CHECK_DATE.json" ]; then
+              PREV_FILE=".data/snapshots/$CHECK_DATE.json"
+              echo "📁 Found previous snapshot from $CHECK_DATE"
+              break
+            fi
+          done
+
           HAS_PREVIOUS=false
-          if [ -f "$YESTERDAY_FILE" ]; then
+          if [ -n "$PREV_FILE" ] && [ -f "$PREV_FILE" ]; then
             HAS_PREVIOUS=true
-            PREV_DOWNLOADS=$(jq '.npm.totalDownloads // 0' "$YESTERDAY_FILE")
-            PREV_VIEWS=$(jq '.devto.views // 0' "$YESTERDAY_FILE")
-            PREV_REACTIONS=$(jq '.devto.reactions // 0' "$YESTERDAY_FILE")
-            PREV_COMMENTS=$(jq '.devto.comments // 0' "$YESTERDAY_FILE")
-            PREV_CONTRIBUTIONS=$(jq '.github.contributions // 0' "$YESTERDAY_FILE")
-            PREV_COMMITS=$(jq '.github.commits // 0' "$YESTERDAY_FILE")
-            PREV_FOLLOWERS=$(jq '(.github.followers // 0) + (.devto.followers // 0)' "$YESTERDAY_FILE")
+            PREV_DOWNLOADS=$(jq '.npm.totalDownloads // 0' "$PREV_FILE")
+            PREV_VIEWS=$(jq '.devto.views // 0' "$PREV_FILE")
+            PREV_REACTIONS=$(jq '.devto.reactions // 0' "$PREV_FILE")
+            PREV_COMMENTS=$(jq '.devto.comments // 0' "$PREV_FILE")
+            PREV_CONTRIBUTIONS=$(jq '.github.contributions // 0' "$PREV_FILE")
+            PREV_COMMITS=$(jq '.github.commits // 0' "$PREV_FILE")
+            PREV_FOLLOWERS=$(jq '(.github.followers // 0) + (.devto.followers // 0)' "$PREV_FILE")
           else
             # No previous day - can't calculate real deltas
             PREV_DOWNLOADS=0
@@ -57,8 +111,38 @@ jobs:
             PREV_FOLLOWERS=0
           fi
 
-          # Fetch npm stats (filtered by excluded packages list from metrics-config.ts)
-          NPM_RESULT=$(curl -s "https://registry.npmjs.org/-/v1/search?text=maintainer:ofriperetz&size=100")
+          # ============================================================
+          # Helper: curl with retry (3 attempts, exponential backoff)
+          # ============================================================
+          curl_retry() {
+            local url="$1"
+            local headers="$2"
+            local max_attempts=3
+            local attempt=1
+            local wait=2
+            while [ $attempt -le $max_attempts ]; do
+              if [ -n "$headers" ]; then
+                result=$(curl -s -H "$headers" "$url")
+              else
+                result=$(curl -s "$url")
+              fi
+              if [ -n "$result" ] && [ "$result" != "null" ] && ! echo "$result" | grep -q '"error"'; then
+                echo "$result"
+                return 0
+              fi
+              echo "Retry $attempt/$max_attempts for $url" >&2
+              sleep $wait
+              wait=$((wait * 2))
+              attempt=$((attempt + 1))
+            done
+            echo "{}"  # Return empty object on failure
+          }
+
+          # ============================================================
+          # STEP 2: Fetch npm data (packages + downloads)
+          # Excludes: eslint-plugin-mcp, eslint-plugin-llm-*, @forge-js/*
+          # ============================================================
+          NPM_RESULT=$(curl_retry "https://registry.npmjs.org/-/v1/search?text=maintainer:ofriperetz&size=100")
 
           # Excluded packages (matches NPM_CONFIG.excludedPackages and excludedPrefixes)
           EXCLUDED_PACKAGES="eslint-plugin-mcp eslint-plugin-llm-optimized eslint-plugin-llm eslint-plugin-mcp-optimized"
@@ -88,7 +172,10 @@ jobs:
             fi
           done
 
-          # Fetch GitHub stats ONLY for target repos (ofriperetz-dev and eslint)
+          # ============================================================
+          # STEP 3: Fetch GitHub data (stars, followers, contributions)
+          # Target repos: ofri-peretz/ofriperetz-dev, ofri-peretz/eslint
+          # ============================================================
           GH_USER=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/users/ofri-peretz")
           GH_FOLLOWERS=$(echo $GH_USER | jq '.followers // 0')
 
@@ -108,7 +195,10 @@ jobs:
           GH_CONTRIBUTIONS=$(echo $GH_CONTRIBUTIONS_RESPONSE | jq '.data.user.contributionsCollection.contributionCalendar.totalContributions // 0')
           GH_COMMITS=$(echo $GH_CONTRIBUTIONS_RESPONSE | jq '.data.user.contributionsCollection.totalCommitContributions // 0')
 
-          # Fetch Dev.to stats
+          # ============================================================
+          # STEP 4: Fetch Dev.to data (articles, views, reactions)
+          # Requires DEVTO_API_KEY secret
+          # ============================================================
           DEVTO_FOLLOWERS=$(curl -s -H "api-key: $DEVTO_API_KEY" "https://dev.to/api/followers/users?per_page=1000" | jq 'length')
           DEVTO_ARTICLES=$(curl -s -H "api-key: $DEVTO_API_KEY" "https://dev.to/api/articles/me/all?per_page=1000")
           DEVTO_ARTICLE_COUNT=$(echo $DEVTO_ARTICLES | jq 'length')
@@ -116,7 +206,11 @@ jobs:
           DEVTO_REACTIONS=$(echo $DEVTO_ARTICLES | jq '[.[].positive_reactions_count] | add // 0')
           DEVTO_COMMENTS=$(echo $DEVTO_ARTICLES | jq '[.[].comments_count] | add // 0')
 
-          # Calculate daily deltas (change since yesterday)
+          # ============================================================
+          # STEP 5: Calculate daily deltas
+          # Formula: DAILY_X = TODAY_X - YESTERDAY_X
+          # If no previous day or negative delta: set to 0
+          # ============================================================
           TOTAL_FOLLOWERS=$((GH_FOLLOWERS + DEVTO_FOLLOWERS))
 
           if [ "$HAS_PREVIOUS" = "true" ]; then

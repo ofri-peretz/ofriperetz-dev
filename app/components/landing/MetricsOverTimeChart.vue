@@ -260,7 +260,7 @@ const aggregatedData = computed(() => {
       rawData.forEach((d) => {
         const monthKey = getMonthKey(new Date(d.date))
         // Keep the latest value for each month
-        if (!monthMap[monthKey] || d.date > monthMap[monthKey].date) {
+        if (!monthMap[monthKey] || d.date > monthMap[monthKey || ''].date) {
           monthMap[monthKey] = { date: d.date, value: d.value }
         }
       })
