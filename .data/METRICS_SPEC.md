@@ -164,3 +164,91 @@ Run the snapshot generation script locally to create historical data, then push 
 - Check individual snapshot files in `.data/snapshots/`
 - View workflow logs in GitHub Actions
 - Test API response: `curl https://raw.githubusercontent.com/ofri-peretz/ofriperetz-dev/main/.data/snapshots/aggregation.json`
+
+---
+
+## API Reference (cURL Commands)
+
+### GitHub
+
+**Get user followers:**
+```bash
+curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+  "https://api.github.com/users/ofri-peretz" | jq '.followers'
+```
+
+**Get contributions (GraphQL):**
+```bash
+curl -s -X POST \
+  -H "Authorization: Bearer $GITHUB_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "query { user(login: \"ofri-peretz\") { contributionsCollection { totalCommitContributions contributionCalendar { totalContributions } } } }"}' \
+  https://api.github.com/graphql | jq '.data.user.contributionsCollection'
+```
+
+**Get stars for specific repo:**
+```bash
+curl -s "https://api.github.com/repos/ofri-peretz/eslint" | jq '.stargazers_count'
+curl -s "https://api.github.com/repos/ofri-peretz/ofriperetz-dev" | jq '.stargazers_count'
+```
+
+### npm
+
+**Search packages by maintainer:**
+```bash
+curl -s "https://registry.npmjs.org/-/v1/search?text=maintainer:ofriperetz&size=100" | jq '.objects[].package.name'
+```
+
+**Get package downloads (last 30 days):**
+```bash
+curl -s "https://api.npmjs.org/downloads/point/last-month/eslint-plugin-import-next" | jq '.downloads'
+```
+
+### Dev.to
+
+**Get all articles (requires API key):**
+```bash
+curl -s -H "api-key: $DEVTO_API_KEY" \
+  "https://dev.to/api/articles/me/all?per_page=1000" | jq 'length'
+```
+
+**Get article stats:**
+```bash
+curl -s -H "api-key: $DEVTO_API_KEY" \
+  "https://dev.to/api/articles/me/all?per_page=1000" | jq '[.[].page_views_count] | add'
+```
+
+**Get followers:**
+```bash
+curl -s -H "api-key: $DEVTO_API_KEY" \
+  "https://dev.to/api/followers/users?per_page=1000" | jq 'length'
+```
+
+### Codecov
+
+**Get test coverage:**
+```bash
+curl -s -H "Authorization: Bearer $CODECOV_TOKEN" \
+  "https://codecov.io/api/v2/github/ofri-peretz/repos/eslint/coverage" | jq '.coverage'
+```
+
+---
+
+## Current Real Values (as of Jan 9, 2026)
+
+| Metric | Value | Source |
+|--------|-------|--------|
+| Total Downloads | 9,208 | npm API (sum of all packages) |
+| Package Count | 14 | npm API (filtered) |
+| GitHub Stars | 1 | GitHub API (eslint: 1, ofriperetz-dev: 0) |
+| GitHub Followers | 6 | GitHub API |
+| Contributions | 602 | GitHub GraphQL |
+| Commits | 560 | GitHub GraphQL |
+| Dev.to Views | 1,689 | Dev.to API |
+| Dev.to Followers | 89 | Dev.to API |
+| Reactions | 10 | Dev.to API |
+| Comments | 9 | Dev.to API |
+| Articles | 28 | Dev.to API |
+| ESLint Plugins | 15 | Auto-counted from repo |
+| ESLint Rules | 221 | Auto-counted from repo |
+| Test Coverage | 90% | Codecov API |
