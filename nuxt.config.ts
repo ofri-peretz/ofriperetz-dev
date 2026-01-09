@@ -271,11 +271,10 @@ export default defineNuxtConfig({
       cssMinify: true,
       // Disable sourcemaps in production for smaller bundles
       sourcemap: false,
-      // DISABLED: Both Terser and esbuild cause TDZ (Temporal Dead Zone) errors
-      // The MDC parser from @nuxt/content has complex nested scopes that
-      // confuse minifier variable renaming, causing "Cannot access 'X' before initialization"
-      // Vercel's edge compression (gzip/brotli) provides good compression without this risk
-      minify: false,
+      // Using esbuild for minification (default in Vite)
+      // Note: If TDZ errors occur ("Cannot access 'X' before initialization"), 
+      // set minify: false as a fallback - Vercel's edge compression still provides good results
+      minify: 'esbuild',
       rollupOptions: {
         output: {
           // Improved chunking strategy for better code-splitting
