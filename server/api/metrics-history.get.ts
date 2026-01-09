@@ -55,19 +55,30 @@ export default defineEventHandler(async () => {
   }
 
   try {
-    // Fetch aggregation.json directly from GitHub
-    const response = await fetch(AGGREGATION_URL, {
-      headers: {
-        'Accept': 'application/json',
-        'Cache-Control': 'no-cache'
+    let snapshots: Snapshot[]
+
+    // In dev mode, read from local file for immediate updates
+    if (import.meta.dev) {
+      const fs = await import('fs/promises')
+      const path = await import('path')
+      const localPath = path.join(process.cwd(), '.data/snapshots/aggregation.json')
+      const fileContent = await fs.readFile(localPath, 'utf-8')
+      snapshots = JSON.parse(fileContent)
+    } else {
+      // In production, fetch from GitHub
+      const response = await fetch(AGGREGATION_URL, {
+        headers: {
+          'Accept': 'application/json',
+          'Cache-Control': 'no-cache'
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error(`GitHub returned ${response.status}`)
       }
-    })
 
-    if (!response.ok) {
-      throw new Error(`GitHub returned ${response.status}`)
+      snapshots = await response.json()
     }
-
-    const snapshots: Snapshot[] = await response.json()
 
     // Cache the result
     cachedHistory.data = snapshots
@@ -75,7 +86,7 @@ export default defineEventHandler(async () => {
 
     return snapshots
   } catch (error) {
-    console.error('[metrics-history] Failed to fetch from GitHub:', error)
+    console.error('[metrics-history] Failed to fetch:', error)
 
     // Return cached data if available
     if (cachedHistory.data) {
