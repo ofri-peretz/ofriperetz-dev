@@ -47,6 +47,66 @@ Each snapshot also calculates **daily deltas** (change from previous snapshot) f
 
 The `aggregation.json` file is the source of truth for the `/api/metrics-history` endpoint, fetched directly from GitHub's raw content API.
 
+## ✅ Behavior & Guarantees
+
+### Daily Data Point Creation
+
+- **Automatic**: Runs daily at 6:00 AM UTC (with 12 PM and 6 PM retries)
+- **Manual**: Can be triggered anytime via `workflow_dispatch`
+- **Output**: Creates individual `YYYY-MM-DD.json` file with today's snapshot
+- **Deltas**: Calculates daily changes by comparing with previous day's snapshot
+
+### Aggregation Update Process
+
+The workflow updates `aggregation.json` with both cumulative totals and daily deltas:
+
+1. **If aggregation.json exists:**
+   - Removes today's entry if it already exists (enables re-runs)
+   - Adds the new snapshot
+   - Sorts by date and keeps last 365 days
+   - Creates minified JSON for fast loading
+
+2. **If aggregation.json is missing:**
+   - **SAFEGUARD**: Rebuilds from ALL individual `YYYY-MM-DD.json` files
+   - Never creates a new file with only today's data
+   - Prevents historical data loss
+
+### Re-trigger Behavior
+
+**Same-day re-runs are safe and idempotent:**
+
+- Removes existing entry for that date
+- Fetches fresh data from APIs
+- Calculates new deltas
+- **Result**: Same-day data is overwritten with latest values
+
+### Missed Day Recovery
+
+**If a day is missed, the system continues working:**
+
+- Next day's snapshot will have correct cumulative values
+- The delta will be larger (showing combined activity)
+- Individual snapshots remain independent
+- **No data is lost** - just the granularity for the missed day
+
+**Example:**
+
+```
+Jan 10: ✅ Workflow runs → Creates 2026-01-10.json (delta from Jan 9)
+Jan 11: ❌ Workflow fails (missed day)
+Jan 12: ✅ Workflow runs → Creates 2026-01-12.json (delta from Jan 10)
+        → Delta shows 2 days of activity
+        → Cumulative values are still correct
+```
+
+### Data Integrity Safeguards
+
+1. **Backup Before Modification**: Creates timestamped backup of `aggregation.json` before any changes
+2. **Rebuild Capability**: Can reconstruct `aggregation.json` from individual snapshots
+3. **Git History**: All backups are committed, enabling recovery from any point
+4. **Negative Delta Protection**: If APIs return lower values, delta = 0 (prevents negative spikes)
+5. **API Retry Logic**: 3 retries with exponential backoff for transient failures
+
 ## 🔐 Required Secrets
 
 | Secret          | Purpose                         |
