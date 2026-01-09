@@ -1,6 +1,3 @@
-import { readFile } from 'node:fs/promises'
-import { join } from 'node:path'
-
 interface Snapshot {
   date: string
   npm: { 
@@ -36,19 +33,20 @@ interface Snapshot {
   }
 }
 
-// Cache to avoid frequent filesystem reads
+// Cache to avoid frequent API calls
 const cachedHistory = {
   lastFetched: 0,
   data: null as Snapshot[] | null
 }
 
-export default defineEventHandler(async () => {
-  // In dev mode, skip cache entirely to always read fresh files
-  // In production, cache for 1 hour
-  const CACHE_TTL = process.dev ? 0 : 60 * 60 * 1000
+// GitHub raw content URL for the aggregation file
+const AGGREGATION_URL = 'https://raw.githubusercontent.com/ofri-peretz/ofriperetz-dev/main/.data/snapshots/aggregation.json'
 
-  const useCache = !process.dev 
-    && cachedHistory.data 
+export default defineEventHandler(async () => {
+  // Cache for 1 hour in production, 1 minute in dev
+  const CACHE_TTL = process.dev ? 60 * 1000 : 60 * 60 * 1000
+
+  const useCache = cachedHistory.data 
     && cachedHistory.data.length > 0 
     && (Date.now() - cachedHistory.lastFetched) < CACHE_TTL
   
@@ -56,27 +54,36 @@ export default defineEventHandler(async () => {
     return cachedHistory.data
   }
 
-  const snapshotsDir = join(process.cwd(), '.data', 'snapshots')
-  const aggregationFile = join(snapshotsDir, 'aggregation.json')
-
   try {
-    // Read the single aggregation file for performance (1 file vs N files)
-    const content = await readFile(aggregationFile, 'utf-8')
-    const snapshots: Snapshot[] = JSON.parse(content)
+    // Fetch aggregation.json directly from GitHub
+    const response = await fetch(AGGREGATION_URL, {
+      headers: {
+        'Accept': 'application/json',
+        'Cache-Control': 'no-cache'
+      }
+    })
 
-    // Snapshots are already sorted and limited to 365 days by the workflow
+    if (!response.ok) {
+      throw new Error(`GitHub returned ${response.status}`)
+    }
+
+    const snapshots: Snapshot[] = await response.json()
+
+    // Cache the result
     cachedHistory.data = snapshots
     cachedHistory.lastFetched = Date.now()
 
     return snapshots
-  } catch {
-    // Aggregation file doesn't exist yet - return empty array
+  } catch (error) {
+    console.error('[metrics-history] Failed to fetch from GitHub:', error)
+
+    // Return cached data if available
+    if (cachedHistory.data) {
+      return cachedHistory.data
+    }
+
+    // No data yet - return empty array
     // The UI will show "No historical data yet" message
-    // Once GitHub Actions runs, it will create the aggregation file
-    console.log('[metrics-history] No aggregation.json found, returning empty array')
-    
-    cachedHistory.data = []
-    cachedHistory.lastFetched = Date.now()
     return []
   }
 })
