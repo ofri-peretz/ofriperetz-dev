@@ -65,11 +65,16 @@ jobs:
             TOTAL_DOWNLOADS=$((TOTAL_DOWNLOADS + DOWNLOADS))
           done
 
-          # Fetch GitHub stats (using REST API)
+          # Fetch GitHub stats ONLY for target repos (ofriperetz-dev and eslint)
           GH_USER=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/users/ofri-peretz")
           GH_FOLLOWERS=$(echo $GH_USER | jq '.followers // 0')
-          GH_REPOS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/users/ofri-peretz/repos?per_page=100")
-          GH_STARS=$(echo $GH_REPOS | jq '[.[].stargazers_count] | add // 0')
+
+          # Get stars only from these two specific repos
+          REPO1=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/repos/ofri-peretz/ofriperetz-dev")
+          REPO2=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/repos/ofri-peretz/eslint")
+          STARS1=$(echo $REPO1 | jq '.stargazers_count // 0')
+          STARS2=$(echo $REPO2 | jq '.stargazers_count // 0')
+          GH_STARS=$((STARS1 + STARS2))
 
           # Fetch GitHub contributions via GraphQL
           GH_CONTRIBUTIONS_RESPONSE=$(curl -s -X POST \
