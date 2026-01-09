@@ -271,56 +271,14 @@ export default defineNuxtConfig({
       cssMinify: true,
       // Disable sourcemaps in production for smaller bundles
       sourcemap: false,
-      // Minification disabled due to TDZ error: "Cannot access 'ne' before initialization"
+      // Minification disabled due to TDZ error: "Cannot access 'isFunction' before initialization"
       // This is caused by variable shadowing between Vue runtime utilities and MDC parser
       // when using aggressive manualChunks. Vercel's edge Brotli/Gzip compression still
       // provides good optimization (~15% bundle size penalty but deterministic initialization)
       // See: deployment_integrity.md Section 1.8 (Variable Shadowing/Collision)
-      minify: false,
-      rollupOptions: {
-        output: {
-          // Improved chunking strategy for better code-splitting
-          manualChunks(id) {
-            // Vendor chunks for large dependencies
-            if (id.includes('node_modules')) {
-              // Reka UI components (from @nuxt/ui)
-              if (id.includes('@reka-ui') || id.includes('reka-ui')) {
-                return 'vendor-reka'
-              }
-              // Motion library
-              if (id.includes('motion-v') || id.includes('@vueuse/motion')) {
-                return 'vendor-motion'
-              }
-              // Radix Vue primitives
-              if (id.includes('radix-vue')) {
-                return 'vendor-radix'
-              }
-              // Tailwind variants
-              if (id.includes('tailwind-variants')) {
-                return 'vendor-tv'
-              }
-            }
-
-            // App-level component chunks (lazy-loaded)
-            // Stats page components
-            if (id.includes('/landing/MetricsOverTimeChart') ||
-                id.includes('/landing/EffortStarsCorrelation') ||
-                id.includes('/landing/DownloadsByPackage')) {
-              return 'stats-charts'
-            }
-            // North Star visualizations
-            if (id.includes('/landing/NorthStarFunnel') ||
-                id.includes('/landing/NorthStarWeb') ||
-                id.includes('/landing/NorthStarHero')) {
-              return 'stats-northstar'
-            }
-            // Early stage view
-            if (id.includes('/landing/EarlyStageImpactView')) {
-              return 'stats-early'
-            }
-          }
-        }
-      }
+      minify: false
+      // manualChunks removed - aggressive chunking was causing initialization order issues
+      // Vite's automatic chunking will handle code-splitting without TDZ errors
     }
   },
 
