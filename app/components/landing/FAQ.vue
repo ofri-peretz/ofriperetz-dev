@@ -35,7 +35,8 @@ const ui = {
     id="faq"
     class="scroll-mt-20"
     :ui="{
-      container: 'px-0 !pt-0 gap-4 sm:gap-4',
+      wrapper: 'py-0',
+      container: 'px-0 !py-0 gap-4 sm:gap-4',
       title: 'text-left text-xl sm:text-xl lg:text-2xl font-medium',
       description: 'text-left mt-2 text-sm sm:text-md lg:text-sm text-muted'
     }"

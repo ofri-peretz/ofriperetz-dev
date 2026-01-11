@@ -214,6 +214,17 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  // Content module configuration - disable syntax highlighting to reduce bundle by ~600KB
+  // Since we use YAML content without code blocks, Shiki highlighting is not needed
+  content: {
+    build: {
+      markdown: {
+        // Disable Shiki syntax highlighting entirely - saves ~622KB
+        highlight: false
+      }
+    }
+  },
+
   // Runtime config for API keys (server-side only for security)
   runtimeConfig: {
     devtoApiKey: process.env.DEVTO_API_KEY || '',
@@ -252,17 +263,6 @@ export default defineNuxtConfig({
       // Don't crawl links to avoid trying to prerender /stats which needs dynamic API data
       crawlLinks: false,
       ignore: ['/stats', '/api']
-    }
-  },
-
-  // Content module configuration - disable syntax highlighting to reduce bundle by ~600KB
-  // Since we use YAML content without code blocks, Shiki highlighting is not needed
-  content: {
-    build: {
-      markdown: {
-        // Disable Shiki syntax highlighting entirely - saves ~622KB
-        highlight: false
-      }
     }
   },
 

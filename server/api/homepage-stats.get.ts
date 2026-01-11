@@ -37,6 +37,9 @@ interface DevToData {
   totalViews: number
   followers: number
   articleCount: number
+  totalReactions: number
+  totalComments: number
+  totalReadingMinutes: number
 }
 
 interface HomepageStatsResponse {
@@ -58,20 +61,23 @@ const FALLBACK_DATA: HomepageStatsResponse = {
     totalStars: 11,
     totalForks: 2,
     totalRepos: 35,
-    followers: 51,
+    followers: 6,
     recentCommits: 477,
     totalContributions: 583,
     starsBreakdown: [],
     authenticated: false
   },
   npm: {
-    totalDownloads: 9500,
+    totalDownloads: 9611,
     packageCount: 16
   },
   devto: {
-    totalViews: 0,
-    followers: 45,
-    articleCount: 30
+    totalViews: 1834,
+    followers: 85,
+    articleCount: 28,
+    totalReactions: 10,
+    totalComments: 9,
+    totalReadingMinutes: 100
   },
   source: 'fallback'
 }
@@ -323,12 +329,20 @@ async function fetchDevToData(): Promise<DevToData> {
 
     const stats = statsResponse.status === 'fulfilled'
       ? statsResponse.value
-      : { followers: 45, totalViews: 0 }
+      : { followers: 85, totalViews: 1834 }
+
+    // Aggregate engagement from articles
+    const totalReactions = articles.reduce((sum, a) => sum + (a.positive_reactions_count || 0), 0)
+    const totalComments = articles.reduce((sum, a) => sum + (a.comments_count || 0), 0)
+    const totalReadingMinutes = articles.reduce((sum, a) => sum + (a.reading_time_minutes || 0), 0)
 
     return {
       totalViews: stats?.totalViews || 0,
-      followers: stats?.followers || 45,
-      articleCount: articles.length
+      followers: stats?.followers || 85,
+      articleCount: articles.length,
+      totalReactions,
+      totalComments,
+      totalReadingMinutes
     }
   } catch (error) {
     console.error('[homepage-stats] DevTo fetch error:', error)

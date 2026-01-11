@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 /**
  * Bootstrap historical snapshots for the Metrics Over Time chart
- * 
+ *
  * This generates realistic historical data points based on current live values,
  * creating a believable growth trajectory from project inception (Nov 2025).
- * 
+ *
  * Usage: node scripts/bootstrap-history.mjs
  */
 
-import { writeFile, readFile, mkdir } from 'node:fs/promises'
+import { writeFile, mkdir } from 'node:fs/promises'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -43,10 +43,10 @@ function growthCurve(currentValue, dayIndex, totalDays, startRatio = 0.05) {
   const k = 6 // Steepness
   const midpoint = 0.5
   const curve = 1 / (1 + Math.exp(-k * (progress - midpoint)))
-  
+
   // Scale from startRatio to 1
   const scaledProgress = startRatio + (1 - startRatio) * curve
-  
+
   return Math.floor(currentValue * scaledProgress)
 }
 
@@ -70,12 +70,12 @@ function stepGrowth(currentValue, dayIndex, totalDays) {
 
 function generateSnapshot(date, dayIndex) {
   const totalDays = daysDiff
-  
+
   // Calculate previous day for delta computation
   const prevDayIndex = Math.max(0, dayIndex - 1)
-  
+
   const calculateDelta = (current, prev) => Math.max(0, current - prev)
-  
+
   // Current values
   const npmDownloads = growthCurve(CURRENT.npm.totalDownloads, dayIndex, totalDays, 0.02)
   const stars = Math.min(CURRENT.github.stars, dayIndex > totalDays - 7 ? 1 : 0) // Star came late
@@ -89,7 +89,7 @@ function generateSnapshot(date, dayIndex) {
   const articles = stepGrowth(CURRENT.devto.articles, dayIndex, totalDays)
   const plugins = stepGrowth(CURRENT.ecosystem.plugins, dayIndex, totalDays)
   const rules = linearGrowth(CURRENT.ecosystem.rules, dayIndex, totalDays, 0.1)
-  
+
   // Previous values for delta calculation
   const prevDownloads = growthCurve(CURRENT.npm.totalDownloads, prevDayIndex, totalDays, 0.02)
   const prevContributions = linearGrowth(CURRENT.github.contributions, prevDayIndex, totalDays, 0.05)
@@ -98,7 +98,7 @@ function generateSnapshot(date, dayIndex) {
   const prevFollowers = growthCurve(CURRENT.devto.followers, prevDayIndex, totalDays, 0.05)
   const prevReactions = linearGrowth(CURRENT.devto.reactions, prevDayIndex, totalDays, 0.1)
   const prevComments = linearGrowth(CURRENT.devto.comments, prevDayIndex, totalDays, 0.1)
-  
+
   return {
     date,
     npm: {
@@ -140,28 +140,28 @@ async function main() {
   console.log(`   Start date: ${START_DATE.toISOString().split('T')[0]}`)
   console.log(`   End date: ${END_DATE.toISOString().split('T')[0]}`)
   console.log(`   Total days: ${daysDiff}\n`)
-  
+
   // Ensure directory exists
   await mkdir(snapshotsDir, { recursive: true })
-  
+
   const snapshots = []
-  
+
   // Generate daily snapshots for full granularity
   for (let i = 0; i <= daysDiff; i += 1) {
     const date = new Date(START_DATE)
     date.setDate(date.getDate() + i)
     const dateStr = date.toISOString().split('T')[0]
-    
+
     const snapshot = generateSnapshot(dateStr, i)
     snapshots.push(snapshot)
-    
+
     // Also write individual file
     await writeFile(
       join(snapshotsDir, `${dateStr}.json`),
       JSON.stringify(snapshot, null, 2)
     )
   }
-  
+
   // Ensure 2026-01-09 is included with actual data
   const finalSnapshot = {
     date: '2026-01-09',
@@ -197,20 +197,20 @@ async function main() {
       testCoverage: CURRENT.ecosystem.testCoverage
     }
   }
-  
+
   // Replace the last entry with the real data
   if (snapshots[snapshots.length - 1]?.date !== '2026-01-09') {
     snapshots.push(finalSnapshot)
   } else {
     snapshots[snapshots.length - 1] = finalSnapshot
   }
-  
+
   // Write aggregation file
   await writeFile(
     join(snapshotsDir, 'aggregation.json'),
     JSON.stringify(snapshots)
   )
-  
+
   console.log(`✅ Generated ${snapshots.length} snapshots\n`)
   console.log('📁 Files created:')
   snapshots.slice(0, 5).forEach(s => console.log(`   .data/snapshots/${s.date}.json`))
@@ -218,10 +218,10 @@ async function main() {
     console.log(`   ... and ${snapshots.length - 5} more`)
   }
   console.log(`\n   .data/snapshots/aggregation.json (${snapshots.length} entries)\n`)
-  
+
   console.log('📈 Sample data progression:')
   const samples = [snapshots[0], snapshots[Math.floor(snapshots.length / 2)], snapshots[snapshots.length - 1]]
-  samples.forEach(s => {
+  samples.forEach((s) => {
     console.log(`   ${s.date}: NPM ${s.npm.totalDownloads} | Stars ${s.github.stars} | Views ${s.devto.views} | Contributions ${s.github.contributions}`)
   })
 }

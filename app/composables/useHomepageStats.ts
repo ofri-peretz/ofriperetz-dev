@@ -25,6 +25,9 @@ export interface HomepageStats {
     totalViews: number
     followers: number
     articleCount: number
+    totalReactions: number
+    totalComments: number
+    totalReadingMinutes: number
   }
   source: 'api' | 'cache' | 'fallback'
   fetchedAt?: string
@@ -35,20 +38,23 @@ const FALLBACK_STATS: HomepageStats = {
     totalStars: 11,
     totalForks: 2,
     totalRepos: 35,
-    followers: 51,
+    followers: 6,
     recentCommits: 477,
     totalContributions: 583,
     starsBreakdown: [],
     authenticated: false
   },
   npm: {
-    totalDownloads: 9500,
+    totalDownloads: 9611,
     packageCount: 16
   },
   devto: {
-    totalViews: 0,
-    followers: 45,
-    articleCount: 30
+    totalViews: 1834,
+    followers: 85,
+    articleCount: 28,
+    totalReactions: 10,
+    totalComments: 9,
+    totalReadingMinutes: 100
   },
   source: 'fallback'
 }

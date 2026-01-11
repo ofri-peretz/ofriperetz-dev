@@ -45,8 +45,8 @@ interface CombinedResponse {
 const FALLBACK_DATA: CombinedResponse = {
   articles: [],
   stats: {
-    followers: 45,
-    totalViews: 0
+    followers: 85,
+    totalViews: 1834
   },
   source: 'fallback'
 }
@@ -72,7 +72,7 @@ export default defineEventHandler(async (): Promise<CombinedResponse> => {
       const mapped = (publicArticles || []).map(a => ({ ...a, page_views_count: 0 }))
       return {
         articles: mapped,
-        stats: { followers: 45, totalViews: 0 },
+        stats: { followers: 85, totalViews: 1834 },
         source: 'fallback'
       }
     } catch (e) {
@@ -133,7 +133,7 @@ export default defineEventHandler(async (): Promise<CombinedResponse> => {
       )
       return {
         articles: (publicArticles || []).map(a => ({ ...a, page_views_count: 0 })),
-        stats: { followers: 45, totalViews: 0 },
+        stats: { followers: 85, totalViews: 1834 },
         source: 'fallback'
       }
     } catch {

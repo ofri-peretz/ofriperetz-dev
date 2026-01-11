@@ -251,13 +251,13 @@ const formatWeekRange = (weekKey: string): string => {
   const start = getWeekStartDate(weekKey)
   const end = new Date(start)
   end.setUTCDate(start.getUTCDate() + 6)
-  
+
   const formatDate = (d: Date) => {
     const month = d.toLocaleDateString('en-US', { month: 'short' })
     const day = d.getUTCDate()
     return `${month} ${day}`
   }
-  
+
   return `${formatDate(start)} - ${formatDate(end)}`
 }
 
@@ -514,7 +514,7 @@ const groupedMetrics = computed(() => {
               Total {{ currentMetric.shortLabel.toLowerCase() }} over time
             </span>
           </div>
-          
+
           <div class="flex items-center gap-3">
             <!-- Growth percentage -->
             <div
@@ -586,7 +586,10 @@ const groupedMetrics = computed(() => {
                 </div>
                 <div class="flex items-baseline gap-1.5">
                   <span class="text-[10px] text-gray-400 dark:text-gray-600">Total:</span>
-                  <span class="font-bold text-sm" :class="currentMetric.color.replace('from-', 'text-').replace('to-primary-400', '').replace('to-cyan-400', '').replace('to-orange-400', '').replace('to-teal-400', '').replace('to-purple-400', '').replace('to-red-400', '').replace('to-blue-400', '').replace('to-green-400', '').replace('to-indigo-400', '').replace('to-emerald-400', '')">
+                  <span
+                    class="font-bold text-sm"
+                    :class="currentMetric.color.replace('from-', 'text-').replace('to-primary-400', '').replace('to-cyan-400', '').replace('to-orange-400', '').replace('to-teal-400', '').replace('to-purple-400', '').replace('to-red-400', '').replace('to-blue-400', '').replace('to-green-400', '').replace('to-indigo-400', '').replace('to-emerald-400', '')"
+                  >
                     {{ formatNumber(point.value) }}
                   </span>
                 </div>

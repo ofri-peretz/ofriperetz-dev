@@ -29,9 +29,16 @@ useSeoMeta({
     'Building security-focused ESLint plugins with 9K+ downloads.'
 })
 
+const { stats: homeStats, loading: homeLoading, fetchStats } = useHomepageStats()
+
+onMounted(() => {
+  fetchStats()
+})
+
 // TOC items for home page sections
 const tocItems = [
   { id: 'hero', label: 'Hello' },
+  { id: 'impact', label: 'Impact' },
   { id: 'about', label: 'About' },
   { id: 'skills', label: 'Skills' },
   { id: 'philosophy', label: 'Philosophy' },
@@ -53,12 +60,42 @@ const tocItems = [
       <LandingHero :page />
     </div>
 
+    <!-- Impact Section - Interactive metrics -->
+    <UPageSection
+      id="impact"
+      data-toc-section
+      class="scroll-mt-20"
+      :ui="{
+        wrapper: 'py-12 sm:py-20',
+        container: 'max-w-6xl mx-auto py-0'
+      }"
+    >
+      <LandingImpactMetricsBlock
+        :downloads="homeStats?.npm?.totalDownloads || 0"
+        :views="homeStats?.devto?.totalViews || 0"
+        :followers="(homeStats?.github?.followers || 0) + (homeStats?.devto?.followers || 0)"
+        :github-followers="homeStats?.github?.followers || 0"
+        :devto-followers="homeStats?.devto?.followers || 0"
+        :contributions="homeStats?.github?.totalContributions || 0"
+        :commits="homeStats?.github?.recentCommits || 0"
+        :articles="homeStats?.devto?.articleCount || 0"
+        :reactions="homeStats?.devto?.totalReactions || 0"
+        :comments="homeStats?.devto?.totalComments || 0"
+        :reading-minutes="homeStats?.devto?.totalReadingMinutes || 0"
+        :packages="homeStats?.npm?.packageCount || 0"
+        :loading="homeLoading"
+        show-cta
+      />
+    </UPageSection>
+
     <!-- About Section with tighter, modern spacing -->
     <UPageSection
       id="about"
       data-toc-section
+      class="scroll-mt-20"
       :ui="{
-        container: 'py-4 sm:py-6 lg:grid lg:grid-cols-2 lg:gap-6 scroll-mt-20'
+        wrapper: 'py-12 sm:py-20',
+        container: 'lg:grid lg:grid-cols-2 lg:gap-12 py-0'
       }"
     >
       <LandingAbout :page />
@@ -69,7 +106,7 @@ const tocItems = [
     <div
       id="skills"
       data-toc-section
-      class="scroll-mt-20 py-4 sm:py-5"
+      class="scroll-mt-20 py-12 sm:py-20"
     >
       <LazyLandingSkills :page />
     </div>
@@ -77,7 +114,7 @@ const tocItems = [
     <div
       id="philosophy"
       data-toc-section
-      class="scroll-mt-20 py-4 sm:py-5"
+      class="scroll-mt-20 py-12 sm:py-20"
     >
       <LazyLandingPhilosophy />
     </div>
@@ -85,7 +122,7 @@ const tocItems = [
     <div
       id="articles"
       data-toc-section
-      class="scroll-mt-20 py-4 sm:py-5"
+      class="scroll-mt-20 py-12 sm:py-20"
     >
       <LazyLandingDevToArticles :page />
     </div>
@@ -93,7 +130,7 @@ const tocItems = [
     <div
       id="faq"
       data-toc-section
-      class="scroll-mt-20 py-4 sm:py-5"
+      class="scroll-mt-20 py-12 sm:py-20"
     >
       <LazyLandingFAQ :page />
     </div>

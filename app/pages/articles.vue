@@ -71,17 +71,42 @@ const _totalReadingTime = computed(
 )
 
 // ============================================
-// SORTING SYSTEM
+// FILTER & SEARCH SYSTEM
 // ============================================
 
-// Pinned article slugs - shown first in default state
-const PINNED_SLUGS = [
-  'eslint-plugin-import-vs-eslint-plugin-import-next-up-to-100x-faster',
-  'why-eslint-plugin-import-takes-45-seconds-and-how-we-fixed-it',
-  'your-eslint-security-plugin-is-missing-80-of-vulnerabilities-i-have-proof',
-  'the-30-minute-security-audit-onboarding-a-new-codebase',
-  'the-security-engineer-interview-cheat-sheet-for-javascript-developers'
-]
+const search = ref('')
+const selectedTags = ref<Set<string>>(new Set())
+
+// Get all unique tags from articles, excluding common ones
+const allTags = computed(() => {
+  const tags = new Set<string>()
+  articles.value.forEach((article) => {
+    article.tag_list.forEach(tag => tags.add(tag))
+  })
+  // Filter out generic tags like 'eslint' if they are too common
+  return Array.from(tags).filter(t => t.toLowerCase() !== 'eslint').sort()
+})
+
+const toggleTag = (tag: string) => {
+  if (selectedTags.value.has(tag)) {
+    selectedTags.value.delete(tag)
+  } else {
+    selectedTags.value.add(tag)
+  }
+  isDefaultState.value = false
+}
+
+const clearTags = () => {
+  selectedTags.value.clear()
+}
+
+const showTagFilters = ref(false)
+const tagFilterRef = ref(null)
+
+// Close tag filter dropdown when clicking outside
+onClickOutside(tagFilterRef, () => {
+  showTagFilters.value = false
+})
 
 // Sort options
 type SortOption = 'views' | 'recent' | 'reactions'
@@ -92,19 +117,12 @@ const sortOrder = ref<SortOrder>('desc')
 const isDefaultState = ref(true)
 
 const sortOptions = [
-  { value: 'views' as SortOption, label: 'Views', icon: 'i-lucide-eye' },
   { value: 'recent' as SortOption, label: 'Recent', icon: 'i-lucide-calendar' },
-  {
-    value: 'reactions' as SortOption,
-    label: 'Reactions',
-    icon: 'i-lucide-heart'
-  }
+  { value: 'views' as SortOption, label: 'Views', icon: 'i-lucide-eye' },
+  { value: 'reactions' as SortOption, label: 'Reactions', icon: 'i-lucide-heart' },
+  { value: 'comments' as SortOption, label: 'Comments', icon: 'i-lucide-message-circle' },
+  { value: 'reading_time' as SortOption, label: 'Read Time', icon: 'i-lucide-clock' }
 ]
-
-// Get current sort option index for sliding indicator
-const _currentSortIndex = computed(() =>
-  sortOptions.findIndex(opt => opt.value === sortBy.value)
-)
 
 // Handle sort option change
 const selectSort = (option: SortOption) => {
@@ -119,64 +137,97 @@ const selectSort = (option: SortOption) => {
   isDefaultState.value = false
 }
 
-// Toggle sort order
-const toggleOrder = () => {
-  sortOrder.value = sortOrder.value === 'desc' ? 'asc' : 'desc'
-  isDefaultState.value = false
-}
-
 // Reset to default
 const resetSort = () => {
-  sortBy.value = 'views'
+  sortBy.value = 'recent'
   sortOrder.value = 'desc'
+  search.value = ''
+  selectedTags.value.clear()
   isDefaultState.value = true
 }
 
 // Sorted and filtered articles
-const sortedArticles = computed(() => {
+const filteredArticles = computed(() => {
   if (!articles.value) return []
 
-  const sorted = [...articles.value].sort((a, b) => {
+  // 1. FILTERING
+  const result = articles.value.filter((article) => {
+    // Search match
+    const matchesSearch = !search.value
+      || article.title.toLowerCase().includes(search.value.toLowerCase())
+      || article.description.toLowerCase().includes(search.value.toLowerCase())
+
+    // Tag match (AND logic as per docs)
+    const matchesTags = selectedTags.value.size === 0
+      || Array.from(selectedTags.value).every(tag => article.tag_list.includes(tag))
+
+    return matchesSearch && matchesTags
+  })
+
+  // 2. SORTING
+  result.sort((a, b) => {
     let comparison = 0
 
     switch (sortBy.value) {
       case 'views':
-        // Sort by actual page views (falls back to 0 if not available)
-        comparison
-          = (b.page_views_count || 0) - (a.page_views_count || 0)
+        comparison = (b.page_views_count || 0) - (a.page_views_count || 0)
         break
       case 'recent':
-        comparison
-          = new Date(b.published_at).getTime()
-            - new Date(a.published_at).getTime()
+        comparison = new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
         break
       case 'reactions':
-        comparison
-          = (b.positive_reactions_count || 0) - (a.positive_reactions_count || 0)
+        comparison = (b.positive_reactions_count || 0) - (a.positive_reactions_count || 0)
+        break
+      case 'comments':
+        comparison = (b.comments_count || 0) - (a.comments_count || 0)
+        break
+      case 'reading_time':
+        comparison = (b.reading_time_minutes || 0) - (a.reading_time_minutes || 0)
         break
     }
 
     return sortOrder.value === 'desc' ? comparison : -comparison
   })
 
-  // If default state, put pinned articles first
-  if (isDefaultState.value) {
-    const pinned = sorted.filter(a =>
+  // 3. FEATURED PINNING (only in default state)
+  const PINNED_SLUGS = [
+    'eslint-plugin-import-vs-eslint-plugin-import-next-up-to-100x-faster',
+    'why-eslint-plugin-import-takes-45-seconds-and-how-we-fixed-it',
+    'your-eslint-security-plugin-is-missing-80-of-vulnerabilities-i-have-proof',
+    'the-30-minute-security-audit-onboarding-a-new-codebase',
+    'the-security-engineer-interview-cheat-sheet-for-javascript-developers'
+  ]
+
+  if (isDefaultState.value && !search.value && selectedTags.value.size === 0) {
+    const pinned = result.filter(a =>
       PINNED_SLUGS.some(slug => a.slug?.includes(slug))
     )
-    const notPinned = sorted.filter(
+    const notPinned = result.filter(
       a => !PINNED_SLUGS.some(slug => a.slug?.includes(slug))
     )
     return [...pinned, ...notPinned]
   }
 
-  return sorted
+  return result
 })
 
+// For pagination, use filteredArticles
+const sortedArticles = filteredArticles
+
 // Check if article is pinned (for badge display)
-const isPinned = (article: any) =>
-  isDefaultState.value
-  && PINNED_SLUGS.some(slug => article.slug?.includes(slug))
+const isPinned = (article: any) => {
+  const PINNED_SLUGS = [
+    'eslint-plugin-import-vs-eslint-plugin-import-next-up-to-100x-faster',
+    'why-eslint-plugin-import-takes-45-seconds-and-how-we-fixed-it',
+    'your-eslint-security-plugin-is-missing-80-of-vulnerabilities-i-have-proof',
+    'the-30-minute-security-audit-onboarding-a-new-codebase',
+    'the-security-engineer-interview-cheat-sheet-for-javascript-developers'
+  ]
+  return isDefaultState.value
+    && !search.value
+    && selectedTags.value.size === 0
+    && PINNED_SLUGS.some(slug => article.slug?.includes(slug))
+}
 
 // ============================================
 // WINDOW SIZE (used by pagination and view mode)
@@ -356,7 +407,7 @@ const tocItems = [
 </script>
 
 <template>
-  <div class="py-12 sm:py-16 lg:py-20">
+  <div class="py-6 sm:py-10">
     <!-- Floating TOC -->
     <FloatingToc :items="tocItems" />
 
@@ -380,53 +431,153 @@ const tocItems = [
             development. Published across multiple platforms.
           </p>
         </BlurFade>
-        <BlurFade :delay="50">
-          <div class="mt-6 flex flex-wrap justify-center gap-3">
-            <ShimmerButton>
-              <NuxtLink
-                to="https://dev.to/ofri-peretz"
-                target="_blank"
-                class="flex items-center gap-2 text-sm"
-              >
-                <UIcon
-                  name="i-simple-icons-devdotto"
-                  class="w-4 h-4"
-                />
-                Follow on dev.to
-                <UIcon
-                  name="i-lucide-external-link"
-                  class="w-3 h-3 opacity-60"
-                />
-              </NuxtLink>
-            </ShimmerButton>
-            <ShimmerButton>
-              <NuxtLink
-                to="https://medium.com/@ofriperetzdev"
-                target="_blank"
-                class="flex items-center gap-2 text-sm"
-              >
-                <UIcon
-                  name="i-simple-icons-medium"
-                  class="w-4 h-4"
-                />
-                Follow on Medium
-                <UIcon
-                  name="i-lucide-external-link"
-                  class="w-3 h-3 opacity-60"
-                />
-              </NuxtLink>
-            </ShimmerButton>
-          </div>
-        </BlurFade>
       </div>
 
       <!-- Content Engagement Preview -->
       <div
         id="articles-stats"
         data-toc-section
-        class="mb-12 scroll-mt-20 max-w-md mx-auto"
+        class="mb-12 scroll-mt-20 max-w-4xl mx-auto"
       >
         <LandingStatsPreviewContent />
+      </div>
+
+      <!-- Filter & Action Section -->
+      <div class="mb-10 space-y-4 relative z-50">
+        <!-- Search Bar: Full width, prominent -->
+        <div class="relative group">
+          <UIcon
+            name="i-lucide-search"
+            class="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-gray-400 transition-colors group-focus-within:text-primary-500"
+          />
+          <input
+            v-model="search"
+            type="text"
+            placeholder="Search articles by title or description..."
+            class="w-full h-14 pl-12 pr-4 text-base rounded-2xl border-2 border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm focus:outline-none focus:border-primary-500/50 focus:ring-4 focus:ring-primary-500/5 transition-all placeholder:text-gray-400"
+          >
+        </div>
+
+        <!-- Premium Action Bar: Consolidated Tags, Sort & View -->
+        <div class="flex flex-col lg:flex-row items-stretch lg:items-center gap-3 p-1.5 bg-gray-50/50 dark:bg-gray-800/20 backdrop-blur-md border border-gray-200/50 dark:border-gray-800/50 rounded-2xl">
+          <!-- Left Part: Tags Dropdown (Integrated) -->
+          <div
+            ref="tagFilterRef"
+            class="relative shrink-0"
+          >
+            <button
+              class="w-full lg:w-auto flex items-center gap-2 px-4 h-10 rounded-xl bg-white dark:bg-gray-900 border border-gray-200/50 dark:border-gray-800/50 transition-all hover:bg-gray-50 dark:hover:bg-gray-800 shadow-sm group/tags"
+              :class="selectedTags.size > 0 ? 'ring-2 ring-primary-500/20 border-primary-500/50' : ''"
+              @click="showTagFilters = !showTagFilters"
+            >
+              <UIcon
+                name="i-lucide-filter"
+                class="size-4"
+                :class="selectedTags.size > 0 ? 'text-primary-500' : 'text-gray-400'"
+              />
+              <span class="text-[11px] font-black uppercase tracking-wider">
+                Tags
+                <span
+                  v-if="selectedTags.size > 0"
+                  class="ml-1 text-primary-500"
+                >({{ selectedTags.size }})</span>
+              </span>
+              <UIcon
+                name="i-lucide-chevron-down"
+                class="size-3.5 transition-transform duration-200"
+                :class="showTagFilters ? 'rotate-180' : ''"
+              />
+            </button>
+
+            <!-- Tags Dropdown Content -->
+            <div
+              v-if="showTagFilters"
+              class="absolute left-0 lg:left-0 w-[calc(100vw-2rem)] sm:w-80 mt-2 p-4 z-[100] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl transition-none"
+            >
+              <div class="flex items-center justify-between mb-3 pb-2 border-b border-gray-100 dark:border-gray-800">
+                <span class="text-[10px] font-black uppercase tracking-widest text-gray-500">Filter by tags</span>
+                <button
+                  v-if="selectedTags.size > 0"
+                  class="text-[10px] font-bold text-red-500 hover:text-red-600 underline"
+                  @click="clearTags"
+                >
+                  Clear All
+                </button>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto no-scrollbar pr-1">
+                <button
+                  v-for="tag in allTags"
+                  :key="tag"
+                  class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-left transition-none border"
+                  :class="selectedTags.has(tag)
+                    ? 'bg-primary-500 border-primary-500 text-white'
+                    : 'bg-gray-50 dark:bg-gray-800/50 border-gray-100 dark:border-gray-800 text-gray-600 dark:text-gray-400 hover:border-primary-500/30'"
+                  @click="toggleTag(tag)"
+                >
+                  <div
+                    class="size-1.5 rounded-full shrink-0"
+                    :class="selectedTags.has(tag) ? 'bg-white' : 'bg-gray-300 dark:bg-gray-600'"
+                  />
+                  <span class="text-[10px] font-black uppercase truncate leading-none">#{{ tag }}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Middle Part: Sort Controls (Integrated) -->
+          <div class="flex-1 flex items-center gap-1 overflow-x-auto no-scrollbar bg-white dark:bg-gray-900 p-1 rounded-xl shadow-sm border border-gray-200/50 dark:border-gray-800/50">
+            <button
+              v-for="option in sortOptions"
+              :key="option.value"
+              class="flex-1 lg:flex-none flex items-center justify-center gap-1.5 px-3 h-8 rounded-lg transition-all text-[10px] font-black uppercase tracking-tight whitespace-nowrap"
+              :class="sortBy === option.value
+                ? 'bg-primary-500 text-white shadow-md shadow-primary-500/20'
+                : 'text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'"
+              @click="selectSort(option.value)"
+            >
+              <UIcon
+                :name="option.icon"
+                class="size-3.5"
+              />
+              <span class="hidden sm:inline">{{ option.label }}</span>
+              <UIcon
+                v-if="sortBy === option.value"
+                :name="sortOrder === 'desc' ? 'i-lucide-arrow-down' : 'i-lucide-arrow-up'"
+                class="size-3 opacity-80"
+              />
+            </button>
+          </div>
+
+          <!-- Right Part: Meta info & View toggle -->
+          <div class="flex items-center justify-between lg:justify-end gap-3 px-1 lg:px-2 shrink-0">
+            <!-- Result Count: Single line bold badge style -->
+            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-800/50">
+              <span class="text-[10px] font-black text-gray-900 dark:text-white">{{ filteredArticles.length }}</span>
+              <span class="text-[9px] font-black uppercase tracking-widest text-gray-500 dark:text-gray-500">Articles</span>
+            </div>
+
+            <div class="w-px h-4 bg-gray-200 dark:bg-gray-700 mx-1 hidden lg:block" />
+
+            <!-- View Toggles -->
+            <div class="flex items-center gap-1 bg-white dark:bg-gray-900 p-1 rounded-xl shadow-sm border border-gray-200/50 dark:border-gray-800/50">
+              <button
+                v-for="mode in availableViewModes"
+                :key="mode"
+                class="flex items-center justify-center w-8 h-8 rounded-lg transition-all"
+                :class="viewMode === mode
+                  ? 'bg-primary-500 text-white shadow-sm'
+                  : 'text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'"
+                @click="viewMode = mode"
+              >
+                <UIcon
+                  :name="mode === 1 ? 'i-lucide-square' : mode === 2 ? 'i-lucide-grid-2x2' : 'i-lucide-grid-3x3'"
+                  class="size-4"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- dev.to Section -->
@@ -435,180 +586,40 @@ const tocItems = [
         data-toc-section
         class="mb-16 scroll-mt-20"
       >
-        <!-- Title Row with anchor link -->
-        <div class="group flex items-center gap-3 mb-6">
-          <UIcon
-            name="i-simple-icons-devdotto"
-            class="w-6 h-6 text-gray-900 dark:text-white"
-          />
-          <a
-            href="#devto-articles"
-            class="flex items-center gap-2"
-          >
-            <h2
-              class="text-2xl font-bold text-gray-900 dark:text-white hover:text-primary-500 transition-colors"
-            >
-              dev.to Articles
-            </h2>
-            <UIcon
-              name="i-lucide-link"
-              class="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
-            />
-          </a>
-          <UBadge
-            color="primary"
-            variant="subtle"
-          >
-            Auto-synced
-          </UBadge>
-        </div>
-
-        <!-- Controls Row: Sort + View -->
-        <div
-          id="articles-controls"
-          class="flex flex-wrap items-center justify-between gap-4 mb-6 scroll-mt-20"
-        >
-          <!-- Sort Controls -->
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="text-sm text-gray-500 dark:text-gray-400">Sort:</span>
-            <div
-              class="flex items-center gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-xl"
-            >
-              <button
-                v-for="option in sortOptions"
-                :key="option.value"
-                class="flex items-center gap-1.5 px-3 h-8 rounded-lg transition-all duration-200 text-sm font-medium"
-                :class="
-                  sortBy === option.value
-                    ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700'
-                "
-                @click="selectSort(option.value)"
-              >
-                <UIcon
-                  :name="option.icon"
-                  class="w-4 h-4"
-                />
-                {{ option.label }}
-              </button>
-            </div>
-
-            <!-- Order Toggle -->
-            <button
-              class="flex items-center justify-center w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-              :title="sortOrder === 'desc' ? 'Descending' : 'Ascending'"
-              @click="toggleOrder"
-            >
-              <UIcon
-                :name="
-                  sortOrder === 'desc'
-                    ? 'i-lucide-arrow-down'
-                    : 'i-lucide-arrow-up'
-                "
-                class="w-4 h-4 text-gray-600 dark:text-gray-400"
-              />
-            </button>
-
-            <!-- Reset Button -->
-            <button
-              v-if="!isDefaultState"
-              class="flex items-center gap-1.5 px-3 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-sm text-gray-600 dark:text-gray-400"
-              @click="resetSort"
-            >
-              <UIcon
-                name="i-lucide-rotate-ccw"
-                class="w-3.5 h-3.5"
-              />
-              Reset
-            </button>
-
-            <!-- Pinned indicator -->
-            <div
-              v-if="isDefaultState"
-              class="flex items-center gap-1.5 text-sm text-amber-600 dark:text-amber-400"
-            >
-              <UIcon
-                name="i-lucide-pin"
-                class="w-4 h-4"
-              />
-              <span class="hidden sm:inline">Featured first</span>
-            </div>
-          </div>
-
-          <!-- View Mode Toggle -->
-          <div class="flex items-center gap-2">
-            <span
-              class="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline"
-            >View:</span>
-            <div
-              class="flex items-center gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-xl"
-            >
-              <button
-                v-for="mode in availableViewModes"
-                :key="mode"
-                class="flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-200"
-                :class="
-                  viewMode === mode
-                    ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
-                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-                "
-                @click="viewMode = mode"
-              >
-                <UIcon
-                  :name="
-                    mode === 1
-                      ? 'i-lucide-square'
-                      : mode === 2
-                        ? 'i-lucide-columns-2'
-                        : 'i-lucide-grid-3x3'
-                  "
-                  class="w-5 h-5"
-                />
-              </button>
-            </div>
-          </div>
-        </div>
-
         <!-- Top Pagination Controls -->
         <div
           v-if="totalArticlePages > 1 && !loading && !error"
-          class="flex justify-center items-center gap-2 mb-6"
+          id="articles-controls"
+          class="flex justify-center items-center gap-3 mb-8 scroll-mt-20"
         >
           <button
             :disabled="currentArticlePage === 1"
-            class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-800 hover:border-primary-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
             @click="goToArticlePage(currentArticlePage - 1)"
           >
             <UIcon
               name="i-lucide-chevron-left"
-              class="w-4 h-4"
+              class="size-4"
             />
+            Prev
           </button>
 
-          <div class="flex gap-1">
-            <button
-              v-for="page in totalArticlePages"
-              :key="page"
-              class="w-9 h-9 rounded-lg font-medium text-sm transition-all"
-              :class="
-                page === currentArticlePage
-                  ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
-              "
-              @click="goToArticlePage(page)"
-            >
-              {{ page }}
-            </button>
+          <div class="flex items-center gap-2 px-4 py-2 bg-gray-100/50 dark:bg-gray-800/30 rounded-xl border border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm">
+            <span class="text-xs font-bold text-gray-500 dark:text-gray-400">Page</span>
+            <span class="text-sm font-black text-primary-500">{{ currentArticlePage }}</span>
+            <span class="text-xs font-bold text-gray-500 dark:text-gray-400">of</span>
+            <span class="text-sm font-black">{{ totalArticlePages }}</span>
           </div>
 
           <button
             :disabled="currentArticlePage === totalArticlePages"
-            class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-800 hover:border-primary-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
             @click="goToArticlePage(currentArticlePage + 1)"
           >
+            Next
             <UIcon
               name="i-lucide-chevron-right"
-              class="w-4 h-4"
+              class="size-4"
             />
           </button>
         </div>
@@ -634,120 +645,90 @@ const tocItems = [
           class="mb-8"
         />
 
-        <!-- Articles Grid with smooth transition on view change -->
-        <Transition
-          name="fade"
-          mode="out-in"
+        <div
+          v-if="!loading && !error"
+          :key="`${viewMode}-${sortBy}-${sortOrder}-${isDefaultState}`"
+          class="grid gap-6"
+          :class="gridClass"
         >
           <div
-            v-if="!loading && !error"
-            :key="`${viewMode}-${sortBy}-${sortOrder}-${isDefaultState}`"
-            class="grid gap-6"
-            :class="gridClass"
+            v-for="article in paginatedArticles"
+            :key="article.id"
+            class="relative"
           >
-            <BlurFade
-              v-for="(article, index) in paginatedArticles"
-              :key="article.id"
-              :delay="index * 20"
+            <!-- Pinned Badge -->
+            <div
+              v-if="isPinned(article)"
+              class="absolute -top-2 -right-2 z-10 flex items-center gap-1 px-2 py-1 bg-amber-500 text-white text-xs font-medium rounded-full shadow-lg"
             >
-              <div class="relative">
-                <!-- Pinned Badge -->
-                <div
-                  v-if="isPinned(article)"
-                  class="absolute -top-2 -right-2 z-10 flex items-center gap-1 px-2 py-1 bg-amber-500 text-white text-xs font-medium rounded-full shadow-lg"
-                >
-                  <UIcon
-                    name="i-lucide-pin"
-                    class="w-3 h-3"
-                  />
-                  Featured
-                </div>
-                <DevToArticleCard :article="article" />
-              </div>
-            </BlurFade>
+              <UIcon
+                name="i-lucide-pin"
+                class="w-3 h-3"
+              />
+              Featured
+            </div>
+            <DevToArticleCard :article="article" />
           </div>
-        </Transition>
+        </div>
 
-        <!-- Pagination Controls -->
+        <!-- Bottom Pagination Controls -->
         <div
           v-if="totalArticlePages > 1"
-          class="flex justify-center items-center gap-2 mt-8"
+          class="flex justify-center items-center gap-3 mt-12"
         >
           <button
             :disabled="currentArticlePage === 1"
-            class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-800 hover:border-primary-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
             @click="goToArticlePage(currentArticlePage - 1)"
           >
             <UIcon
               name="i-lucide-chevron-left"
-              class="w-4 h-4"
+              class="size-4"
             />
+            Prev
           </button>
 
-          <div class="flex gap-1">
-            <button
-              v-for="page in totalArticlePages"
-              :key="page"
-              class="w-9 h-9 rounded-lg font-medium text-sm transition-all"
-              :class="
-                page === currentArticlePage
-                  ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
-              "
-              @click="goToArticlePage(page)"
-            >
-              {{ page }}
-            </button>
+          <div class="flex items-center gap-2 px-4 py-2 bg-gray-100/50 dark:bg-gray-800/30 rounded-xl border border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm">
+            <span class="text-xs font-bold text-gray-500 dark:text-gray-400">Page</span>
+            <span class="text-sm font-black text-primary-500">{{ currentArticlePage }}</span>
+            <span class="text-xs font-bold text-gray-500 dark:text-gray-400">of</span>
+            <span class="text-sm font-black">{{ totalArticlePages }}</span>
           </div>
 
           <button
             :disabled="currentArticlePage === totalArticlePages"
-            class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-800 hover:border-primary-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
             @click="goToArticlePage(currentArticlePage + 1)"
           >
+            Next
             <UIcon
               name="i-lucide-chevron-right"
-              class="w-4 h-4"
+              class="size-4"
             />
           </button>
         </div>
 
         <!-- Empty State -->
         <div
-          v-if="!loading && !error && articles.length === 0"
-          class="text-center py-12"
+          v-if="!loading && !error && filteredArticles.length === 0"
+          class="flex flex-col items-center justify-center py-20 bg-gray-50/50 dark:bg-gray-800/20 rounded-3xl border border-dashed border-gray-200 dark:border-gray-700"
         >
           <UIcon
-            name="i-lucide-file-text"
-            class="w-12 h-12 text-gray-400 mx-auto mb-4"
+            name="i-lucide-search-x"
+            class="w-16 h-16 text-gray-300 dark:text-gray-600 mb-4"
           />
-          <p class="text-gray-500 dark:text-gray-400">
-            No articles found.
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+            No articles found
+          </h3>
+          <p class="text-gray-500 dark:text-gray-400 mb-6 max-w-xs text-center">
+            We couldn't find any articles matching your search or selected tags.
           </p>
-        </div>
-
-        <!-- View All on dev.to -->
-        <div
-          v-if="articles.length > 0"
-          class="text-center mt-8"
-        >
-          <ShimmerButton>
-            <NuxtLink
-              to="https://dev.to/ofri-peretz"
-              target="_blank"
-              class="flex items-center gap-2"
-            >
-              <UIcon
-                name="i-simple-icons-devdotto"
-                class="w-4 h-4"
-              />
-              View All on dev.to
-              <UIcon
-                name="i-lucide-external-link"
-                class="w-3 h-3 opacity-60"
-              />
-            </NuxtLink>
-          </ShimmerButton>
+          <button
+            class="px-6 py-2.5 bg-primary-500 text-white rounded-xl font-bold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-primary-500/20"
+            @click="resetSort"
+          >
+            Clear all filters
+          </button>
         </div>
       </div>
 
@@ -755,39 +736,31 @@ const tocItems = [
       <div
         id="medium-articles"
         data-toc-section
-        class="scroll-mt-20"
+        class="scroll-mt-20 mt-16"
       >
-        <div class="flex items-center gap-3 mb-6">
+        <NuxtLink
+          to="https://medium.com/@ofriperetzdev"
+          target="_blank"
+          class="group block p-8 rounded-3xl bg-gray-50/50 dark:bg-gray-800/10 border border-dashed border-gray-200 dark:border-gray-800 text-center hover:border-primary-500/50 transition-all duration-300"
+        >
           <UIcon
             name="i-simple-icons-medium"
-            class="w-6 h-6 text-gray-900 dark:text-white"
+            class="w-12 h-12 text-gray-400 mx-auto mb-4 group-hover:text-primary-500 transition-colors"
           />
-          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
-            Medium Articles
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+            More on Medium
           </h2>
-        </div>
-
-        <UCard class="text-center py-8">
-          <div class="space-y-4">
+          <p class="text-gray-600 dark:text-gray-400 max-w-md mx-auto mb-4">
+            I also publish deep-dives on Medium. Explore my profile for more technical content and engineering leadership insights.
+          </p>
+          <div class="inline-flex items-center gap-2 text-sm font-bold text-primary-500 group-hover:underline">
+            View Articles on Medium
             <UIcon
-              name="i-simple-icons-medium"
-              class="w-12 h-12 text-gray-400 mx-auto"
+              name="i-lucide-external-link"
+              class="w-4 h-4"
             />
-            <p class="text-gray-600 dark:text-gray-400">
-              I also publish articles on Medium. Check out my profile for more
-              content!
-            </p>
-            <UButton
-              to="https://medium.com/@ofriperetzdev"
-              target="_blank"
-              color="primary"
-              size="lg"
-              trailing-icon="i-lucide-external-link"
-            >
-              View Articles on Medium
-            </UButton>
           </div>
-        </UCard>
+        </NuxtLink>
       </div>
     </UContainer>
   </div>

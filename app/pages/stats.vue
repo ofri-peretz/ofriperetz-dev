@@ -21,6 +21,12 @@ watch(funnelMode, (newMode) => {
 })
 
 const {
+  stats: homeStats,
+  loading: homeLoading,
+  fetchStats: fetchHomeStats
+} = useHomepageStats()
+
+const {
   articles,
   followers: devtoFollowers,
   totalViews: devtoViews,
@@ -41,13 +47,16 @@ const {
 
 // Early stage mode: hide correlation analysis until we have meaningful star data
 const isEarlyStage = computed(() =>
-  (githubStats.value?.totalStars || 0) < STARS_VISIBILITY_THRESHOLD
+  (githubStats.value?.totalStars || homeStats.value?.github?.totalStars || 0) < STARS_VISIBILITY_THRESHOLD
 )
 
 // Fetch data on mount with prioritized staggering for perceived performance
-// Priority: GitHub (hero stars) > npm (main metrics) > articles (secondary)
+// Priority: Homepage Stats (Instant landing) > GitHub (hero stars) > npm (main metrics) > articles (secondary)
 onMounted(async () => {
   try {
+    // Priority 0: Homepage Stats for near-instant metric landing
+    await fetchHomeStats()
+
     // Priority 1: GitHub stats for hero section (shows first)
     await fetchGitHubStats()
 
@@ -323,20 +332,20 @@ const tocItems = computed(() => {
               root-margin="50px"
               min-height="300px"
             >
-              <LazyLandingEarlyStageImpactView
-                :downloads="totalDownloads"
-                :views="totalViews"
-                :followers="totalFollowers"
-                :github-followers="githubStats?.followers || 0"
-                :devto-followers="devtoFollowers"
-                :contributions="githubStats?.totalContributions || 0"
-                :commits="githubStats?.recentCommits || 0"
-                :articles="totalArticles"
+              <LandingImpactMetricsBlock
+                :downloads="totalDownloads || homeStats?.npm?.totalDownloads || 0"
+                :views="totalViews || homeStats?.devto?.totalViews || 0"
+                :followers="totalFollowers || (homeStats?.github?.followers + homeStats?.devto?.followers) || 0"
+                :github-followers="githubStats?.followers || homeStats?.github?.followers || 0"
+                :devto-followers="devtoFollowers || homeStats?.devto?.followers || 0"
+                :contributions="githubStats?.totalContributions || homeStats?.github?.totalContributions || 0"
+                :commits="githubStats?.recentCommits || homeStats?.github?.recentCommits || 0"
+                :articles="totalArticles || homeStats?.devto?.articleCount || 0"
                 :reading-minutes="totalReadingTime"
                 :reactions="devtoReactions"
                 :comments="totalComments"
-                :packages="npmStats?.length || 0"
-                :loading="npmLoading || githubLoading || articlesLoading"
+                :packages="npmStats?.length || homeStats?.npm?.packageCount || 0"
+                :loading="homeLoading ? true : (npmLoading && githubLoading && articlesLoading)"
               />
               <template #loading>
                 <div

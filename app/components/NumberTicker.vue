@@ -7,18 +7,21 @@ const props = withDefaults(
     decimalPlaces?: number
     suffix?: string
     prefix?: string
+    skipAnimation?: boolean
   }>(),
   {
     startValue: 0,
     duration: 2000,
     decimalPlaces: 0,
     suffix: '',
-    prefix: ''
+    prefix: '',
+    skipAnimation: false
   }
 )
 
 const displayValue = ref(props.startValue)
 const isVisible = ref(false)
+const hasAnimated = ref(false)
 const targetRef = ref<HTMLElement | null>(null)
 
 // Easing function for smooth animation
@@ -26,19 +29,22 @@ const easeOutExpo = (t: number): number => {
   return t === 1 ? 1 : 1 - Math.pow(2, -10 * t)
 }
 
-// Format the number
+// Format the number based on the global metric standard
 const formattedValue = computed(() => {
-  const num = displayValue.value.toFixed(props.decimalPlaces)
-  // Add thousand separators
-  const parts = num.split('.')
-  parts[0] = (parts[0] ?? '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-  return props.prefix + parts.join('.') + props.suffix
+  return formatMetric(displayValue.value, props.decimalPlaces)
 })
 
 // Animate when visible
 const animate = () => {
+  // Skip animation if requested or already animated
+  if (props.skipAnimation || hasAnimated.value) {
+    displayValue.value = props.value
+    return
+  }
+
   if (!isVisible.value) return
 
+  hasAnimated.value = true
   const start = props.startValue
   const end = props.value
   const startTime = performance.now()
@@ -60,11 +66,13 @@ const animate = () => {
   requestAnimationFrame(step)
 }
 
-// Watch for value changes
+// Watch for value changes - update display but don't re-animate
 watch(
   () => props.value,
-  () => {
-    if (isVisible.value) {
+  (newVal) => {
+    if (hasAnimated.value || props.skipAnimation) {
+      displayValue.value = newVal
+    } else if (isVisible.value) {
       animate()
     }
   }

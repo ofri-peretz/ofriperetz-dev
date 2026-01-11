@@ -10,6 +10,7 @@ defineProps<{
 
 <template>
   <UPageHero
+    class="pt-12 sm:pt-16"
     :ui="{
       headline: 'flex items-center justify-center',
       title: 'text-shadow-md max-w-lg mx-auto',
@@ -225,15 +226,5 @@ defineProps<{
         </Motion>
       </div>
     </template>
-
-    <!-- Impact Preview - in Hero section -->
-    <Motion
-      :initial="{ scale: 1.1, opacity: 0, filter: 'blur(20px)' }"
-      :animate="{ scale: 1, opacity: 1, filter: 'blur(0px)' }"
-      :transition="{ duration: 0.6, delay: 0.7 }"
-      class="py-6 px-2 sm:px-8 w-full max-w-6xl mx-auto"
-    >
-      <LandingImpactPreview />
-    </Motion>
   </UPageHero>
 </template>

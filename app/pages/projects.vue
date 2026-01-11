@@ -225,17 +225,17 @@ const tocItems = [
 
               <div class="flex gap-1">
                 <button
-                  v-for="page in totalPages"
-                  :key="page"
+                  v-for="p in totalPages"
+                  :key="p"
                   class="w-8 h-8 rounded-lg font-medium text-sm transition-all"
                   :class="
-                    page === currentPage
+                    p === currentPage
                       ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
                       : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
                   "
-                  @click="goToPage(page)"
+                  @click="goToPage(p)"
                 >
-                  {{ page }}
+                  {{ p }}
                 </button>
               </div>
 
@@ -376,17 +376,17 @@ const tocItems = [
 
           <div class="flex gap-1">
             <button
-              v-for="page in totalPages"
-              :key="page"
+              v-for="p in totalPages"
+              :key="p"
               class="w-10 h-10 rounded-lg font-medium transition-all"
               :class="
-                page === currentPage
+                p === currentPage
                   ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
                   : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
               "
-              @click="goToPage(page)"
+              @click="goToPage(p)"
             >
-              {{ page }}
+              {{ p }}
             </button>
           </div>
 

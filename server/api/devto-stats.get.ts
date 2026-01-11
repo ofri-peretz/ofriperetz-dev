@@ -1,7 +1,8 @@
 import { getCache, setCache, CACHE_TTL } from '../utils/cache'
 
 // Fallback value - update manually from dashboard if API fails persistently
-const FALLBACK_FOLLOWERS = 45
+const FALLBACK_FOLLOWERS = 85
+const FALLBACK_VIEWS = 1834
 
 export default defineEventHandler(async () => {
   const config = useRuntimeConfig()
@@ -18,6 +19,7 @@ export default defineEventHandler(async () => {
     console.warn('[devto-stats] No DEVTO_API_KEY configured, using fallback')
     return {
       followers: FALLBACK_FOLLOWERS,
+      totalViews: FALLBACK_VIEWS,
       source: 'fallback' as const
     }
   }
@@ -72,6 +74,7 @@ export default defineEventHandler(async () => {
 
     return {
       followers: FALLBACK_FOLLOWERS,
+      totalViews: FALLBACK_VIEWS,
       source: 'fallback' as const
     }
   }
