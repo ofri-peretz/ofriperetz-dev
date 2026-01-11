@@ -74,13 +74,13 @@ const toggle = () => {
             :class="iconColor"
           />
         </div>
-        <div class="flex flex-col justify-center min-w-0">
-          <div class="text-[11px] sm:text-sm font-black uppercase tracking-widest text-gray-700 dark:text-gray-200 leading-tight truncate">
+        <div class="flex flex-col justify-center min-w-0 flex-1">
+          <div class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-gray-700 dark:text-gray-200 leading-tight">
             {{ label }}
           </div>
           <div
             v-if="description"
-            class="text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2 leading-snug"
+            class="text-[9px] sm:text-[10px] text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2 leading-snug"
           >
             {{ description }}
           </div>

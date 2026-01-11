@@ -402,79 +402,14 @@ const tocItems = [
           </button>
         </div>
 
-        <!-- More Projects Coming Soon -->
+        <!-- Interlace ESLint Ecosystem Promo -->
         <BlurFade :delay="300">
           <div
             id="more-projects"
             data-toc-section
-            class="mt-16 scroll-mt-20"
+            class="mt-16 scroll-mt-20 max-w-3xl mx-auto"
           >
-            <div
-              class="flex flex-col items-center gap-4 p-8 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50 border border-gray-200 dark:border-gray-700"
-            >
-              <div
-                class="flex items-center gap-2 text-gray-500 dark:text-gray-400"
-              >
-                <UIcon
-                  name="i-lucide-package"
-                  class="w-5 h-5"
-                />
-                <span class="text-sm font-medium">More packages in the ecosystem</span>
-              </div>
-              <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                10+ More ESLint Plugins Available
-              </h3>
-              <p
-                class="text-sm text-gray-500 dark:text-gray-400 text-center max-w-2xl"
-              >
-                Including eslint-plugin-pg, eslint-plugin-vercel-ai-security,
-                eslint-plugin-express-security, eslint-plugin-lambda-security,
-                and more.
-              </p>
-              <div class="flex flex-wrap gap-3 justify-center mt-2">
-                <ShimmerButton>
-                  <NuxtLink
-                    to="https://github.com/ofri-peretz"
-                    target="_blank"
-                    class="flex items-center gap-2"
-                  >
-                    <UIcon
-                      name="i-simple-icons-github"
-                      class="w-4 h-4"
-                    />
-                    Explore All Packages
-                    <UIcon
-                      name="i-lucide-external-link"
-                      class="w-3 h-3 opacity-60"
-                    />
-                  </NuxtLink>
-                </ShimmerButton>
-                <ShimmerButton>
-                  <NuxtLink
-                    to="https://www.npmjs.com/~ofriperetz"
-                    target="_blank"
-                    class="flex items-center gap-2"
-                  >
-                    <UIcon
-                      name="i-simple-icons-npm"
-                      class="w-4 h-4"
-                    />
-                    View on npm
-                    <UIcon
-                      name="i-lucide-external-link"
-                      class="w-3 h-3 opacity-60"
-                    />
-                  </NuxtLink>
-                </ShimmerButton>
-              </div>
-            </div>
-          </div>
-        </BlurFade>
-
-        <!-- Package Stats Preview -->
-        <BlurFade :delay="350">
-          <div class="mt-8 max-w-md mx-auto">
-            <LandingStatsPreviewDownloads />
+            <LandingInterlaceEslintPromo />
           </div>
         </BlurFade>
       </UPageSection>

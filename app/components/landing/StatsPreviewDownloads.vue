@@ -277,14 +277,14 @@ onMounted(() => {
 
       <!-- CTA Button -->
       <div class="text-center">
-        <NuxtLink to="/stats#downloads">
+        <NuxtLink to="/stats">
           <ShimmerButton class="mx-auto">
             <span class="flex items-center gap-2 text-sm font-medium">
               <UIcon
                 name="i-lucide-bar-chart-3"
                 class="w-4 h-4"
               />
-              View All Stats
+              View Full Dashboard
               <UIcon
                 name="i-lucide-arrow-right"
                 class="w-4 h-4"

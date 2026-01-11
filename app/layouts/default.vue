@@ -10,5 +10,8 @@
       <slot />
       <AppFooter />
     </UContainer>
+
+    <!-- Scroll indicator for desktop navigation -->
+    <ScrollIndicator />
   </div>
 </template>

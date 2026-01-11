@@ -59,7 +59,7 @@ const estimatedHours = computed(() => {
 const metrics = computed(() => [
   {
     id: 'downloads',
-    label: 'Package Downloads',
+    label: 'Downloads',
     value: props.downloads,
     icon: 'i-simple-icons-npm',
     iconColor: 'text-red-500',
@@ -88,7 +88,7 @@ const metrics = computed(() => [
   },
   {
     id: 'followers',
-    label: 'Developer Network',
+    label: 'Network',
     value: props.followers,
     icon: 'i-lucide-users',
     iconColor: 'text-purple-500',
@@ -103,7 +103,7 @@ const metrics = computed(() => [
   },
   {
     id: 'effort',
-    label: 'Development Activity',
+    label: 'Activity',
     value: props.contributions ?? 0,
     icon: 'i-lucide-git-commit',
     iconColor: 'text-green-500',
@@ -118,14 +118,14 @@ const metrics = computed(() => [
   },
   {
     id: 'engagement',
-    label: 'Community Engagement',
+    label: 'Engagement',
     value: (props.reactions ?? 0) + (props.comments ?? 0),
     icon: 'i-lucide-heart',
     iconColor: 'text-pink-500',
     color: 'text-pink-600 dark:text-pink-400',
     bgColor: 'bg-pink-50 dark:bg-pink-500/10',
     borderColor: 'border-pink-200 dark:border-pink-500/30',
-    description: 'Reactions & comments on articles',
+    description: 'Reactions & comments',
     subMetrics: [
       { label: 'Reactions', value: props.reactions ?? 0, icon: 'i-lucide-heart' },
       { label: 'Comments', value: props.comments ?? 0, icon: 'i-lucide-message-square' }
@@ -133,14 +133,14 @@ const metrics = computed(() => [
   },
   {
     id: 'content',
-    label: 'Knowledge Sharing',
+    label: 'Content',
     value: (props.articles ?? 0) + (props.readingMinutes ?? 0),
     icon: 'i-lucide-book-open',
     iconColor: 'text-amber-500',
     color: 'text-amber-600 dark:text-amber-400',
     bgColor: 'bg-amber-50 dark:bg-amber-500/10',
     borderColor: 'border-amber-200 dark:border-amber-500/30',
-    description: 'Technical articles & read time',
+    description: 'Articles & read time',
     subMetrics: [
       { label: 'Articles', value: props.articles ?? 0, icon: 'i-lucide-file-text' },
       { label: 'Reading Minutes', value: props.readingMinutes ?? 0, icon: 'i-lucide-clock' }

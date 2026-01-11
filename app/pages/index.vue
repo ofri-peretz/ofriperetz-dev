@@ -66,7 +66,7 @@ const tocItems = [
       data-toc-section
       class="scroll-mt-20"
       :ui="{
-        wrapper: 'py-12 sm:py-20',
+        wrapper: 'py-8 sm:py-20',
         container: 'max-w-6xl mx-auto py-0'
       }"
     >
@@ -94,7 +94,7 @@ const tocItems = [
       data-toc-section
       class="scroll-mt-20"
       :ui="{
-        wrapper: 'py-12 sm:py-20',
+        wrapper: 'py-8 sm:py-20',
         container: 'lg:grid lg:grid-cols-2 lg:gap-12 py-0'
       }"
     >
@@ -106,7 +106,7 @@ const tocItems = [
     <div
       id="skills"
       data-toc-section
-      class="scroll-mt-20 py-12 sm:py-20"
+      class="scroll-mt-20 py-8 sm:py-20"
     >
       <LazyLandingSkills :page />
     </div>
@@ -114,7 +114,7 @@ const tocItems = [
     <div
       id="philosophy"
       data-toc-section
-      class="scroll-mt-20 py-12 sm:py-20"
+      class="scroll-mt-20 py-8 sm:py-20"
     >
       <LazyLandingPhilosophy />
     </div>
@@ -122,7 +122,7 @@ const tocItems = [
     <div
       id="articles"
       data-toc-section
-      class="scroll-mt-20 py-12 sm:py-20"
+      class="scroll-mt-20 py-8 sm:py-20"
     >
       <LazyLandingDevToArticles :page />
     </div>
@@ -130,7 +130,7 @@ const tocItems = [
     <div
       id="faq"
       data-toc-section
-      class="scroll-mt-20 py-12 sm:py-20"
+      class="scroll-mt-20 py-8 sm:py-20"
     >
       <LazyLandingFAQ :page />
     </div>

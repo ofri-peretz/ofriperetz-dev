@@ -20,13 +20,13 @@ const items = computed(() => {
 })
 
 const ui = {
-  root: 'flex items-center gap-4 w-full',
-  list: 'relative flex bg-transparent dark:bg-transparent gap-2 px-0',
+  root: 'flex items-center gap-2 sm:gap-4 w-full',
+  list: 'relative flex bg-transparent dark:bg-transparent gap-1 sm:gap-2 px-0 overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0',
   indicator:
     'absolute top-[4px] duration-200 ease-out focus:outline-none rounded-lg bg-elevated/60',
   trigger:
-    'px-3 py-2 rounded-lg hover:bg-muted/50 data-[state=active]:text-highlighted data-[state=inactive]:text-muted',
-  label: 'truncate'
+    'px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg hover:bg-muted/50 data-[state=active]:text-highlighted data-[state=inactive]:text-muted text-xs sm:text-sm whitespace-nowrap shrink-0',
+  label: ''
 }
 </script>
 
