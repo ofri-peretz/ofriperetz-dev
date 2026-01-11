@@ -70,21 +70,10 @@ const formatDate = (dateString: string) => {
       </div>
 
       <!-- SECTION 3: CONTENT BODY -->
-      <div class="p-6 flex-grow flex flex-col gap-4">
-        <!-- Tags -->
-        <div class="flex flex-wrap gap-2">
-          <span
-            v-for="tag in article.tag_list.slice(0, 3)"
-            :key="tag"
-            class="px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-violet-600 dark:text-violet-400 bg-violet-600/5 dark:bg-violet-400/5 border border-violet-500/10 rounded-md"
-          >
-            #{{ tag }}
-          </span>
-        </div>
-
-        <!-- Title -->
-        <div>
-          <h3 class="text-xl font-black text-violet-600 dark:text-violet-400 group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors line-clamp-2 leading-tight tracking-tighter">
+      <div class="p-6 flex-grow flex flex-col">
+        <!-- Title & Description -->
+        <div class="flex-grow">
+          <h3 class="text-xl font-black text-violet-600 dark:text-violet-400 group-hover:text-violet-700 dark:group-hover:text-violet-300 transition-colors line-clamp-2 leading-tight tracking-tighter min-h-[3rem]">
             {{ article.title }}
           </h3>
           <p
@@ -93,6 +82,17 @@ const formatDate = (dateString: string) => {
           >
             {{ article.description }}
           </p>
+        </div>
+
+        <!-- Tags at bottom of content block -->
+        <div class="flex flex-wrap gap-2 mt-4">
+          <span
+            v-for="tag in article.tag_list.slice(0, 3)"
+            :key="tag"
+            class="px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-violet-600 dark:text-violet-400 bg-violet-600/5 dark:bg-violet-400/5 border border-violet-500/10 rounded-md"
+          >
+            #{{ tag }}
+          </span>
         </div>
       </div>
 

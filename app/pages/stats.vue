@@ -224,16 +224,23 @@ useHead({
 
 // TOC items for this page - conditionally include correlation analysis
 const tocItems = computed(() => {
+  const isDataLoading = homeLoading.value || githubLoading.value || npmLoading.value || articlesLoading.value
+
+  // Use a generic label while loading to avoid flashes
+  const visualizationLabel = isDataLoading
+    ? 'Impact Visualization'
+    : (isEarlyStage.value ? 'Impact Metrics' : 'NSM Visualization')
+
   const baseItems = [
     { id: 'stats-header', label: 'Overview' },
     // Only show North Star Goal in TOC when not early stage
     ...(isEarlyStage.value ? [] : [{ id: 'north-star-goal', label: 'North Star Goal' }]),
-    { id: 'nsm-visualization', label: isEarlyStage.value ? 'Impact Metrics' : 'NSM Visualization' },
+    { id: 'nsm-visualization', label: visualizationLabel },
     { id: 'metrics-over-time', label: 'Metrics Over Time' }
   ]
 
   // Only show correlation analysis in TOC when we have meaningful data
-  if (!isEarlyStage.value) {
+  if (!isEarlyStage.value && !isDataLoading) {
     baseItems.push({ id: 'correlation-analysis', label: 'Correlation Analysis' })
   }
 
@@ -442,10 +449,18 @@ const tocItems = computed(() => {
               />
               <template #loading>
                 <div
-                  class="animate-pulse bg-gray-100 dark:bg-gray-800 rounded-xl h-[400px] flex items-center justify-center"
+                  class="bg-slate-50 dark:bg-slate-900 rounded-xl sm:rounded-2xl border border-gray-200 dark:border-gray-800 h-[400px] flex flex-col items-center justify-center gap-4"
                 >
-                  <div class="text-gray-400">
-                    Loading visualization...
+                  <div class="relative">
+                    <div class="w-12 h-12 border-4 border-primary-500/20 border-t-primary-500 rounded-full animate-spin" />
+                    <UIcon
+                      name="i-lucide-activity"
+                      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 text-primary-500 animate-pulse"
+                    />
+                  </div>
+                  <div class="flex flex-col items-center gap-1">
+                    <span class="text-sm font-bold text-gray-900 dark:text-white">Analyzing Data Patterns</span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">Preparing high-fidelity visualization...</span>
                   </div>
                 </div>
               </template>

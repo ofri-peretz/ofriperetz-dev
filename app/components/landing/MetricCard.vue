@@ -52,7 +52,7 @@ const toggle = () => {
 
 <template>
   <div
-    class="relative rounded-2xl border bg-linear-to-br p-5 transition-all duration-300 group"
+    class="relative h-full rounded-2xl border bg-linear-to-br p-5 transition-all duration-300 group flex flex-col"
     :class="[
       bgColor,
       borderColor,
@@ -63,24 +63,24 @@ const toggle = () => {
     @click="toggle"
   >
     <!-- Main Content -->
-    <div class="flex items-center justify-between h-14 sm:h-16">
-      <div class="flex items-center gap-3 h-full">
+    <div class="flex items-center justify-between h-16 sm:h-20 shrink-0">
+      <div class="flex items-center gap-4 h-full">
         <div
-          class="p-2 rounded-xl bg-white/90 dark:bg-gray-800/90 shadow-sm transition-transform group-hover:scale-110 shrink-0 flex items-center justify-center"
+          class="p-2 sm:p-2.5 rounded-xl bg-white/90 dark:bg-gray-800/90 shadow-sm transition-transform group-hover:scale-110 shrink-0 flex items-center justify-center"
         >
           <UIcon
             :name="icon"
-            class="w-5 h-5"
+            class="w-5 h-5 sm:w-6 sm:h-6"
             :class="iconColor"
           />
         </div>
         <div class="flex flex-col justify-center min-w-0">
-          <div class="text-[11px] sm:text-sm font-black uppercase tracking-widest text-gray-700 dark:text-gray-200 leading-none truncate">
+          <div class="text-[11px] sm:text-sm font-black uppercase tracking-widest text-gray-700 dark:text-gray-200 leading-tight truncate">
             {{ label }}
           </div>
           <div
             v-if="description"
-            class="text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-1 leading-tight"
+            class="text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2 leading-snug"
           >
             {{ description }}
           </div>
@@ -89,18 +89,18 @@ const toggle = () => {
 
       <div
         v-if="subMetrics.length > 0"
-        class="flex items-center gap-1 text-gray-400 shrink-0"
+        class="flex items-center gap-1 text-gray-400 shrink-0 ml-2"
       >
         <UIcon
           name="i-lucide-chevron-down"
-          class="w-4 h-4 transition-transform duration-300"
+          class="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300"
           :class="isExpanded ? 'rotate-180' : ''"
         />
       </div>
     </div>
 
     <!-- Value Section -->
-    <div class="mt-4 sm:mt-6 overflow-hidden">
+    <div class="mt-auto pt-4 sm:pt-6 overflow-hidden">
       <div
         class="font-bold tabular-nums transition-all duration-500"
         :class="[
@@ -110,7 +110,7 @@ const toggle = () => {
         ]"
       >
         <template v-if="loading">
-          ...
+          <div class="h-8 bg-current/10 rounded-lg animate-pulse w-24" />
         </template>
         <template v-else>
           <NumberTicker

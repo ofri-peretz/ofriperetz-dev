@@ -194,7 +194,7 @@ const toggleCard = (id: string) => {
     </template>
 
     <!-- Metrics Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 h-full">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
       <LandingMetricCard
         v-for="metric in metrics"
         :id="metric.id"
