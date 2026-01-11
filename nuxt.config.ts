@@ -234,11 +234,11 @@ export default defineNuxtConfig({
   },
 
   // Route rules for caching
-  // Switch to ISR (Stale-While-Revalidate) to avoid static asset cache mismatch (Split-Brain)
-  routeRules: {
-    '/': { swr: 3600 },
-    '/projects': { swr: 3600 },
-    '/articles': { swr: 3600 },
+    // Switch to Pure SSR to guarantee fresh assets and avoid Vercel 404 caching issues
+    routeRules: {
+    '/': { ssr: true, prerender: false, swr: false },
+    '/projects': { ssr: true, prerender: false, swr: false },
+    '/articles': { ssr: true, prerender: false, swr: false },
     // API routes - short cache
     '/api/**': { cache: { maxAge: 60 } }
   },
