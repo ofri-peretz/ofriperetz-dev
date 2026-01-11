@@ -236,8 +236,12 @@ export default defineNuxtConfig({
 
   // Route rules for caching
   routeRules: {
-    // Default to SSR for all pages (no cache) to prevent stale asset issues
-    '/api/**': { cors: true }
+    // Static pages - cache aggressively (Prerender is the only stable mode on Vercel for this app)
+    '/': { prerender: true },
+    '/projects': { prerender: true },
+    '/articles': { prerender: true },
+    // API routes - short cache
+    '/api/**': { cache: { maxAge: 60 } }
   },
 
   // Performance optimizations
@@ -254,8 +258,13 @@ export default defineNuxtConfig({
     preset: 'vercel',
     // Enable compression
     compressPublicAssets: true,
-    // Explicitly disable prerendering to ensure strict ISR/SSR behavior
+    // Explicitly enable prerendering
     prerender: {
+      routes: [
+        '/',
+        '/projects',
+        '/articles'
+      ],
       crawlLinks: false,
       ignore: ['/stats', '/api']
     }
