@@ -25,9 +25,9 @@ const formatDate = (dateString: string) => {
 
       <!-- SECTION 1: THUMBNAIL IMAGE -->
       <div class="relative h-52 w-full shrink-0 overflow-hidden">
-        <template v-if="article.cover_image || article.social_image">
+        <template v-if="article.cover_image">
           <NuxtImg
-            :src="article.cover_image || article.social_image"
+            :src="article.cover_image"
             :alt="article.title"
             loading="lazy"
             decoding="async"
