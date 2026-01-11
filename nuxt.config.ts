@@ -235,10 +235,9 @@ export default defineNuxtConfig({
   // Route rules for caching
   routeRules: {
     // Static pages - cache aggressively
-    // Temporarily disabled to fix Split-Brain deployment issue (force SSR)
-    // '/': { prerender: true },
-    // '/projects': { prerender: true },
-    // '/articles': { prerender: true },
+    '/': { prerender: true },
+    '/projects': { prerender: true },
+    '/articles': { prerender: true },
     // API routes - short cache
     '/api/**': { cache: { maxAge: 60 } }
   },
@@ -257,9 +256,9 @@ export default defineNuxtConfig({
     compressPublicAssets: true,
     prerender: {
       routes: [
-        // '/',
-        // '/projects',
-        // '/articles'
+        '/',
+        '/projects',
+        '/articles'
       ],
       // Don't crawl links to avoid trying to prerender /stats which needs dynamic API data
       crawlLinks: false,
