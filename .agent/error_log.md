@@ -66,6 +66,6 @@
 ### 7. Comprehensive Diagnostics & Elimination Report (2026-01-11)
 
 - **Asset Integrity**: Verified `ofri-profile.webp` returns **200 OK** via direct curl. Static assets are correctly hosted.
-- **Split-Brain (Invalidation)**: Eliminated by enforcing **Pure SSR** (`prerender: false`). This guarantees HTML is generated on-demand, referencing only currently deployed assets.
-- **Cache Persistence**: Addressed by resetting `nitro` config to default auto-detection and disabling legacy `vercel.json`. This removes potential conflicts where Vercel might serve stale/static routes over the new Serverless Function.
-- **Safety**: Implemented `chunk-error-handler.client.ts` to automatically recover client-sessions if they encounter a transient 404.
+- **Route Availability (The Trade-Off)**: Pure SSR consistently resulted in 404s for root routes on Vercel (likely due to Nitro preset function mapping conflicts).
+- **Resolution**: RESTORED **Prerendering** (`prerender: true`) for main routes to guarantee **200 OK** availability.
+- **Split-Brain Mitigation**: Retained the `chunk-error-handler.client.ts` plugin. Since Prerendering re-introduces the race condition risk, this client-side safety net is now critical to auto-recover any sessions that hit stale HTML.
