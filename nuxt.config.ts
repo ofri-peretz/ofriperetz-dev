@@ -60,7 +60,8 @@ export default defineNuxtConfig({
         { key: 'favicon-192', rel: 'icon', type: 'image/png', sizes: '192x192', href: '/logo-192.png' },
         { key: 'apple-touch-icon', rel: 'apple-touch-icon', sizes: '180x180', href: '/logo-apple-touch.png' },
         // Preload critical profile image to prevent initial blank state
-        { rel: 'preload', href: '/ofri-profile.webp', as: 'image', type: 'image/webp' }
+        // Removed manual preload as NuxtImg handles this with loading="eager"
+        // { rel: 'preload', href: '/ofri-profile.webp', as: 'image', type: 'image/webp' }
       ],
       script: [
         // Anti-FOUC: Show loading overlay immediately (runs before any CSS/JS loads)
@@ -233,11 +234,11 @@ export default defineNuxtConfig({
   },
 
   // Route rules for caching
+  // Switch to ISR (Stale-While-Revalidate) to avoid static asset cache mismatch (Split-Brain)
   routeRules: {
-    // Static pages - cache aggressively
-    '/': { prerender: true },
-    '/projects': { prerender: true },
-    '/articles': { prerender: true },
+    '/': { swr: 3600 },
+    '/projects': { swr: 3600 },
+    '/articles': { swr: 3600 },
     // API routes - short cache
     '/api/**': { cache: { maxAge: 60 } }
   },
@@ -252,13 +253,14 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
 
   nitro: {
+    preset: 'vercel',
     // Enable compression
     compressPublicAssets: true,
     prerender: {
       routes: [
-        '/',
-        '/projects',
-        '/articles'
+        // '/',
+        // '/projects',
+        // '/articles'
       ],
       // Don't crawl links to avoid trying to prerender /stats which needs dynamic API data
       crawlLinks: false,
