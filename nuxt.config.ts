@@ -249,6 +249,8 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2024-11-01',
 
+  // Nitro configuration - relying on auto-detection for Vercel
+  /*
   nitro: {
     preset: 'vercel',
     // Enable compression
@@ -264,6 +266,7 @@ export default defineNuxtConfig({
       ignore: ['/stats', '/api']
     }
   },
+  */
 
   vite: {
     build: {
