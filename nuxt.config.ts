@@ -249,24 +249,17 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2024-11-01',
 
-  // Nitro configuration - relying on auto-detection for Vercel
-  /*
+  // Nitro configuration - explicit Vercel preset for correct function generation
   nitro: {
     preset: 'vercel',
     // Enable compression
     compressPublicAssets: true,
+    // Explicitly disable prerendering to ensure strict ISR/SSR behavior
     prerender: {
-      routes: [
-        // '/',
-        // '/projects',
-        // '/articles'
-      ],
-      // Don't crawl links to avoid trying to prerender /stats which needs dynamic API data
       crawlLinks: false,
       ignore: ['/stats', '/api']
     }
   },
-  */
 
   vite: {
     build: {
