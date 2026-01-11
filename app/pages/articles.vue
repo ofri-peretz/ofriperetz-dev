@@ -109,7 +109,7 @@ onClickOutside(tagFilterRef, () => {
 })
 
 // Sort options
-type SortOption = 'views' | 'recent' | 'reactions'
+type SortOption = 'views' | 'recent' | 'reactions' | 'comments' | 'reading_time';
 type SortOrder = 'desc' | 'asc'
 
 const sortBy = ref<SortOption>('views')
@@ -492,7 +492,7 @@ const tocItems = [
             <!-- Tags Dropdown Content -->
             <div
               v-if="showTagFilters"
-              class="absolute left-0 lg:left-0 w-[calc(100vw-2rem)] sm:w-80 mt-2 p-4 z-[100] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl transition-none"
+              class="absolute left-0 lg:left-0 w-[calc(100vw-2rem)] sm:w-80 mt-2 p-4 z-100 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl transition-none"
             >
               <div class="flex items-center justify-between mb-3 pb-2 border-b border-gray-100 dark:border-gray-800">
                 <span class="text-[10px] font-black uppercase tracking-widest text-gray-500">Filter by tags</span>
