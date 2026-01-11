@@ -39,6 +39,7 @@ onMounted(() => {
 const tocItems = [
   { id: 'hero', label: 'Hello' },
   { id: 'impact', label: 'Impact' },
+  { id: 'projects', label: 'Projects' },
   { id: 'about', label: 'About' },
   { id: 'skills', label: 'Skills' },
   { id: 'philosophy', label: 'Philosophy' },
@@ -86,6 +87,19 @@ const tocItems = [
         :loading="homeLoading"
         show-cta
       />
+    </UPageSection>
+
+    <!-- Projects Section -->
+    <UPageSection
+      id="projects"
+      data-toc-section
+      class="scroll-mt-20"
+      :ui="{
+        wrapper: 'py-8 sm:py-20',
+        container: 'max-w-7xl mx-auto py-0'
+      }"
+    >
+      <LazyLandingProjects />
     </UPageSection>
 
     <!-- About Section with tighter, modern spacing -->
