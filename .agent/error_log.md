@@ -62,3 +62,10 @@
 - **Cause**: Syntax errors in `nuxt.config.ts` (e.g., missing braces) caused the build to fail. Vercel automatically rolls back (or stays on) the previous deployment, so the broken state persists.
 - **Lesson**: If a deployment doesn't fix the issue, check the build logs. A rejected build means the new configuration was never applied.
 - **Fix**: Always validate config syntax locally (e.g., `pnpm nuxi typecheck` or just `pnpm dev`) before pushing critical infrastructure changes.
+
+### 7. Comprehensive Diagnostics & Elimination Report (2026-01-11)
+
+- **Asset Integrity**: Verified `ofri-profile.webp` returns **200 OK** via direct curl. Static assets are correctly hosted.
+- **Split-Brain (Invalidation)**: Eliminated by enforcing **Pure SSR** (`prerender: false`). This guarantees HTML is generated on-demand, referencing only currently deployed assets.
+- **Cache Persistence**: Addressed by resetting `nitro` config to default auto-detection and disabling legacy `vercel.json`. This removes potential conflicts where Vercel might serve stale/static routes over the new Serverless Function.
+- **Safety**: Implemented `chunk-error-handler.client.ts` to automatically recover client-sessions if they encounter a transient 404.
