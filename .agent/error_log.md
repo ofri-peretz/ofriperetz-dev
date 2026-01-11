@@ -55,3 +55,10 @@
 - **Cause**: Manually preloading an image in `nuxt.config.ts` (e.g., `/image.webp`) while using `<NuxtImg>` in the template. `<NuxtImg>` generates an optimized IPX URL (e.g., `/_ipx/...`), so the browser downloads the optimized version and ignores the preloaded raw file.
 - **Lesson**: Do not manually preload raw assets that are processed by image optimization modules.
 - **Fix**: Remove manual `<link rel="preload">` tags. Use `loading="eager"` and `fetchpriority="high"` attributes on the `<NuxtImg>` component instead.
+
+### 6. Deployment Rejection masking Fixes
+
+- **Error**: Fixes applied (like switching to SSR) don't seem to work; site remains broken/cached.
+- **Cause**: Syntax errors in `nuxt.config.ts` (e.g., missing braces) caused the build to fail. Vercel automatically rolls back (or stays on) the previous deployment, so the broken state persists.
+- **Lesson**: If a deployment doesn't fix the issue, check the build logs. A rejected build means the new configuration was never applied.
+- **Fix**: Always validate config syntax locally (e.g., `pnpm nuxi typecheck` or just `pnpm dev`) before pushing critical infrastructure changes.
