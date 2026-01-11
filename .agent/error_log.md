@@ -11,25 +11,22 @@
   3.  **The Crash**: The browser loads the Stale HTML, tries to fetch `Script_A.js`, gets a 404, and the application fails to hydrate.
   4.  **Persistence**: If the HTML was served with aggressive caching headers (`prerender: true` generates static files), the 404 state persists until the user's cache expires or is manually cleared.
 - **Lesson**: Pure Static Generation (SSG) with hashed assets is risky on CDNs if caching rules aren't perfectly synchronized. HTML must never be aggressively cached if assets change frequently.
-- **Fix (The "ISR Pivot")**:
-  1.  **Configuration Change**: In `nuxt.config.ts`, we replaced `prerender: true` with `swr: 3600` (Incremental Static Regeneration).
+- **Fix (The "Pure SSR + Safety Net" Strategy)**:
+  1.  **Enforce Pure SSR**: In `nuxt.config.ts`, set explicit rules to disable caching and styling for main routes. This forces Vercel to execute the lambda on _every_ request, guaranteeing the HTML is generated using the _current_ build processing.
 
   ```typescript
   routeRules: {
-    '/': { swr: 3600 },        // Was: { prerender: true }
-    '/projects': { swr: 3600 } // Was: { prerender: true }
+    '/': { ssr: true, prerender: false, swr: false },
+    '/projects': { ssr: true, prerender: false, swr: false }
   }
   ```
 
-  2.  **What is ISR?**: Incremental Static Regeneration allows you to create or update content _after_ the site has been deployed. Unlike SSG (built once), ISR pages are generated on-demand by a **Serverless Function (Lambda)** and then cached at the Edge for the specified TTL (e.g., 3600s).
+  2.  **Why SSR over ISR?**: In some edge cases, Vercel may cache a 404 response from a failed ISR revalidation (caused by a temporary mismatch or cold start). Pure SSR bypasses the shared cache completely for the HTML document, ensuring the user always gets a fresh response or an immediate error (which can be retried).
 
-  3.  **The "Component" that Solved It**: The **Client Manifest** (`.output/server/chunks/app/client.manifest.mjs`).
-      - **Problem (SSG/Prerender)**: When using `prerender: true`, Nuxt reads the Manifest _at build time_ and hardcodes the asset hashes (e.g., `<script src="/_nuxt/Hero.abc123.js">`) into static `.html` files. If the user caches this HTML, they are locked into looking for `.abc123.js` forever, even if a new deployment deletes it.
-      - **Solution (ISR)**: With `swr: true`, the HTML is generated _at runtime_ by the Lambda. The Lambda loads the **latest** Manifest from the _current_ atomic deployment bundle. It says "Oh, the Hero component is now `Hero.xyz987.js`", and generates HTML pointing to the valid, existing file.
-  4.  **Invalidation Mechanic**:
-      - By switching to ISR, we changed the `Cache-Control` header from "Immutable Static Asset" to `s-maxage=3600, stale-while-revalidate`.
-      - This tells the CDN: "You can serve a stale version if you have it, but please go ask the Lambda for a new one in the background."
-      - The Lambda, running the _new_ code, generates the _correct_ HTML with fresh asset links, healing the "Split-Brain" automatically.
+  3.  **Safety Net (Client Plugin)**: Added `chunk-error-handler.client.ts`. Is a lightweight plugin that listens for `ChunkLoadError`. If a user _does_ somehow get stale HTML (e.g., from their own aggressive browser cache), and a JS chunk fails to load (404), this plugin automatically triggers a `window.location.reload()` (once) to fetch the fresh document.
+  4.  **Result**:
+      - Server: Always serves fresh HTML (SSR).
+      - Client: Automatically self-heals if it hits a dead-end asset.
 
 ### 2. TypeScript Undefined in `.split()` Chain
 
