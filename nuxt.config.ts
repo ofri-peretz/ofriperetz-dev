@@ -227,6 +227,7 @@ export default defineNuxtConfig({
   },
 
   // Runtime config for API keys (server-side only for security)
+  // Runtime config for API keys (server-side only for security)
   runtimeConfig: {
     devtoApiKey: process.env.DEVTO_API_KEY || '',
     githubToken: process.env.GITHUB_TOKEN || ''
@@ -234,13 +235,9 @@ export default defineNuxtConfig({
   },
 
   // Route rules for caching
-    // Switch to Pure SSR to guarantee fresh assets and avoid Vercel 404 caching issues
-    routeRules: {
-    '/': { ssr: true, prerender: false, swr: false },
-    '/projects': { ssr: true, prerender: false, swr: false },
-    '/articles': { ssr: true, prerender: false, swr: false },
-    // API routes - short cache
-    '/api/**': { cache: { maxAge: 60 } }
+  routeRules: {
+    // Default to SSR for all pages (no cache) to prevent stale asset issues
+    '/api/**': { cors: true }
   },
 
   // Performance optimizations
